@@ -1,11 +1,17 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AppState, AppStateStatus, DevSettings, I18nManager } from 'react-native';
+import { AppState, AppStateStatus, DevSettings, I18nManager, Platform } from 'react-native';
 import * as Updates from 'expo-updates';
 import { useTranslation } from 'react-i18next';
 import i18n, { AppLanguage, RTL_LAYOUT_KEY, STORAGE_KEY } from '../i18n/i18n';
 
 function reloadApp() {
+  if (Platform.OS === 'web') {
+    if (typeof window !== 'undefined') {
+      window.location.reload();
+    }
+    return;
+  }
   if (__DEV__) {
     DevSettings.reload();
     return;
@@ -43,6 +49,12 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const setAppLanguage = useCallback(
     async (lng: AppLanguage) => {
       await AsyncStorage.setItem(STORAGE_KEY, lng);
+
+      if (Platform.OS === 'web') {
+        await i18nInstance.changeLanguage(lng);
+        return;
+      }
+
       const shouldRTL = lng === 'ar';
       const layoutTarget = shouldRTL ? 'rtl' : 'ltr';
       const lastLayout = await AsyncStorage.getItem(RTL_LAYOUT_KEY);
