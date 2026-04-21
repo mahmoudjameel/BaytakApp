@@ -14,6 +14,11 @@ import { NearbyServiceDetailsScreen } from '../screens/NearbyServiceDetailsScree
 import { AddAddressScreen } from '../screens/AddAddressScreen';
 import { MakeAppointmentScreen } from '../screens/MakeAppointmentScreen';
 import { OfferScreen } from '../screens/OfferScreen';
+import { FavouritesScreen } from '../screens/FavouritesScreen';
+import { InvoiceScreen } from '../screens/InvoiceScreen';
+import { WalletScreen } from '../screens/WalletScreen';
+import { HelpCenterScreen } from '../screens/HelpCenterScreen';
+import { NotificationsScreen } from '../screens/NotificationsScreen';
 import { TabNavigator } from './TabNavigator';
 
 export type RootStackParamList = {
@@ -47,6 +52,11 @@ export type RootStackParamList = {
     priceUnit: string;
     image: string;
   };
+  Favourites: undefined;
+  Invoice: undefined;
+  Wallet: undefined;
+  HelpCenter: undefined;
+  Notifications: undefined;
   Main: undefined;
 };
 
@@ -69,6 +79,11 @@ export const AppNavigator = () => {
         <Stack.Screen name="Offer" component={OfferScreen} />
         <Stack.Screen name="MakeAppointment" component={MakeAppointmentScreen} />
         <Stack.Screen name="NearbyServiceDetails" component={NearbyServiceDetailsScreen} />
+        <Stack.Screen name="Favourites" component={FavouritesScreen} />
+        <Stack.Screen name="Invoice" component={InvoiceScreen} />
+        <Stack.Screen name="Wallet" component={WalletScreen} />
+        <Stack.Screen name="HelpCenter" component={HelpCenterScreen} />
+        <Stack.Screen name="Notifications" component={NotificationsScreen} />
         <Stack.Screen name="Main" component={TabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>

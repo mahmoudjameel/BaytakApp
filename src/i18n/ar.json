@@ -288,5 +288,64 @@
     "t4": "١٢:٠٠ ص",
     "t5": "٤:٠٠ م",
     "t6": "٥:٠٠ م"
+  },
+  "favourites": {
+    "title": "المفضلة",
+    "searchPlaceholder": "ابحث عن شيء",
+    "productName": "باكارات روج",
+    "productPrice": "١٨٠ ر.س"
+  },
+  "invoice": {
+    "title": "الفاتورة",
+    "providerName": "إيميلي جاكسون",
+    "providerEmail": "amilie498@gmail.com",
+    "timeTaken": "الوقت المستغرق",
+    "timeValue": "ساعتان",
+    "bookingId": "رقم الحجز",
+    "bookingIdValue": "1215151515",
+    "serviceProvider": "مقدم الخدمة",
+    "serviceProviderName": "محمد أ",
+    "totalPayment": "إجمالي الدفع: ١٥٠ ر.س",
+    "paymentMethod": "بطاقة فيزا المدينة",
+    "cardNumber": "xxxx-xxxx-XxXX-1547",
+    "backHome": "العودة للرئيسية"
+  },
+  "wallet": {
+    "title": "المحفظة",
+    "totalAmount": "٧٠٠ ر.س",
+    "dueLabel": "مستحق خلال ٧ أيام",
+    "dueAmount": "٥٠٠ ر.س",
+    "totalPaymentLabel": "إجمالي المدفوعات",
+    "totalPaymentAmount": "١٥٠٠ ر.س",
+    "makePayments": "إجراء الدفع",
+    "paymentSection": "المدفوعات",
+    "dueDate": "٨ يوليو",
+    "dueDays": "مستحق خلال ٣ أيام",
+    "payeeName": "محمد",
+    "payeeAmount": "١٥٠٠ ر.س",
+    "payeeDesc": "نص تجريبي لوصف الدفعة ومحتواها",
+    "readMore": "اقرأ المزيد",
+    "seeAll": "عرض الكل"
+  },
+  "helpCenter": {
+    "title": "مركز المساعدة",
+    "card1Title": "المساعدة في الطلب",
+    "card2Title": "تغيير الموعد",
+    "cardDesc": "نص تجريبي لوصف موضوع المساعدة والتفاصيل.",
+    "readMore": "اقرأ المزيد",
+    "ticketSection": "التذكرة",
+    "confirmHelp": "تأكيد المساعدة"
+  },
+  "notifications": {
+    "title": "الإشعارات",
+    "all": "الكل",
+    "unread": "غير مقروء",
+    "itemTitle": "تنظيف مطبخ معياري",
+    "itemTime": "منذ ٥ دقائق",
+    "itemDesc": "نص تجريبي لوصف الإشعار ومحتواه بشكل مختصر وواضح للمستخدم.",
+    "readMore": "اقرأ المزيد"
+  },
+  "inviteFriends": {
+    "menuLabel": "دعوة الأصدقاء"
   }
 }

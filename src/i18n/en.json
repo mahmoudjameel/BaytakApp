@@ -288,5 +288,64 @@
     "t4": "12:00 AM",
     "t5": "4:00 PM",
     "t6": "5:00 PM"
+  },
+  "favourites": {
+    "title": "Favourites",
+    "searchPlaceholder": "Search something",
+    "productName": "Baccarat Rouge",
+    "productPrice": "180 Sud"
+  },
+  "invoice": {
+    "title": "INVOICE",
+    "providerName": "Amilie Jackson",
+    "providerEmail": "amilie498@gmail.com",
+    "timeTaken": "Time Taken",
+    "timeValue": "2 hour",
+    "bookingId": "Booking ID",
+    "bookingIdValue": "1215151515",
+    "serviceProvider": "Service provider",
+    "serviceProviderName": "mohamed A",
+    "totalPayment": "Total Payment:150 SAR",
+    "paymentMethod": "Visa Debit card",
+    "cardNumber": "xxxx-xxxx-XxXX-1547",
+    "backHome": "Back Home"
+  },
+  "wallet": {
+    "title": "Wallet",
+    "totalAmount": "700 RAS",
+    "dueLabel": "Du in 7 days",
+    "dueAmount": "500 SAR",
+    "totalPaymentLabel": "total payment",
+    "totalPaymentAmount": "1500 SAR",
+    "makePayments": "Make Payments",
+    "paymentSection": "Payment",
+    "dueDate": "8 july",
+    "dueDays": "due in 3 days",
+    "payeeName": "Mohammed",
+    "payeeAmount": "1500 SAR",
+    "payeeDesc": "Lorem Ipsum is simply dummy text of the printing",
+    "readMore": "Read More",
+    "seeAll": "See all"
+  },
+  "helpCenter": {
+    "title": "Help Center",
+    "card1Title": "Assistance with request",
+    "card2Title": "Change of date",
+    "cardDesc": "Lorem Ipsum is simply dummy text of the printing and typesetting.",
+    "readMore": "Read More",
+    "ticketSection": "Ticket",
+    "confirmHelp": "Confirm Help"
+  },
+  "notifications": {
+    "title": "Notiifcations",
+    "all": "All",
+    "unread": "Unread",
+    "itemTitle": "Modular Kitchen Cleaning",
+    "itemTime": "5 munities ago",
+    "itemDesc": "Lorem ip. Orci, sem feugiat ut nullam nisl orci, volutpat, felis. Nunc elit, et mattis commodo condimentum tellus et.",
+    "readMore": "Read More"
+  },
+  "inviteFriends": {
+    "menuLabel": "Invite Friends"
   }
 }

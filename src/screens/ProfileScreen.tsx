@@ -1,27 +1,37 @@
 import React, { useCallback, useMemo } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Alert,
+  Image,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Colors } from '../theme/colors';
 import { FontFamily, FontSize } from '../theme/typography';
 import { useAppLanguage } from '../context/LanguageContext';
-import { isRTL } from '../utils/rtl';
+import { RootStackParamList } from '../navigation/AppNavigator';
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 type MenuItem = {
   id: string;
   labelKey: string;
   icon: keyof typeof Ionicons.glyphMap;
   iconBg: string;
-  value?: string;
   onPress?: () => void;
 };
 
 export const ProfileScreen = () => {
   const { t } = useTranslation();
   const { language, setAppLanguage } = useAppLanguage();
-
-  const languageLabel = language === 'ar' ? t('profile.languageArabic') : t('profile.languageEnglish');
+  const navigation = useNavigation<NavigationProp>();
 
   const openLanguagePicker = useCallback(() => {
     Alert.alert(t('profile.chooseLanguageTitle'), t('profile.chooseLanguageMessage'), [
@@ -33,146 +43,133 @@ export const ProfileScreen = () => {
 
   const menuItems: MenuItem[] = useMemo(
     () => [
-      { id: '1', labelKey: 'profile.favourites', icon: 'heart-outline', iconBg: '#FFEBEE' },
-      { id: '2', labelKey: 'profile.wallet', icon: 'wallet-outline', iconBg: '#E8F5E9' },
-      { id: '3', labelKey: 'profile.notifications', icon: 'notifications-outline', iconBg: '#FFF8E7', value: '3' },
-      { id: '4', labelKey: 'profile.security', icon: 'shield-checkmark-outline', iconBg: Colors.primaryLight },
+      {
+        id: '1',
+        labelKey: 'profile.favourites',
+        icon: 'heart-outline',
+        iconBg: '#F0F0F0',
+        onPress: () => navigation.navigate('Favourites'),
+      },
+      {
+        id: '2',
+        labelKey: 'profile.wallet',
+        icon: 'wallet-outline',
+        iconBg: '#F0F0F0',
+        onPress: () => navigation.navigate('Wallet'),
+      },
+      {
+        id: '3',
+        labelKey: 'profile.notifications',
+        icon: 'notifications-outline',
+        iconBg: '#F0F0F0',
+        onPress: () => navigation.navigate('Notifications'),
+      },
+      {
+        id: '4',
+        labelKey: 'profile.security',
+        icon: 'shield-checkmark-outline',
+        iconBg: '#F0F0F0',
+      },
       {
         id: '5',
         labelKey: 'profile.language',
         icon: 'language-outline',
-        iconBg: '#F3E5F5',
-        value: languageLabel,
+        iconBg: '#F0F0F0',
         onPress: openLanguagePicker,
       },
-      { id: '6', labelKey: 'profile.helpCenter', icon: 'help-circle-outline', iconBg: '#E3F2FD' },
+      {
+        id: '6',
+        labelKey: 'profile.helpCenter',
+        icon: 'help-circle-outline',
+        iconBg: '#F0F0F0',
+        onPress: () => navigation.navigate('HelpCenter'),
+      },
+      {
+        id: '7',
+        labelKey: 'inviteFriends.menuLabel',
+        icon: 'people-outline',
+        iconBg: '#F0F0F0',
+      },
     ],
-    [languageLabel, openLanguagePicker],
+    [navigation, openLanguagePicker],
   );
-
-  const chevronName = isRTL() ? 'chevron-back' : 'chevron-forward';
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <View style={styles.header}>
-        <Text style={styles.title}>{t('profile.title')}</Text>
-        <TouchableOpacity style={styles.editBtn}>
-          <Ionicons name="create-outline" size={20} color={Colors.primary} />
+        <TouchableOpacity style={styles.backBtn}>
+          <Ionicons name="chevron-back" size={22} color="#1B1D36" />
         </TouchableOpacity>
+        <Text style={styles.headerTitle}>{t('profile.title')}</Text>
+        <View style={styles.backBtn} />
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.profileCard}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+        <View style={styles.avatarSection}>
           <View style={styles.avatarWrap}>
-            <View style={styles.avatar}>
-              <Ionicons name="person" size={44} color={Colors.primary} />
-            </View>
-            <TouchableOpacity style={styles.cameraBtn}>
-              <Ionicons name="camera" size={13} color={Colors.white} />
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.name}>{t('profile.userName')}</Text>
-          <Text style={styles.email}>{t('profile.userEmail')}</Text>
-
-          <View style={styles.statsRow}>
-            <View style={styles.stat}>
-              <Text style={styles.statNum}>12</Text>
-              <Text style={styles.statLabel}>{t('profile.bookings')}</Text>
-            </View>
-            <View style={styles.statDivider} />
-            <View style={styles.stat}>
-              <Text style={styles.statNum}>4</Text>
-              <Text style={styles.statLabel}>{t('profile.contracts')}</Text>
-            </View>
-            <View style={styles.statDivider} />
-            <View style={styles.stat}>
-              <Text style={styles.statNum}>250</Text>
-              <Text style={styles.statLabel}>{t('profile.sarWallet')}</Text>
+            <Image
+              source={require('../../assets/offer/Frame 1171279031.png')}
+              style={styles.avatar}
+              resizeMode="cover"
+            />
+            <View style={styles.plusBadge}>
+              <Ionicons name="add" size={14} color="#FFFFFF" />
             </View>
           </View>
         </View>
 
-        <View style={styles.menuCard}>
+        <View style={styles.nameRow}>
+          <Text style={styles.name}>{t('profile.userName')}</Text>
+          <TouchableOpacity style={styles.editBadge}>
+            <Ionicons name="pencil" size={13} color="#FFFFFF" />
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.email}>{t('profile.userEmail')}</Text>
+
+        <View style={styles.menuList}>
           {menuItems.map((item, index) => (
             <TouchableOpacity
               key={item.id}
-              style={[styles.menuItem, index < menuItems.length - 1 && styles.menuItemBorder]}
+              style={[styles.menuRow, index < menuItems.length - 1 && styles.menuRowBorder]}
               activeOpacity={0.75}
               onPress={item.onPress}
             >
-              <View style={[styles.menuIcon, { backgroundColor: item.iconBg }]}>
-                <Ionicons name={item.icon} size={22} color={Colors.primary} />
+              <View style={[styles.menuIconWrap, { backgroundColor: item.iconBg }]}>
+                <Ionicons name={item.icon} size={20} color="#5C6272" />
               </View>
               <Text style={styles.menuLabel}>{t(item.labelKey)}</Text>
-              <View style={styles.menuRight}>
-                {item.value && (
-                  <View style={styles.valueBadge}>
-                    <Text style={styles.valueText}>{item.value}</Text>
-                  </View>
-                )}
-                <Ionicons name={chevronName} size={18} color={Colors.textLight} />
-              </View>
+              <Ionicons name="chevron-forward" size={18} color="#B0B5C3" />
             </TouchableOpacity>
           ))}
         </View>
 
-        <TouchableOpacity style={styles.logoutBtn} activeOpacity={0.8}>
-          <View style={[styles.menuIcon, { backgroundColor: '#FFEBEE' }]}>
-            <Ionicons name="log-out-outline" size={22} color={Colors.error} />
-          </View>
-          <Text style={styles.logoutText}>{t('profile.logout')}</Text>
-        </TouchableOpacity>
-
-        <View style={{ height: 24 }} />
+        <View style={{ height: 32 }} />
       </ScrollView>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.backgroundSecondary },
+  container: { flex: 1, backgroundColor: '#FFFFFF' },
   header: {
-    backgroundColor: Colors.white,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
+    height: 52,
     flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
     justifyContent: 'space-between',
-    alignItems: 'center',
   },
-  title: { fontSize: FontSize.xl, fontFamily: FontFamily.outfit.semiBold, color: Colors.textDark },
-  editBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: Colors.primaryLight,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  profileCard: {
-    backgroundColor: Colors.white,
-    margin: 16,
-    borderRadius: 20,
-    padding: 24,
-    alignItems: 'center',
-    gap: 6,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  avatarWrap: { position: 'relative', marginBottom: 8 },
+  backBtn: { width: 36, height: 36, alignItems: 'center', justifyContent: 'center' },
+  headerTitle: { fontSize: 18, fontFamily: FontFamily.outfit.semiBold, color: '#1B1D36' },
+  scrollContent: { alignItems: 'center', paddingHorizontal: 16 },
+  avatarSection: { marginTop: 20, marginBottom: 16 },
+  avatarWrap: { position: 'relative' },
   avatar: {
     width: 88,
     height: 88,
     borderRadius: 44,
-    backgroundColor: Colors.primaryLight,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 3,
-    borderColor: Colors.primary,
+    backgroundColor: '#E8F4F3',
   },
-  cameraBtn: {
+  plusBadge: {
     position: 'absolute',
     bottom: 0,
     end: 0,
@@ -183,74 +180,68 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
-    borderColor: Colors.white,
+    borderColor: '#FFFFFF',
   },
-  name: { fontSize: FontSize.xl, fontFamily: FontFamily.outfit.semiBold, color: Colors.textDark },
-  email: { fontSize: FontSize.base, fontFamily: FontFamily.outfit.regular, color: Colors.textGray },
-  statsRow: {
+  nameRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 16,
-    paddingTop: 16,
-    borderTopWidth: 1,
-    borderTopColor: Colors.backgroundSecondary,
-    width: '100%',
-    justifyContent: 'space-around',
+    gap: 8,
+    marginBottom: 4,
   },
-  stat: { alignItems: 'center', gap: 2 },
-  statNum: { fontSize: FontSize.xl, fontFamily: FontFamily.outfit.bold, color: Colors.textDark },
-  statLabel: { fontSize: FontSize.sm, fontFamily: FontFamily.outfit.regular, color: Colors.textGray },
-  statDivider: { width: 1, height: 32, backgroundColor: Colors.border },
-  menuCard: {
-    backgroundColor: Colors.white,
-    marginHorizontal: 16,
-    borderRadius: 20,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 6,
-    elevation: 3,
+  name: {
+    fontSize: 20,
+    fontFamily: FontFamily.outfit.bold,
+    color: '#1B1D36',
   },
-  menuItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    gap: 14,
-  },
-  menuItemBorder: { borderBottomWidth: 1, borderBottomColor: Colors.backgroundSecondary },
-  menuIcon: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
+  editBadge: {
+    width: 26,
+    height: 26,
+    borderRadius: 6,
+    backgroundColor: Colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  menuLabel: { flex: 1, fontSize: FontSize.base, fontFamily: FontFamily.outfit.medium, color: Colors.textDark },
-  menuRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  valueBadge: {
-    backgroundColor: Colors.primaryLight,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 10,
+  email: {
+    fontSize: 14,
+    fontFamily: FontFamily.outfit.regular,
+    color: '#9AA0AE',
+    marginBottom: 24,
   },
-  valueText: { fontSize: 11, fontFamily: FontFamily.outfit.semiBold, color: Colors.primary },
-  logoutBtn: {
-    backgroundColor: Colors.white,
-    marginHorizontal: 16,
-    marginTop: 12,
-    borderRadius: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 14,
-    paddingHorizontal: 16,
-    gap: 14,
+  menuList: {
+    width: '100%',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#EDEFF3',
+    overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
+    shadowOpacity: 0.04,
     shadowRadius: 6,
-    elevation: 3,
+    elevation: 2,
   },
-  logoutText: { fontSize: FontSize.base, fontFamily: FontFamily.outfit.semiBold, color: Colors.error },
+  menuRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    gap: 14,
+  },
+  menuRowBorder: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#F2F3F7',
+  },
+  menuIconWrap: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  menuLabel: {
+    flex: 1,
+    fontSize: FontSize.base,
+    fontFamily: FontFamily.outfit.medium,
+    color: '#1B1D36',
+  },
 });
