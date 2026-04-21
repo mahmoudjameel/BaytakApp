@@ -17,7 +17,7 @@ export const SocialButton: React.FC<SocialButtonProps> = ({ title, icon, onPress
 
   return (
     <TouchableOpacity
-      style={[styles.container, rtl && styles.containerRtl, style]}
+      style={[styles.container, style]}
       onPress={onPress}
       activeOpacity={0.8}
     >
@@ -39,9 +39,6 @@ const styles = StyleSheet.create({
     height: 54,
     paddingHorizontal: 24,
     gap: 12,
-  },
-  containerRtl: {
-    flexDirection: 'row-reverse',
   },
   text: {
     fontSize: FontSize.md,

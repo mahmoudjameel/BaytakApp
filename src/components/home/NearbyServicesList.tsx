@@ -32,7 +32,7 @@ export const NearbyServicesList: React.FC<NearbyServicesListProps> = ({ services
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      contentContainerStyle={[styles.nearbyList, rtl && styles.nearbyListRtl]}
+      contentContainerStyle={styles.nearbyList}
     >
       {services.map((item) => (
         <TouchableOpacity
@@ -78,7 +78,7 @@ export const NearbyServicesList: React.FC<NearbyServicesListProps> = ({ services
                     {item.priceMain}{' '}
                     <Text style={[styles.priceUnit, { fontSize: Math.round(13 * scale) }]}>{item.priceUnit}</Text>
                   </Text>
-                  <View style={[styles.distWrap, styles.distWrapRtl]}>
+                  <View style={styles.distWrap}>
                     <Ionicons name="location" size={Math.round(11 * scale)} color="#D2D3D9" />
                     <Text style={[styles.distText, { fontSize: Math.round(10 * scale) }, styles.textRtl]}>
                       {item.distance}
@@ -107,7 +107,6 @@ export const NearbyServicesList: React.FC<NearbyServicesListProps> = ({ services
 
 const styles = StyleSheet.create({
   nearbyList: { paddingHorizontal: 16, gap: 12, paddingBottom: 2 },
-  nearbyListRtl: { flexDirection: 'row-reverse' },
   serviceCard: {
     borderRadius: 18,
     backgroundColor: '#FFFFFF',
@@ -175,10 +174,6 @@ const styles = StyleSheet.create({
     flex: 1,
     minWidth: 0,
     justifyContent: 'flex-start',
-  },
-  distWrapRtl: {
-    flexDirection: 'row-reverse',
-    justifyContent: 'flex-end',
   },
   distText: {
     color: '#9AA0AE',

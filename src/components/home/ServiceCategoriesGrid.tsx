@@ -24,7 +24,7 @@ export const ServiceCategoriesGrid: React.FC<ServiceCategoriesGridProps> = ({ ca
   const rtl = isRTL();
 
   return (
-    <View style={[styles.categoriesGrid, rtl && styles.categoriesGridRtl]}>
+    <View style={styles.categoriesGrid}>
       {categories.map((cat) => (
         <TouchableOpacity
           key={cat.id}
@@ -50,8 +50,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     gap: 10,
   },
-  /** صف الفئات يبدأ من اليمين */
-  categoriesGridRtl: { flexDirection: 'row-reverse' },
   categoryItem: {
     borderRadius: 14,
     alignItems: 'center',

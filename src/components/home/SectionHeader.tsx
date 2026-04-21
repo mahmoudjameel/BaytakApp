@@ -17,7 +17,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({ title, onSeeAll, s
   const rtl = isRTL();
 
   return (
-    <View style={[styles.sectionHeader, rtl && styles.sectionHeaderRtl]}>
+    <View style={styles.sectionHeader}>
       <View style={styles.titleWrap}>
         <Text style={[styles.sectionTitle, rtl && styles.sectionTitleRtl]} numberOfLines={1}>
           {title}
@@ -44,9 +44,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginTop: 12,
     marginBottom: 10,
-  },
-  sectionHeaderRtl: {
-    flexDirection: 'row-reverse',
   },
   titleWrap: {
     flex: 1,

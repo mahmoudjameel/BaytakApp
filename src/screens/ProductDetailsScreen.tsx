@@ -179,7 +179,7 @@ export const ProductDetailsScreen: React.FC<Props> = ({ navigation, route }) => 
               <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={[styles.thumbRow, rtl && styles.thumbRowRtl]}
+                contentContainerStyle={styles.thumbRow}
               >
                 {gallery.map((uri, i) => (
                   <TouchableOpacity
@@ -317,9 +317,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     minWidth: '100%',
     justifyContent: 'center',
-  },
-  thumbRowRtl: {
-    flexDirection: 'row-reverse',
   },
   thumb: {
     width: 52,

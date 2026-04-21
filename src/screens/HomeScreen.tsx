@@ -161,7 +161,7 @@ export const HomeScreen = () => {
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={[styles.hList, rtl && styles.hListRtl]}
+          contentContainerStyle={styles.hList}
         >
           {contracts.map(item => (
             <TouchableOpacity key={item.id} style={styles.contractCard} activeOpacity={0.85}>
@@ -196,7 +196,7 @@ export const HomeScreen = () => {
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={[styles.hList, rtl && styles.hListRtl]}
+          contentContainerStyle={styles.hList}
         >
           {popularStores.map(item => (
             <TouchableOpacity key={item.id} style={styles.popularCard} activeOpacity={0.85}>
@@ -213,7 +213,7 @@ export const HomeScreen = () => {
                   <Ionicons name="time-outline" size={10} color={Colors.textLight} />
                   <Text style={[styles.metaText, rtl && styles.metaTextRtl]}>{item.time}</Text>
                 </View>
-                <View style={[styles.tagRow, rtl && styles.tagRowRtl]}>
+                <View style={styles.tagRow}>
                   {item.tags.map(tag => (
                     <View key={tag} style={styles.tag}>
                       <Text style={styles.tagText}>{tag}</Text>
@@ -229,7 +229,7 @@ export const HomeScreen = () => {
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={[styles.hList, { paddingBottom: 18 }, rtl && styles.hListRtl]}
+          contentContainerStyle={[styles.hList, { paddingBottom: 18 }]}
         >
           {bestDeals.map(item => (
             <TouchableOpacity
@@ -253,7 +253,7 @@ export const HomeScreen = () => {
                     <Ionicons key={star} name="star" size={10} color="#F6B100" />
                   ))}
                 </View>
-                <View style={[styles.dealPriceRow, rtl && styles.dealPriceRowRtl]}>
+                <View style={styles.dealPriceRow}>
                   <Text style={[styles.cardPrice, rtl && styles.cardPriceRtl]}>{item.price}</Text>
                   <View style={styles.dealCartBtn} pointerEvents="none">
                     <Image
@@ -276,7 +276,6 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#FFFFFF' },
   scrollContent: { paddingBottom: 18, width: '100%' },
   hList: { paddingHorizontal: 16, gap: 10 },
-  hListRtl: { flexDirection: 'row-reverse' },
   imageRounded: { borderRadius: 10 },
   cardBody: { padding: 8, gap: 3 },
   cardBodyRtl: { alignItems: 'stretch' },
@@ -299,7 +298,6 @@ const styles = StyleSheet.create({
   starsRow: { flexDirection: 'row', alignItems: 'center', gap: 2 },
   starsRowRtl: { alignSelf: 'flex-end' },
   dealPriceRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 2 },
-  dealPriceRowRtl: { flexDirection: 'row-reverse' },
   cardPrice: { fontSize: 13, fontFamily: FontFamily.outfit.bold, color: Colors.textDark, marginTop: 2 },
   cardPriceRtl: { textAlign: 'right', alignSelf: 'stretch', writingDirection: 'rtl' },
   dealCartBtn: {
@@ -342,7 +340,7 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
   },
   ratingText: { fontSize: 9, fontFamily: FontFamily.outfit.semiBold, color: '#D99A00' },
-  contractDesc: { fontSize: 10, lineHeight: 14, color: '#7A8193', fontFamily: FontFamily.outfit.regular, textAlign: 'left' },
+  contractDesc: { fontSize: 10, lineHeight: 14, color: '#7A8193', fontFamily: FontFamily.outfit.regular },
   popularCard: {
     width: 186,
     borderRadius: 12,
@@ -363,7 +361,6 @@ const styles = StyleSheet.create({
   popularPriceTagRtl: { start: 8 },
   popularPriceText: { fontSize: 9, fontFamily: FontFamily.outfit.bold, color: Colors.textDark },
   tagRow: { flexDirection: 'row', gap: 5, flexWrap: 'wrap' },
-  tagRowRtl: { flexDirection: 'row-reverse', justifyContent: 'flex-end' },
   tag: {
     borderRadius: 7,
     backgroundColor: '#EFF4EE',

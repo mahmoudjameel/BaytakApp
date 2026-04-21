@@ -93,7 +93,7 @@ export const AllProductsScreen: React.FC<Props> = ({ navigation }) => {
             {t(item.nameKey)}
           </Text>
           <View style={[styles.starsRow, rtl && styles.starsRowRtl]}>{renderStars(item.rating)}</View>
-          <View style={[styles.priceRow, rtl && styles.priceRowRtl]}>
+          <View style={styles.priceRow}>
             <Text style={[styles.price, rtl && styles.textRtl]}>{t(item.priceKey)}</Text>
             <View style={styles.cartBtn} pointerEvents="none">
               <Image
@@ -165,7 +165,7 @@ export const AllProductsScreen: React.FC<Props> = ({ navigation }) => {
         keyExtractor={(item) => item.id}
         numColumns={2}
         renderItem={renderItem}
-        columnWrapperStyle={[styles.gridRow, rtl && styles.gridRowRtl]}
+        columnWrapperStyle={styles.gridRow}
         contentContainerStyle={styles.gridContent}
         showsVerticalScrollIndicator={false}
       />
@@ -259,9 +259,6 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     gap: 12,
   },
-  gridRowRtl: {
-    flexDirection: 'row-reverse',
-  },
 
   // ← Product Card
   productCard: {
@@ -310,9 +307,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginTop: 6,
-  },
-  priceRowRtl: {
-    flexDirection: 'row-reverse',
   },
   price: {
     fontSize: 13,
