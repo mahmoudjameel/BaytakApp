@@ -16,42 +16,21 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({ title, onSeeAll, s
   const seeAll = seeAllLabel ?? t('common.seeAll');
   const rtl = isRTL();
 
-  const seeAllBtn = (
-    <TouchableOpacity
-      style={styles.seeAllBtn}
-      onPress={() => onSeeAll?.()}
-      activeOpacity={0.7}
-      hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-    >
-      <Text style={[styles.seeAll, rtl && styles.seeAllRtl]}>{seeAll}</Text>
-    </TouchableOpacity>
-  );
-
-  const titleBlock = (
-    <View style={styles.titleWrap}>
-      <Text style={[styles.sectionTitle, rtl && styles.sectionTitleRtl]} numberOfLines={1}>
-        {title}
-      </Text>
-    </View>
-  );
-
-  /**
-   * الصف داخل تطبيق RTL ينعكس فيُضغط Text+flex أحياناً فيختفي العنوان.
-   * نفرض direction: ltr على الحاوية ونرتب العناصر يدوياً: عربي = عرض الكل | العنوان، إنجليزي = العنوان | عرض الكل.
-   */
   return (
-    <View style={styles.sectionHeader}>
-      {rtl ? (
-        <>
-          {seeAllBtn}
-          {titleBlock}
-        </>
-      ) : (
-        <>
-          {titleBlock}
-          {seeAllBtn}
-        </>
-      )}
+    <View style={[styles.sectionHeader, rtl && styles.sectionHeaderRtl]}>
+      <View style={styles.titleWrap}>
+        <Text style={[styles.sectionTitle, rtl && styles.sectionTitleRtl]} numberOfLines={1}>
+          {title}
+        </Text>
+      </View>
+      <TouchableOpacity
+        style={styles.seeAllBtn}
+        onPress={() => onSeeAll?.()}
+        activeOpacity={0.7}
+        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+      >
+        <Text style={[styles.seeAll, rtl && styles.seeAllRtl]}>{seeAll}</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -59,15 +38,15 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({ title, onSeeAll, s
 const styles = StyleSheet.create({
   sectionHeader: {
     alignSelf: 'stretch',
-    width: '100%',
-    direction: 'ltr',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
     marginTop: 12,
     marginBottom: 10,
-    gap: 12,
+  },
+  sectionHeaderRtl: {
+    flexDirection: 'row-reverse',
   },
   titleWrap: {
     flex: 1,
@@ -85,14 +64,14 @@ const styles = StyleSheet.create({
   },
   seeAllBtn: {
     flexShrink: 0,
+    paddingStart: 12,
   },
   seeAll: {
     fontSize: 13,
     fontFamily: FontFamily.outfit.medium,
     color: Colors.primary,
-    textAlign: 'right',
   },
   seeAllRtl: {
-    textAlign: 'left',
+    textAlign: 'right',
   },
 });
