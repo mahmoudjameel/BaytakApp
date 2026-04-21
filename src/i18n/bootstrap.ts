@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { DevSettings, I18nManager } from 'react-native';
+import { DevSettings, I18nManager, Platform } from 'react-native';
 import * as Updates from 'expo-updates';
 import i18n, { AppLanguage, RTL_LAYOUT_KEY, STORAGE_KEY } from './i18n';
 
@@ -29,7 +29,9 @@ export async function bootstrapLanguage(): Promise<void> {
   const layoutTarget = shouldRTL ? 'rtl' : 'ltr';
 
   I18nManager.allowRTL(true);
-  I18nManager.swapLeftAndRightInRTL(true);
+  if (Platform.OS !== 'web') {
+    I18nManager.swapLeftAndRightInRTL(true);
+  }
   I18nManager.forceRTL(shouldRTL);
 
   const lastLayout = await AsyncStorage.getItem(RTL_LAYOUT_KEY);
