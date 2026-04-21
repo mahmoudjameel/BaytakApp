@@ -4,6 +4,12 @@ import * as Updates from 'expo-updates';
 import i18n, { AppLanguage, RTL_LAYOUT_KEY, STORAGE_KEY } from './i18n';
 
 function reloadApp() {
+  if (Platform.OS === 'web') {
+    if (typeof window !== 'undefined') {
+      window.location.reload();
+    }
+    return;
+  }
   if (__DEV__) {
     DevSettings.reload();
     return;
@@ -21,17 +27,19 @@ function reloadApp() {
 export async function bootstrapLanguage(): Promise<void> {
   const raw = await AsyncStorage.getItem(STORAGE_KEY);
   const lng: AppLanguage = raw === 'en' || raw === 'ar' ? raw : 'ar';
-  /** أول تشغيل أو قيمة قديمة: نثبّت الاختيار الافتراضي في التخزين */
   if (raw !== 'en' && raw !== 'ar') {
     await AsyncStorage.setItem(STORAGE_KEY, lng);
   }
   const shouldRTL = lng === 'ar';
   const layoutTarget = shouldRTL ? 'rtl' : 'ltr';
 
-  I18nManager.allowRTL(true);
-  if (Platform.OS !== 'web') {
-    I18nManager.swapLeftAndRightInRTL(true);
+  if (Platform.OS === 'web') {
+    await i18n.changeLanguage(lng);
+    return;
   }
+
+  I18nManager.allowRTL(true);
+  I18nManager.swapLeftAndRightInRTL(true);
   I18nManager.forceRTL(shouldRTL);
 
   const lastLayout = await AsyncStorage.getItem(RTL_LAYOUT_KEY);

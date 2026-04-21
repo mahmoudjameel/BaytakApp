@@ -1,6 +1,6 @@
 import './src/i18n/i18n';
-import React, { useCallback, useEffect, useState } from 'react';
-import { View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Platform, View } from 'react-native';
 import {
   useFonts,
   Outfit_400Regular,
@@ -23,7 +23,9 @@ import { bootstrapLanguage } from './src/i18n/bootstrap';
 import { LanguageProvider } from './src/context/LanguageContext';
 import { DirectionalRoot } from './src/components/DirectionalRoot';
 
-SplashScreen.preventAutoHideAsync();
+if (Platform.OS !== 'web') {
+  SplashScreen.preventAutoHideAsync();
+}
 
 export default function App() {
   const [langReady, setLangReady] = useState(false);
@@ -43,18 +45,18 @@ export default function App() {
     bootstrapLanguage().then(() => setLangReady(true));
   }, []);
 
-  const onLayoutRootView = useCallback(async () => {
-    if ((fontsLoaded || fontError) && langReady) {
-      await SplashScreen.hideAsync();
+  useEffect(() => {
+    if (Platform.OS !== 'web' && (fontsLoaded || fontError) && langReady) {
+      SplashScreen.hideAsync();
     }
   }, [fontsLoaded, fontError, langReady]);
 
-  if ((!fontsLoaded && !fontError) || !langReady) {
+  if (Platform.OS !== 'web' && ((!fontsLoaded && !fontError) || !langReady)) {
     return null;
   }
 
   return (
-    <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+    <View style={{ flex: 1 }}>
       <StatusBar style="auto" />
       <SafeAreaProvider>
         <LanguageProvider>
