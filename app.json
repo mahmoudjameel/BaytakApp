@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "Baytak",
+    "slug": "baytak-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/splash.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#147672"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.baytak.app"
+    },
+    "android": {
+      "supportsRTL": true,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/splash.png",
+        "backgroundColor": "#147672"
+      },
+      "package": "com.baytak.app"
+    },
+    "web": {
+      "favicon": "./assets/images/splash.png",
+      "bundler": "metro"
+    }
+  }
+}
