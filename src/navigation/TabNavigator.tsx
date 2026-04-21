@@ -10,6 +10,7 @@ import { ContractScreen } from '../screens/ContractScreen';
 import { ProfileScreen } from '../screens/ProfileScreen';
 import { Colors } from '../theme/colors';
 import { FontFamily, FontSize } from '../theme/typography';
+import { isRTL } from '../utils/rtl';
 
 const Tab = createBottomTabNavigator();
 
@@ -41,60 +42,67 @@ const TabIcon = ({ focused, name, source, label }: TabIconProps) => (
 
 export const TabNavigator = () => {
   const { t } = useTranslation();
+  const rtl = isRTL();
+
+  const tabScreens = [
+    {
+      name: 'Home',
+      component: HomeScreen,
+      renderIcon: (focused: boolean) => (
+        <TabIcon focused={focused} source={require('../../assets/home.png')} label={t('tabs.home')} />
+      ),
+    },
+    {
+      name: 'Booking',
+      component: BookingScreen,
+      renderIcon: (focused: boolean) => (
+        <TabIcon focused={focused} name="calendar-outline" label={t('tabs.booking')} />
+      ),
+    },
+    {
+      name: 'Cart',
+      component: CartScreen,
+      renderIcon: (focused: boolean) => (
+        <TabIcon focused={focused} source={require('../../assets/cart.png')} label={t('tabs.cart')} />
+      ),
+    },
+    {
+      name: 'Contract',
+      component: ContractScreen,
+      renderIcon: (focused: boolean) => (
+        <TabIcon focused={focused} source={require('../../assets/writing 1.png')} label={t('tabs.contract')} />
+      ),
+    },
+    {
+      name: 'MyProfile',
+      component: ProfileScreen,
+      renderIcon: (focused: boolean) => (
+        <TabIcon focused={focused} source={require('../../assets/user.png')} label={t('tabs.profile')} />
+      ),
+    },
+  ] as const;
+
+  const orderedTabs = rtl ? [...tabScreens].reverse() : tabScreens;
 
   return (
     <Tab.Navigator
+      initialRouteName="Home"
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: styles.tabBar,
       }}
     >
-      <Tab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} source={require('../../assets/home.png')} label={t('tabs.home')} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Booking"
-        component={BookingScreen}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} name="calendar-outline" label={t('tabs.booking')} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Cart"
-        component={CartScreen}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} source={require('../../assets/cart.png')} label={t('tabs.cart')} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Contract"
-        component={ContractScreen}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} source={require('../../assets/writing 1.png')} label={t('tabs.contract')} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="MyProfile"
-        component={ProfileScreen}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} source={require('../../assets/user.png')} label={t('tabs.profile')} />
-          ),
-        }}
-      />
+      {orderedTabs.map((tab) => (
+        <Tab.Screen
+          key={tab.name}
+          name={tab.name}
+          component={tab.component}
+          options={{
+            tabBarIcon: ({ focused }) => tab.renderIcon(focused),
+          }}
+        />
+      ))}
     </Tab.Navigator>
   );
 };

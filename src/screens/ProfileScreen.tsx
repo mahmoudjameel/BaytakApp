@@ -17,6 +17,7 @@ import { Colors } from '../theme/colors';
 import { FontFamily, FontSize } from '../theme/typography';
 import { useAppLanguage } from '../context/LanguageContext';
 import { RootStackParamList } from '../navigation/AppNavigator';
+import { backChevronIcon, isRTL } from '../utils/rtl';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -32,6 +33,7 @@ export const ProfileScreen = () => {
   const { t } = useTranslation();
   const { language, setAppLanguage } = useAppLanguage();
   const navigation = useNavigation<NavigationProp>();
+  const rtl = isRTL();
 
   const openLanguagePicker = useCallback(() => {
     Alert.alert(t('profile.chooseLanguageTitle'), t('profile.chooseLanguageMessage'), [
@@ -96,11 +98,11 @@ export const ProfileScreen = () => {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
+      <View style={[styles.header, rtl && styles.headerRtl]}>
         <TouchableOpacity style={styles.backBtn}>
-          <Ionicons name="chevron-back" size={22} color="#1B1D36" />
+          <Ionicons name={backChevronIcon()} size={22} color="#1B1D36" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t('profile.title')}</Text>
+        <Text style={[styles.headerTitle, rtl && styles.headerTitleRtl]}>{t('profile.title')}</Text>
         <View style={styles.backBtn} />
       </View>
 
@@ -118,27 +120,27 @@ export const ProfileScreen = () => {
           </View>
         </View>
 
-        <View style={styles.nameRow}>
-          <Text style={styles.name}>{t('profile.userName')}</Text>
+        <View style={[styles.nameRow, rtl && styles.nameRowRtl]}>
+          <Text style={[styles.name, rtl && styles.nameRtl]}>{t('profile.userName')}</Text>
           <TouchableOpacity style={styles.editBadge}>
             <Ionicons name="pencil" size={13} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
-        <Text style={styles.email}>{t('profile.userEmail')}</Text>
+        <Text style={[styles.email, rtl && styles.emailRtl]}>{t('profile.userEmail')}</Text>
 
         <View style={styles.menuList}>
           {menuItems.map((item, index) => (
             <TouchableOpacity
               key={item.id}
-              style={[styles.menuRow, index < menuItems.length - 1 && styles.menuRowBorder]}
+              style={[styles.menuRow, rtl && styles.menuRowRtl, index < menuItems.length - 1 && styles.menuRowBorder]}
               activeOpacity={0.75}
               onPress={item.onPress}
             >
               <View style={[styles.menuIconWrap, { backgroundColor: item.iconBg }]}>
                 <Ionicons name={item.icon} size={20} color="#5C6272" />
               </View>
-              <Text style={styles.menuLabel}>{t(item.labelKey)}</Text>
-              <Ionicons name="chevron-forward" size={18} color="#B0B5C3" />
+              <Text style={[styles.menuLabel, rtl && styles.menuLabelRtl]}>{t(item.labelKey)}</Text>
+              <Ionicons name={rtl ? 'chevron-back' : 'chevron-forward'} size={18} color="#B0B5C3" />
             </TouchableOpacity>
           ))}
         </View>
@@ -158,8 +160,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     justifyContent: 'space-between',
   },
+  headerRtl: {
+    flexDirection: 'row-reverse',
+  },
   backBtn: { width: 36, height: 36, alignItems: 'center', justifyContent: 'center' },
   headerTitle: { fontSize: 18, fontFamily: FontFamily.outfit.semiBold, color: '#1B1D36' },
+  headerTitleRtl: { writingDirection: 'rtl' },
   scrollContent: { alignItems: 'center', paddingHorizontal: 16 },
   avatarSection: { marginTop: 20, marginBottom: 16 },
   avatarWrap: { position: 'relative' },
@@ -188,10 +194,17 @@ const styles = StyleSheet.create({
     gap: 8,
     marginBottom: 4,
   },
+  nameRowRtl: {
+    flexDirection: 'row-reverse',
+  },
   name: {
     fontSize: 20,
     fontFamily: FontFamily.outfit.bold,
     color: '#1B1D36',
+  },
+  nameRtl: {
+    textAlign: 'right',
+    writingDirection: 'rtl',
   },
   editBadge: {
     width: 26,
@@ -206,6 +219,10 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.outfit.regular,
     color: '#9AA0AE',
     marginBottom: 24,
+  },
+  emailRtl: {
+    textAlign: 'right',
+    writingDirection: 'rtl',
   },
   menuList: {
     width: '100%',
@@ -227,6 +244,9 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     gap: 14,
   },
+  menuRowRtl: {
+    flexDirection: 'row-reverse',
+  },
   menuRowBorder: {
     borderBottomWidth: 1,
     borderBottomColor: '#F2F3F7',
@@ -243,5 +263,9 @@ const styles = StyleSheet.create({
     fontSize: FontSize.base,
     fontFamily: FontFamily.outfit.medium,
     color: '#1B1D36',
+  },
+  menuLabelRtl: {
+    textAlign: 'right',
+    writingDirection: 'rtl',
   },
 });

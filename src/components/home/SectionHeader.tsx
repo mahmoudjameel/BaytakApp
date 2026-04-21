@@ -15,29 +15,44 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({ title, onSeeAll, s
   const { t } = useTranslation();
   const seeAll = seeAllLabel ?? t('common.seeAll');
   const rtl = isRTL();
+  const titleNode = (
+    <View style={styles.titleWrap}>
+      <Text style={[styles.sectionTitle, rtl && styles.sectionTitleRtl]} numberOfLines={1}>
+        {title}
+      </Text>
+    </View>
+  );
+  const seeAllNode = (
+    <TouchableOpacity
+      style={styles.seeAllBtn}
+      onPress={() => onSeeAll?.()}
+      activeOpacity={0.7}
+      hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+    >
+      <Text style={[styles.seeAll, rtl && styles.seeAllRtl]}>{seeAll}</Text>
+    </TouchableOpacity>
+  );
 
   return (
     <View style={styles.sectionHeader}>
-      <View style={styles.titleWrap}>
-        <Text style={[styles.sectionTitle, rtl && styles.sectionTitleRtl]} numberOfLines={1}>
-          {title}
-        </Text>
-      </View>
-      <TouchableOpacity
-        style={styles.seeAllBtn}
-        onPress={() => onSeeAll?.()}
-        activeOpacity={0.7}
-        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-      >
-        <Text style={[styles.seeAll, rtl && styles.seeAllRtl]}>{seeAll}</Text>
-      </TouchableOpacity>
+      {rtl ? (
+        <>
+          {seeAllNode}
+          {titleNode}
+        </>
+      ) : (
+        <>
+          {titleNode}
+          {seeAllNode}
+        </>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   sectionHeader: {
-    alignSelf: 'stretch',
+    width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -46,8 +61,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   titleWrap: {
-    flex: 1,
-    minWidth: 0,
+    flexShrink: 1,
+    maxWidth: '78%',
   },
   sectionTitle: {
     fontSize: 17,
@@ -61,7 +76,6 @@ const styles = StyleSheet.create({
   },
   seeAllBtn: {
     flexShrink: 0,
-    paddingStart: 12,
   },
   seeAll: {
     fontSize: 13,
