@@ -30,6 +30,7 @@ import { ProviderTimeScreen } from '../screens/provider/ProviderTimeScreen';
 import { ProviderWalletScreen } from '../screens/provider/ProviderWalletScreen';
 import { AddNewServiceScreen } from '../screens/provider/AddNewServiceScreen';
 import { TeamsScreen } from '../screens/provider/TeamsScreen';
+import { ProviderProfileScreen } from '../screens/provider/ProviderProfileScreen';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -77,6 +78,7 @@ export type RootStackParamList = {
   ProviderWallet: undefined;
   AddNewService: undefined;
   Teams: undefined;
+  ProviderProfile: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();

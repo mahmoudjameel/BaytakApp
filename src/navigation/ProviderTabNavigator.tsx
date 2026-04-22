@@ -12,8 +12,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ProviderHomeScreen } from '../screens/provider/ProviderHomeScreen';
 import { ProviderPerformanceScreen } from '../screens/provider/ProviderPerformanceScreen';
 import { ProviderOrderScreen } from '../screens/provider/ProviderOrderScreen';
-import { ProviderWalletScreen } from '../screens/provider/ProviderWalletScreen';
-import { ProfileScreen } from '../screens/ProfileScreen';
+import { ProviderProfileScreen } from '../screens/provider/ProviderProfileScreen';
 import { Colors } from '../theme/colors';
 import { FontFamily } from '../theme/typography';
 import { isRTL } from '../utils/rtl';
@@ -91,11 +90,11 @@ export const ProviderTabNavigator = () => {
       label: 'order',
     },
     {
-      name: 'ProviderWallet',
-      component: ProviderWalletScreen,
-      icon: 'wallet-outline' as const,
-      focusedIcon: 'wallet' as const,
-      label: 'Walet',
+      name: 'ProviderProfile',
+      component: ProviderProfileScreen,
+      icon: 'person-outline' as const,
+      focusedIcon: 'person' as const,
+      label: 'My Profile',
     },
   ] as const;
 
