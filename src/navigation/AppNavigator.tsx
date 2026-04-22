@@ -20,6 +20,16 @@ import { WalletScreen } from '../screens/WalletScreen';
 import { HelpCenterScreen } from '../screens/HelpCenterScreen';
 import { NotificationsScreen } from '../screens/NotificationsScreen';
 import { TabNavigator } from './TabNavigator';
+import { ProviderTabNavigator } from './ProviderTabNavigator';
+
+import { ProviderSelectServicesScreen } from '../screens/provider/ProviderSelectServicesScreen';
+import { ProviderAccountSuccessScreen } from '../screens/provider/ProviderAccountSuccessScreen';
+import { ProviderPerformanceScreen } from '../screens/provider/ProviderPerformanceScreen';
+import { ProviderOrderScreen } from '../screens/provider/ProviderOrderScreen';
+import { ProviderTimeScreen } from '../screens/provider/ProviderTimeScreen';
+import { ProviderWalletScreen } from '../screens/provider/ProviderWalletScreen';
+import { AddNewServiceScreen } from '../screens/provider/AddNewServiceScreen';
+import { TeamsScreen } from '../screens/provider/TeamsScreen';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -58,6 +68,15 @@ export type RootStackParamList = {
   HelpCenter: undefined;
   Notifications: undefined;
   Main: undefined;
+  ProviderSelectServices: { accountType?: 'provider' | 'company' } | undefined;
+  ProviderAccountSuccess: undefined;
+  ProviderMain: undefined;
+  ProviderPerformance: undefined;
+  ProviderOrders: undefined;
+  ProviderTime: undefined;
+  ProviderWallet: undefined;
+  AddNewService: undefined;
+  Teams: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -85,6 +104,16 @@ export const AppNavigator = () => {
         <Stack.Screen name="HelpCenter" component={HelpCenterScreen} />
         <Stack.Screen name="Notifications" component={NotificationsScreen} />
         <Stack.Screen name="Main" component={TabNavigator} />
+
+        <Stack.Screen name="ProviderSelectServices" component={ProviderSelectServicesScreen} />
+        <Stack.Screen name="ProviderAccountSuccess" component={ProviderAccountSuccessScreen} />
+        <Stack.Screen name="ProviderMain" component={ProviderTabNavigator} />
+        <Stack.Screen name="ProviderPerformance" component={ProviderPerformanceScreen} />
+        <Stack.Screen name="ProviderOrders" component={ProviderOrderScreen} />
+        <Stack.Screen name="ProviderTime" component={ProviderTimeScreen} />
+        <Stack.Screen name="ProviderWallet" component={ProviderWalletScreen} />
+        <Stack.Screen name="AddNewService" component={AddNewServiceScreen} />
+        <Stack.Screen name="Teams" component={TeamsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

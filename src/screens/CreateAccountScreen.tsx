@@ -18,6 +18,24 @@ import { SocialButton } from '../components/SocialButton';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { isRTL } from '../utils/rtl';
 
+const StepIndicator = ({ current, total }: { current: number; total: number }) => (
+  <View style={stepStyles.row}>
+    {Array.from({ length: total }).map((_, i) => (
+      <View
+        key={i}
+        style={[stepStyles.bar, i < current ? stepStyles.barActive : stepStyles.barInactive]}
+      />
+    ))}
+  </View>
+);
+
+const stepStyles = StyleSheet.create({
+  row: { flexDirection: 'row', gap: 6, paddingHorizontal: 24, marginBottom: 0 },
+  bar: { flex: 1, height: 4, borderRadius: 2 },
+  barActive: { backgroundColor: Colors.primary },
+  barInactive: { backgroundColor: '#E0E0E0' },
+});
+
 type Props = NativeStackScreenProps<RootStackParamList, 'CreateAccount'>;
 
 type AccountKind = 'provider' | 'company' | 'individual';
@@ -109,6 +127,7 @@ export const CreateAccountScreen: React.FC<Props> = ({ route, navigation }) => {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
+      {isProviderFlow && <StepIndicator current={2} total={3} />}
       <ScrollView
         contentContainerStyle={styles.scroll}
         showsVerticalScrollIndicator={false}
@@ -181,7 +200,17 @@ export const CreateAccountScreen: React.FC<Props> = ({ route, navigation }) => {
           )}
         </View>
 
-        <Button title={t('auth.createAccountButton')} onPress={() => navigation.navigate('Verification')} style={styles.createBtn} />
+        <Button
+          title={t('auth.createAccountButton')}
+          onPress={() => {
+            if (isProviderFlow) {
+              navigation.navigate('ProviderSelectServices', { accountType: accountType as 'provider' | 'company' });
+            } else {
+              navigation.navigate('Verification');
+            }
+          }}
+          style={styles.createBtn}
+        />
 
         {!isProviderFlow && (
           <>
