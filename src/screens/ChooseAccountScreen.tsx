@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     paddingBottom: 4,
   },
   topBarRtl: {
-    alignItems: 'flex-start',
+    alignItems: 'flex-end',
   },
   backHit: {
     width: 44,

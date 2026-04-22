@@ -10,7 +10,7 @@ import { FontFamily } from '../theme/typography';
 import { Button } from '../components/Button';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { backChevronIcon } from '../utils/rtl';
+import { backChevronIcon, isRTL } from '../utils/rtl';
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Verification'>;
@@ -18,6 +18,7 @@ type Props = {
 
 export const VerificationScreen: React.FC<Props> = ({ navigation }) => {
   const { t } = useTranslation();
+  const rtl = isRTL();
   const [code, setCode] = useState(['', '', '', '', '']);
   const inputs = useRef<(TextInput | null)[]>([]);
 
@@ -32,7 +33,7 @@ export const VerificationScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
-      <View style={styles.topBar}>
+      <View style={[styles.topBar, rtl && styles.topBarRtl]}>
         <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
           <Ionicons name={backChevronIcon()} size={22} color={Colors.textDark} />
         </TouchableOpacity>
@@ -101,6 +102,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     backgroundColor: '#FFFFFF',
+  },
+  topBarRtl: {
+    flexDirection: 'row-reverse',
   },
   topTitle: {
     fontSize: 16,

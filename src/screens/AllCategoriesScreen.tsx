@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { FontFamily } from '../theme/typography';
 import { Colors } from '../theme/colors';
-import { backChevronIcon } from '../utils/rtl';
+import { backChevronIcon, isRTL } from '../utils/rtl';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AllCategories'>;
 
@@ -35,6 +35,7 @@ const categoryDefs = [
 
 export const AllCategoriesScreen: React.FC<Props> = ({ navigation }) => {
   const { t } = useTranslation();
+  const rtl = isRTL();
 
   const allCategories = useMemo(
     () => categoryDefs.map((c) => ({ ...c, name: t(c.nameKey) })),
@@ -43,7 +44,7 @@ export const AllCategoriesScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
+      <View style={[styles.header, rtl && styles.headerRtl]}>
         <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
           <Ionicons name={backChevronIcon()} size={22} color="#1B1D36" />
         </TouchableOpacity>
@@ -78,6 +79,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
+  },
+  headerRtl: {
+    flexDirection: 'row-reverse',
   },
   backBtn: {
     width: 36,

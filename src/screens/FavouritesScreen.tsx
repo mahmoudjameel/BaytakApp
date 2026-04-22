@@ -15,7 +15,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { FontFamily } from '../theme/typography';
 import { Colors } from '../theme/colors';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import { backChevronIcon } from '../utils/rtl';
+import { backChevronIcon, isRTL } from '../utils/rtl';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Favourites'>;
 
@@ -40,6 +40,7 @@ const items: FavItem[] = PRODUCT_IMAGES.map((img, i) => ({
 
 export const FavouritesScreen: React.FC<Props> = ({ navigation }) => {
   const { t } = useTranslation();
+  const rtl = isRTL();
   const { width } = useWindowDimensions();
   const gap = 12;
   const pad = 16;
@@ -82,7 +83,7 @@ export const FavouritesScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
+      <View style={[styles.header, rtl && styles.headerRtl]}>
         <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()} hitSlop={12}>
           <Ionicons name={backChevronIcon()} size={22} color="#1B1D36" />
         </TouchableOpacity>
@@ -119,6 +120,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     justifyContent: 'space-between',
+  },
+  headerRtl: {
+    flexDirection: 'row-reverse',
   },
   backBtn: { width: 36, height: 36, alignItems: 'center', justifyContent: 'center' },
   headerSide: { width: 36 },

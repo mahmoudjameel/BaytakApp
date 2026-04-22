@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { FontFamily } from '../theme/typography';
-import { backArrowIcon } from '../utils/rtl';
+import { backArrowIcon, isRTL } from '../utils/rtl';
 
 type ContractTab = 'active' | 'pendingApproval' | 'completed';
 
@@ -12,6 +12,7 @@ const tabs: ContractTab[] = ['active', 'pendingApproval', 'completed'];
 
 export const ContractScreen = () => {
   const { t } = useTranslation();
+  const rtl = isRTL();
   const [activeTab, setActiveTab] = useState<ContractTab>('active');
   const [search, setSearch] = useState('');
 
@@ -77,7 +78,7 @@ export const ContractScreen = () => {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
+      <View style={[styles.header, rtl && styles.headerRtl]}>
         <TouchableOpacity style={styles.backBtn}>
           <Ionicons name={backArrowIcon()} size={23} color="#1B1D36" />
         </TouchableOpacity>
@@ -151,6 +152,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
+  },
+  headerRtl: {
+    flexDirection: 'row-reverse',
   },
   backBtn: { width: 34, height: 34, alignItems: 'center', justifyContent: 'center' },
   headerTitle: { fontSize: 18, color: '#1B1D36', fontFamily: FontFamily.outfit.semiBold },

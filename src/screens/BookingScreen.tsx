@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { FontFamily } from '../theme/typography';
-import { backArrowIcon } from '../utils/rtl';
+import { backArrowIcon, isRTL } from '../utils/rtl';
 
 type BookingFilter = 'upcoming' | 'past' | 'cancel';
 
@@ -12,6 +12,7 @@ const filters: BookingFilter[] = ['upcoming', 'past', 'cancel'];
 
 export const BookingScreen = () => {
   const { t } = useTranslation();
+  const rtl = isRTL();
   const [activeFilter, setActiveFilter] = useState<BookingFilter>('upcoming');
 
   const bookings = useMemo(
@@ -56,7 +57,7 @@ export const BookingScreen = () => {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
+      <View style={[styles.header, rtl && styles.headerRtl]}>
         <TouchableOpacity style={styles.iconBtn}>
           <Ionicons name={backArrowIcon()} size={23} color="#1B1D36" />
         </TouchableOpacity>
@@ -132,6 +133,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
+  },
+  headerRtl: {
+    flexDirection: 'row-reverse',
   },
   iconBtn: {
     width: 40,

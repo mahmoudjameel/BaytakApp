@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { FontFamily } from '../theme/typography';
 import { Colors } from '../theme/colors';
-import { backChevronIcon } from '../utils/rtl';
+import { backChevronIcon, isRTL } from '../utils/rtl';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'MakeAppointment'>;
 
@@ -27,6 +27,7 @@ const weekdayKeys = ['weekdays.mon', 'weekdays.tu', 'weekdays.wed', 'weekdays.th
 
 export const MakeAppointmentScreen: React.FC<Props> = ({ navigation, route }) => {
   const { t } = useTranslation();
+  const rtl = isRTL();
   const [selectedDateId, setSelectedDateId] = useState('4');
   const [selectedTimeKey, setSelectedTimeKey] = useState<string>('timeSlots.t2');
   const [promo, setPromo] = useState('');
@@ -57,7 +58,7 @@ export const MakeAppointmentScreen: React.FC<Props> = ({ navigation, route }) =>
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-        <View style={styles.header}>
+        <View style={[styles.header, rtl && styles.headerRtl]}>
           <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
             <Ionicons name={backChevronIcon()} size={22} color="#1E2239" />
           </TouchableOpacity>
@@ -200,6 +201,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  headerRtl: {
+    flexDirection: 'row-reverse',
   },
   backBtn: { width: 34, height: 34, alignItems: 'center', justifyContent: 'center' },
   headerTitle: { fontSize: 30 / 2, color: '#1E2239', fontFamily: FontFamily.outfit.semiBold },

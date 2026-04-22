@@ -13,7 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { FontFamily } from '../theme/typography';
-import { backChevronIcon } from '../utils/rtl';
+import { backChevronIcon, isRTL } from '../utils/rtl';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Offer'>;
 
@@ -46,10 +46,11 @@ const offers = [
 
 export const OfferScreen: React.FC<Props> = ({ navigation }) => {
   const { t } = useTranslation();
+  const rtl = isRTL();
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
+      <View style={[styles.header, rtl && styles.headerRtl]}>
         <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
           <Ionicons name={backChevronIcon()} size={22} color="#1E2239" />
         </TouchableOpacity>
@@ -74,6 +75,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
+  },
+  headerRtl: {
+    flexDirection: 'row-reverse',
   },
   backBtn: { width: 34, height: 34, alignItems: 'center', justifyContent: 'center' },
   headerTitle: { fontSize: 18, color: '#1E2239', fontFamily: FontFamily.outfit.semiBold },

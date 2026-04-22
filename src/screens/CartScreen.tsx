@@ -4,10 +4,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { FontFamily } from '../theme/typography';
-import { backArrowIcon } from '../utils/rtl';
+import { backArrowIcon, isRTL } from '../utils/rtl';
 
 export const CartScreen = () => {
   const { t } = useTranslation();
+  const rtl = isRTL();
   const [items, setItems] = useState([
     { id: '1', price: 30, rating: '4.8', qty: 1 },
     { id: '2', price: 30, rating: '4.8', qty: 1 },
@@ -21,7 +22,7 @@ export const CartScreen = () => {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-        <View style={styles.header}>
+        <View style={[styles.header, rtl && styles.headerRtl]}>
           <TouchableOpacity style={styles.backBtn}>
             <Ionicons name={backArrowIcon()} size={22} color="#1B1D36" />
           </TouchableOpacity>
@@ -126,6 +127,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  headerRtl: {
+    flexDirection: 'row-reverse',
   },
   backBtn: { width: 34, height: 34, alignItems: 'center', justifyContent: 'center' },
   headerTitle: { fontSize: 18, color: '#1B1D36', fontFamily: FontFamily.outfit.semiBold },

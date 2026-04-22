@@ -170,7 +170,7 @@ export const ProductDetailsScreen: React.FC<Props> = ({ navigation, route }) => 
             }}
           />
           <SafeAreaView edges={['top']} style={styles.heroSafe}>
-            <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()} hitSlop={12}>
+            <TouchableOpacity style={[styles.backBtn, rtl && styles.backBtnRtl]} onPress={() => navigation.goBack()} hitSlop={12}>
               <Ionicons name={backChevronIcon()} size={24} color="#1B1D36" />
             </TouchableOpacity>
           </SafeAreaView>
@@ -292,6 +292,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 10,
     alignSelf: 'flex-start',
+  },
+  backBtnRtl: {
+    alignSelf: 'flex-end',
   },
   thumbDock: {
     position: 'absolute',

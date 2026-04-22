@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { FontFamily } from '../theme/typography';
 import { Colors } from '../theme/colors';
-import { backChevronIcon } from '../utils/rtl';
+import { backChevronIcon, isRTL } from '../utils/rtl';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AddAddress'>;
 
@@ -127,13 +127,14 @@ const categoryData: Record<CategoryKey, { markers: MarkerItem[]; services: Servi
 
 export const AddAddressScreen: React.FC<Props> = ({ navigation }) => {
   const { t } = useTranslation();
+  const rtl = isRTL();
   const [selectedCategory, setSelectedCategory] = useState<CategoryKey>('cleaning');
   const currentData = useMemo(() => categoryData[selectedCategory], [selectedCategory]);
   const featuredService = currentData.services[0];
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
+      <View style={[styles.header, rtl && styles.headerRtl]}>
         <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
           <Ionicons name={backChevronIcon()} size={22} color="#1E2239" />
         </TouchableOpacity>
@@ -247,6 +248,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     backgroundColor: '#FFFFFF',
+  },
+  headerRtl: {
+    flexDirection: 'row-reverse',
   },
   backBtn: { width: 34, height: 34, alignItems: 'center', justifyContent: 'center' },
   headerTitle: {

@@ -14,7 +14,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { FontFamily } from '../theme/typography';
 import { Colors } from '../theme/colors';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import { backChevronIcon } from '../utils/rtl';
+import { backChevronIcon, isRTL } from '../utils/rtl';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'HelpCenter'>;
 
@@ -22,12 +22,13 @@ const HELP_CARDS = ['card1Title', 'card2Title'] as const;
 
 export const HelpCenterScreen: React.FC<Props> = ({ navigation }) => {
   const { t } = useTranslation();
+  const rtl = isRTL();
   const { width } = useWindowDimensions();
   const cardWidth = (width - 16 * 2 - 12) / 2;
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
-      <View style={styles.header}>
+      <View style={[styles.header, rtl && styles.headerRtl]}>
         <TouchableOpacity style={styles.iconBtn} onPress={() => navigation.goBack()} hitSlop={12}>
           <Ionicons name={backChevronIcon()} size={22} color="#1B1D36" />
         </TouchableOpacity>
@@ -84,6 +85,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     justifyContent: 'space-between',
+  },
+  headerRtl: {
+    flexDirection: 'row-reverse',
   },
   iconBtn: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
   title: { fontSize: 18, fontFamily: FontFamily.outfit.semiBold, color: '#1B1D36' },

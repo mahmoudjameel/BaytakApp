@@ -24,7 +24,7 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 type MenuItem = {
   id: string;
   labelKey: string;
-  icon: keyof typeof Ionicons.glyphMap;
+  iconSource: any;
   iconBg: string;
   onPress?: () => void;
 };
@@ -48,48 +48,48 @@ export const ProfileScreen = () => {
       {
         id: '1',
         labelKey: 'profile.favourites',
-        icon: 'heart-outline',
+        iconSource: require('../../assets/favourite.png'),
         iconBg: '#F0F0F0',
         onPress: () => navigation.navigate('Favourites'),
       },
       {
         id: '2',
         labelKey: 'profile.wallet',
-        icon: 'wallet-outline',
+        iconSource: require('../../assets/wallet-01.png'),
         iconBg: '#F0F0F0',
         onPress: () => navigation.navigate('Wallet'),
       },
       {
         id: '3',
         labelKey: 'profile.notifications',
-        icon: 'notifications-outline',
+        iconSource: require('../../assets/notification-02.png'),
         iconBg: '#F0F0F0',
         onPress: () => navigation.navigate('Notifications'),
       },
       {
         id: '4',
         labelKey: 'profile.security',
-        icon: 'shield-checkmark-outline',
+        iconSource: require('../../assets/security-check.png'),
         iconBg: '#F0F0F0',
       },
       {
         id: '5',
         labelKey: 'profile.language',
-        icon: 'language-outline',
+        iconSource: require('../../assets/language-square.png'),
         iconBg: '#F0F0F0',
         onPress: openLanguagePicker,
       },
       {
         id: '6',
         labelKey: 'profile.helpCenter',
-        icon: 'help-circle-outline',
+        iconSource: require('../../assets/help-square.png'),
         iconBg: '#F0F0F0',
         onPress: () => navigation.navigate('HelpCenter'),
       },
       {
         id: '7',
         labelKey: 'inviteFriends.menuLabel',
-        icon: 'people-outline',
+        iconSource: require('../../assets/user-multiple.png'),
         iconBg: '#F0F0F0',
       },
     ],
@@ -137,7 +137,7 @@ export const ProfileScreen = () => {
               onPress={item.onPress}
             >
               <View style={[styles.menuIconWrap, { backgroundColor: item.iconBg }]}>
-                <Ionicons name={item.icon} size={20} color="#5C6272" />
+                <Image source={item.iconSource} style={styles.menuIconImage} resizeMode="contain" />
               </View>
               <Text style={[styles.menuLabel, rtl && styles.menuLabelRtl]}>{t(item.labelKey)}</Text>
               <Ionicons name={rtl ? 'chevron-back' : 'chevron-forward'} size={18} color="#B0B5C3" />
@@ -257,6 +257,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  menuIconImage: {
+    width: 21,
+    height: 21,
   },
   menuLabel: {
     flex: 1,

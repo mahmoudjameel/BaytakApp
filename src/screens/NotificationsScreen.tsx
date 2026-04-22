@@ -13,7 +13,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { FontFamily } from '../theme/typography';
 import { Colors } from '../theme/colors';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import { backChevronIcon } from '../utils/rtl';
+import { backChevronIcon, isRTL } from '../utils/rtl';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Notifications'>;
 
@@ -22,11 +22,12 @@ const NOTIF_IDS = ['1', '2', '3', '4', '5'];
 
 export const NotificationsScreen: React.FC<Props> = ({ navigation }) => {
   const { t } = useTranslation();
+  const rtl = isRTL();
   const [activeFilter, setActiveFilter] = useState<NotifFilter>('all');
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
+      <View style={[styles.header, rtl && styles.headerRtl]}>
         <TouchableOpacity style={styles.iconBtn} onPress={() => navigation.goBack()} hitSlop={12}>
           <Ionicons name={backChevronIcon()} size={22} color="#1B1D36" />
         </TouchableOpacity>
@@ -83,6 +84,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     justifyContent: 'space-between',
     backgroundColor: '#F5F7F7',
+  },
+  headerRtl: {
+    flexDirection: 'row-reverse',
   },
   iconBtn: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
   title: { fontSize: 18, fontFamily: FontFamily.outfit.semiBold, color: '#1B1D36' },
