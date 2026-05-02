@@ -81,7 +81,21 @@ export type RootStackParamList = {
   Notifications: undefined;
   LanguageSettings: undefined;
   Main: undefined;
-  ProviderSelectServices: { accountType?: 'provider' | 'company' } | undefined;
+  ProviderSelectServices: {
+    accountType?: 'provider' | 'company';
+    registrationData?: {
+      role: 'PROVIDER';
+      accountType: 'INDIVIDUAL' | 'COMPANY';
+      fullName?: string;
+      email: string;
+      phone: string;
+      password: string;
+      nationalAddress?: string;
+      commercialRegistrationNumber?: string;
+      taxIdNumber?: string;
+      commercialName?: string;
+    };
+  } | undefined;
   ProviderAccountSuccess: undefined;
   ProviderMain: undefined;
   ProviderPerformance: undefined;

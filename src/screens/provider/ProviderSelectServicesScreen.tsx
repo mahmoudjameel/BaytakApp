@@ -11,7 +11,9 @@ import { Button } from '../../components/Button';
 import { RootStackParamList } from '../../navigation/AppNavigator';
 import { isRTL } from '../../utils/rtl';
 import { CategoriesService, Category } from '../../services/categories.service';
+import { AuthService } from '../../services/auth.service';
 import { ProfileService } from '../../services/profile.service';
+import { TokenStorage } from '../../services/api';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ProviderSelectServices'>;
 
@@ -38,13 +40,15 @@ const FALLBACK_ICONS = [
   require('../../../assets/menu 1.png'),
 ];
 
-export const ProviderSelectServicesScreen: React.FC<Props> = ({ navigation }) => {
+export const ProviderSelectServicesScreen: React.FC<Props> = ({ route, navigation }) => {
   const { t } = useTranslation();
   const rtl = isRTL();
   const [selected, setSelected] = useState<number[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+
+  const registrationData = route.params?.registrationData;
 
   useEffect(() => {
     CategoriesService.getAll({ limit: 50 })
@@ -62,12 +66,47 @@ export const ProviderSelectServicesScreen: React.FC<Props> = ({ navigation }) =>
       Alert.alert(t('common.error'), t('providerSelectServices.selectAtLeastOne'));
       return;
     }
+
     setSaving(true);
     try {
-      await ProfileService.updateProviderProfile({ categoryIds: selected });
+      if (registrationData) {
+        const payload = registrationData.accountType === 'INDIVIDUAL'
+          ? {
+              role: 'PROVIDER' as const,
+              accountType: 'INDIVIDUAL' as const,
+              fullName: registrationData.fullName ?? '',
+              email: registrationData.email,
+              phone: registrationData.phone,
+              password: registrationData.password,
+              nationalAddress: registrationData.nationalAddress ?? '',
+              categoryIds: selected,
+            }
+          : {
+              role: 'PROVIDER' as const,
+              accountType: 'COMPANY' as const,
+              email: registrationData.email,
+              phone: registrationData.phone,
+              password: registrationData.password,
+              commercialRegistrationNumber: registrationData.commercialRegistrationNumber ?? '',
+              taxIdNumber: registrationData.taxIdNumber ?? '',
+              commercialName: registrationData.commercialName ?? '',
+              nationalAddress: registrationData.nationalAddress ?? '',
+              categoryIds: selected,
+            };
+
+        await AuthService.register(payload);
+
+        await AuthService.signIn(registrationData.email, registrationData.password);
+      } else {
+        const savedToken = await TokenStorage.getAccess();
+        if (savedToken) {
+          await ProfileService.updateProviderProfile({ categoryIds: selected });
+        }
+      }
+
       navigation.navigate('ProviderAccountSuccess');
-    } catch {
-      navigation.navigate('ProviderAccountSuccess');
+    } catch (err: any) {
+      Alert.alert(t('common.error'), err?.message ?? t('common.somethingWentWrong'));
     } finally {
       setSaving(false);
     }
