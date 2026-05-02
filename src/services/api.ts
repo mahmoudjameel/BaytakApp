@@ -1,6 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
 
 export const BASE_URL = 'https://api.abdallah-ghazal.cloud';
+
+function getApiBase(): string {
+  if (Platform.OS === 'web') {
+    return '/api';
+  }
+  return BASE_URL;
+}
 
 const STORAGE_KEYS = {
   ACCESS_TOKEN: '@baytak_access_token',
@@ -38,7 +46,7 @@ async function refreshAccessToken(): Promise<string | null> {
   const refreshToken = await TokenStorage.getRefresh();
   if (!refreshToken) return null;
   try {
-    const res = await fetch(`${BASE_URL}/auth/mobile/refresh`, {
+    const res = await fetch(`${getApiBase()}/auth/mobile/refresh`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ refreshToken }),
@@ -67,7 +75,7 @@ export async function apiRequest<T = any>(
   };
   if (token) headers['Authorization'] = `Bearer ${token}`;
 
-  const res = await fetch(`${BASE_URL}${path}`, { ...options, headers });
+  const res = await fetch(`${getApiBase()}${path}`, { ...options, headers });
 
   if (res.status === 401 && retry) {
     const newToken = await refreshAccessToken();
@@ -96,7 +104,7 @@ export async function apiUpload<T = any>(
   const headers: Record<string, string> = {};
   if (token) headers['Authorization'] = `Bearer ${token}`;
 
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const res = await fetch(`${getApiBase()}${path}`, {
     method,
     headers,
     body: formData,
