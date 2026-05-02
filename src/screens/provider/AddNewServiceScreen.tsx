@@ -12,6 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useTranslation } from 'react-i18next';
 import { Colors } from '../../theme/colors';
 import { FontFamily } from '../../theme/typography';
 import { InputField } from '../../components/InputField';
@@ -23,6 +24,7 @@ type Nav = NativeStackNavigationProp<RootStackParamList>;
 
 export const AddNewServiceScreen: React.FC = () => {
   const navigation = useNavigation<Nav>();
+  const { t } = useTranslation();
   const rtl = isRTL();
 
   const [serviceTitle, setServiceTitle] = useState('');
@@ -39,7 +41,7 @@ export const AddNewServiceScreen: React.FC = () => {
           <TouchableOpacity style={styles.iconBtn} onPress={() => navigation.goBack()} hitSlop={12}>
             <Ionicons name={backChevronIcon()} size={22} color="#1B1D36" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Add New Service</Text>
+          <Text style={styles.headerTitle}>{t('providerHome.addNewService')}</Text>
           <View style={styles.iconBtn} />
         </View>
 
@@ -49,8 +51,8 @@ export const AddNewServiceScreen: React.FC = () => {
           keyboardShouldPersistTaps="handled"
         >
           <InputField
-            label="Service Title"
-            placeholder="enter your Service Title"
+            label={t('addNewService.serviceTitle')}
+            placeholder={t('addNewService.serviceTitlePlaceholder')}
             value={serviceTitle}
             onChangeText={setServiceTitle}
             labelStyle={[styles.fieldLabel, rtl && styles.textRtl]}
@@ -61,8 +63,8 @@ export const AddNewServiceScreen: React.FC = () => {
           />
 
           <InputField
-            label="Price Upon Viewing"
-            placeholder="Enter Price"
+            label={t('addNewService.priceUponViewing')}
+            placeholder={t('addNewService.enterPrice')}
             value={price}
             onChangeText={setPrice}
             keyboardType="numeric"
@@ -73,19 +75,19 @@ export const AddNewServiceScreen: React.FC = () => {
             containerStyle={styles.fieldContainer}
           />
 
-          <Text style={[styles.fieldLabel, rtl && styles.textRtl]}>Time</Text>
+          <Text style={[styles.fieldLabel, rtl && styles.textRtl]}>{t('providerTime.title')}</Text>
           <TouchableOpacity
             style={styles.timeSelector}
             onPress={() => navigation.navigate('ProviderTime')}
             activeOpacity={0.8}
           >
             <Ionicons name="time-outline" size={18} color="#A7AEC1" />
-            <Text style={styles.timePlaceholder}>Select your Time</Text>
+            <Text style={styles.timePlaceholder}>{t('providerTime.selectTime')}</Text>
           </TouchableOpacity>
 
           <InputField
-            label="Location Pin"
-            placeholder="Create your username"
+            label={t('addNewService.locationPin')}
+            placeholder={t('addNewService.locationPinPlaceholder')}
             value={locationPin}
             onChangeText={setLocationPin}
             labelStyle={[styles.fieldLabel, rtl && styles.textRtl]}
@@ -95,18 +97,18 @@ export const AddNewServiceScreen: React.FC = () => {
             containerStyle={styles.fieldContainer}
           />
 
-          <Text style={[styles.fieldLabel, rtl && styles.textRtl]}>Image Upload Icon</Text>
+          <Text style={[styles.fieldLabel, rtl && styles.textRtl]}>{t('addNewService.imageUploadIcon')}</Text>
           <TouchableOpacity style={styles.uploadBox} activeOpacity={0.8}>
             <View style={styles.uploadIconCircle}>
               <Ionicons name="arrow-up-circle-outline" size={32} color={Colors.primary} />
             </View>
-            <Text style={styles.uploadText}>Image Upload</Text>
+            <Text style={styles.uploadText}>{t('addNewService.imageUpload')}</Text>
           </TouchableOpacity>
         </ScrollView>
 
         <View style={styles.footer}>
           <Button
-            title="Add New Service"
+            title={t('providerHome.addNewService')}
             onPress={() => navigation.goBack()}
             style={styles.submitBtn}
           />

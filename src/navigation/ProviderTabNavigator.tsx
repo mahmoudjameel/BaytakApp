@@ -4,11 +4,14 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  Image,
+  ImageSourcePropType,
 } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useTranslation } from 'react-i18next';
 import { ProviderHomeScreen } from '../screens/provider/ProviderHomeScreen';
 import { ProviderPerformanceScreen } from '../screens/provider/ProviderPerformanceScreen';
 import { ProviderOrderScreen } from '../screens/provider/ProviderOrderScreen';
@@ -24,24 +27,20 @@ const Tab = createBottomTabNavigator();
 
 type TabIconProps = {
   focused: boolean;
-  iconName: keyof typeof Ionicons.glyphMap;
-  focusedIcon: keyof typeof Ionicons.glyphMap;
+  icon: ImageSourcePropType;
   label: string;
 };
 
-const TabIcon = ({ focused, iconName, focusedIcon, label }: TabIconProps) => (
+const TabIcon = ({ focused, icon, label }: TabIconProps) => (
   <View style={tabStyles.item}>
-    <Ionicons
-      name={focused ? focusedIcon : iconName}
-      size={22}
-      color={focused ? Colors.primary : '#9AA0AE'}
-    />
+    <Image source={icon} style={[tabStyles.icon, focused ? tabStyles.iconActive : tabStyles.iconInactive]} />
     <Text style={[tabStyles.label, focused && tabStyles.labelActive]}>{label}</Text>
   </View>
 );
 
 const AddButton = () => {
   const navigation = useNavigation<Nav>();
+  const { t } = useTranslation();
   return (
     <TouchableOpacity
       style={tabStyles.fabWrapper}
@@ -51,50 +50,45 @@ const AddButton = () => {
       <View style={tabStyles.fab}>
         <Ionicons name="add" size={28} color="#FFFFFF" />
       </View>
-      <Text style={tabStyles.fabLabel}>Add</Text>
+      <Text style={tabStyles.fabLabel}>{t('providerTabs.add')}</Text>
     </TouchableOpacity>
   );
 };
 
 export const ProviderTabNavigator = () => {
   const rtl = isRTL();
+  const { t } = useTranslation();
 
   const tabs = [
     {
       name: 'ProviderHome',
       component: ProviderHomeScreen,
-      icon: 'home-outline' as const,
-      focusedIcon: 'home' as const,
-      label: 'Home',
+      icon: require('../../assets/home.png'),
+      label: t('providerTabs.home'),
     },
     {
       name: 'ProviderPerformance',
       component: ProviderPerformanceScreen,
-      icon: 'trending-up-outline' as const,
-      focusedIcon: 'trending-up' as const,
-      label: 'Performance',
+      icon: require('../../assets/Arrow Going Up Alt.png'),
+      label: t('providerTabs.performance'),
     },
     {
       name: 'ProviderAdd',
       component: ProviderHomeScreen,
-      icon: 'add' as const,
-      focusedIcon: 'add' as const,
-      label: 'Add',
+      label: t('providerTabs.add'),
       isAdd: true,
     },
     {
       name: 'ProviderOrders',
       component: ProviderOrderScreen,
-      icon: 'cart-outline' as const,
-      focusedIcon: 'cart' as const,
-      label: 'order',
+      icon: require('../../assets/car1.png'),
+      label: t('providerTabs.order'),
     },
     {
       name: 'ProviderProfile',
       component: ProviderProfileScreen,
-      icon: 'person-outline' as const,
-      focusedIcon: 'person' as const,
-      label: 'My Profile',
+      icon: require('../../assets/user.png'),
+      label: t('providerTabs.profile'),
     },
   ] as const;
 
@@ -131,8 +125,7 @@ export const ProviderTabNavigator = () => {
               tabBarIcon: ({ focused }) => (
                 <TabIcon
                   focused={focused}
-                  iconName={tab.icon}
-                  focusedIcon={tab.focusedIcon}
+                  icon={tab.icon}
                   label={tab.label}
                 />
               ),
@@ -162,6 +155,17 @@ const tabStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 4,
+  },
+  icon: {
+    width: 22,
+    height: 22,
+    resizeMode: 'contain',
+  },
+  iconActive: {
+    tintColor: Colors.primary,
+  },
+  iconInactive: {
+    tintColor: '#9AA0AE',
   },
   label: {
     fontSize: 10,

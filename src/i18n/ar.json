@@ -20,7 +20,7 @@
     "confirmPayment": "تأكيد الدفع",
     "netAmount": "المبلغ الصافي",
     "consultationFee": "رسوم الاستشارة",
-    "vat": "ضريبة القيمة المضافة (٥٪)",
+    "vat": "ضريبة القيمة المضافة (5٪)",
     "paymentDetails": "تفاصيل الدفع",
     "shippingAddress": "عنوان الشحن",
     "home": "الرئيسية",
@@ -102,7 +102,22 @@
     "commercialName": "الاسم التجاري",
     "commercialNamePlaceholder": "أدخل الاسم التجاري",
     "emailAddress": "البريد الإلكتروني",
-    "emailAddressPlaceholder": "أدخل البريد الإلكتروني"
+    "emailAddressPlaceholder": "أدخل البريد الإلكتروني",
+    "phoneNumber": "رقم الهاتف",
+    "phoneNumberPlaceholder": "أدخل رقم الهاتف",
+    "password": "كلمة المرور",
+    "passwordPlaceholder": "أنشئ كلمة المرور"
+  },
+  "companyDetails": {
+    "title": "بيانات الشركة",
+    "subtitle": "أضف بعض بيانات الشركة قبل المتابعة لإعداد الحساب.",
+    "companyName": "اسم الشركة",
+    "companyNamePlaceholder": "أدخل اسم الشركة",
+    "registrationOrTax": "السجل التجاري / الرقم الضريبي (اختياري)",
+    "registrationOrTaxPlaceholder": "أدخل السجل التجاري أو الرقم الضريبي",
+    "teamOrActivity": "عدد الفريق أو نوع النشاط",
+    "teamOrActivityPlaceholder": "مثال: 10 أعضاء أو خدمات تكييف",
+    "continue": "متابعة"
   },
   "verification": {
     "screenTitle": "التحقق",
@@ -122,30 +137,30 @@
     "popularStore": "متاجر مميزة",
     "bestDeal": "أفضل العروض",
     "sampleServiceName": "متجر خدمة...",
-    "sampleDistance": "على بُعد ١٫٥ كم",
+    "sampleDistance": "على بُعد 1.5 كم",
     "samplePriceMain": "500",
     "contractCompany": "شركة إنشاءات",
     "contractDesc": "نص تجريبي لوصف العقد ومحتواه باختصار.",
-    "contractDue": "الاستحقاق ٣٠ أبريل ٢٠٢٤",
-    "popularTitle": "احصل على مساعدة خلال ١٥–٣٠ دقيقة",
-    "popularTime": "٢٠ دقيقة أغسطس",
-    "popularPrice": "٣٠ ر.س",
+    "contractDue": "الاستحقاق 30 أبريل 2024",
+    "popularTitle": "احصل على مساعدة خلال 15–30 دقيقة",
+    "popularTime": "20 دقيقة أغسطس",
+    "popularPrice": "30 ر.س",
     "dealName": "باكارات روج",
-    "dealPrice": "٣٠ ر.س",
+    "dealPrice": "30 ر.س",
     "allServicesProvider": "جميع مقدمي الخدمة",
     "workingTime": "أوقات العمل",
-    "workingHours": "الإثنين - الجمعة، صباحًا ٨ ص - مساءً ٨ م",
-    "reviewsCount": "التقييمات (١٥٤)",
+    "workingHours": "الإثنين - الجمعة، صباحًا 8 ص - مساءً 8 م",
+    "reviewsCount": "التقييمات (154)",
     "metricClient": "عميل",
     "metricExperience": "خبرة",
     "metricRating": "تقييم",
     "metricReviews": "مراجعات",
-    "yearsPlus": "+٥ سنوات",
-    "clientsPlus": "+١٢٠٠٠",
-    "reviewsPlus": "+١٫٣ ألف",
+    "yearsPlus": "+5 سنوات",
+    "clientsPlus": "+12000",
+    "reviewsPlus": "+1.3 ألف",
     "cleaningExpert": "خبير تنظيف",
     "pricePerHour": "{{rate}} ر.س/ساعة",
-    "reviewDate": "٢٢ سبتمبر ٢٠٢٣",
+    "reviewDate": "22 سبتمبر 2023",
     "reviewText": "نص تجريبي لمراجعة المستخدم حول جودة الخدمة والتجربة."
   },
   "allProducts": {
@@ -155,9 +170,9 @@
     "productStove": "موقد غاز"
   },
   "productDetail": {
-    "ratingSummary": "٤ (١٤٦ مراجعة)",
+    "ratingSummary": "4 (146 مراجعة)",
     "readMore": "اقرأ المزيد",
-    "reviewsHeading": "التقييمات (١٥٤)",
+    "reviewsHeading": "التقييمات (154)",
     "similarProducts": "منتجات مشابهة",
     "addToCart": "أضف إلى السلة",
     "reviewerName": "أكاش باساك",
@@ -197,8 +212,8 @@
     "filterPast": "سابقة",
     "filterCancel": "ملغاة",
     "serviceName": "تنظيف مطبخ معياري",
-    "dateSample": "٢٢ يونيو ٢٠٢٤",
-    "timeSample": "٠٩:٠٠ ص",
+    "dateSample": "22 يونيو 2024",
+    "timeSample": "09:00 ص",
     "locationSample": "المملكة العربية السعودية",
     "empty": "لا توجد مواعيد {{status}}"
   },
@@ -207,17 +222,28 @@
     "productName": "دولتشي آند غابانا",
     "addAddress": "إضافة عنوان جديد",
     "addressType": "المنزل",
-    "addressLine1": "ص.ب: ٢٥٥٥٥ صفاة ١٣١١٦",
-    "addressLine2": "طريق ١٧، الدور ٢٧",
+    "addressLine1": "ص.ب: 25555 صفاة 13116",
+    "addressLine2": "طريق 17، الدور 27",
     "netAmount": "المبلغ الصافي",
-    "payment100": "١٠٠ ر.س",
-    "payment200": "٢٠٠ ر.س"
+    "payment100": "100 ر.س",
+    "payment200": "200 ر.س"
   },
   "contract": {
     "title": "العقود",
     "serviceName": "اسم الخدمة: صيانة مكيف",
     "provider": "مقدم الخدمة: أحمد علي",
     "description": "شركة إنشاءات رائدة نسعى لتقديم جودة عالية"
+  },
+  "contractFilter": {
+    "locations": "الموقع",
+    "defaultLocation": "المملكة العربية السعودية",
+    "categories": "الفئات",
+    "allService": "كل الخدمات",
+    "assembly": "تركيب",
+    "electronics": "إلكترونيات",
+    "waxing": "شمع",
+    "priceRange": "نطاق السعر",
+    "applyFilter": "تطبيق الفلتر"
   },
   "profile": {
     "title": "الملف الشخصي",
@@ -237,6 +263,9 @@
     "userEmail": "amilie498@gmail.com",
     "chooseLanguageTitle": "اللغة",
     "chooseLanguageMessage": "اختر لغة التطبيق"
+  },
+  "language": {
+    "suggestedLanguages": "اللغات المقترحة"
   },
   "nearbyDetails": {
     "providerName": "أحمد خالد",
@@ -263,15 +292,60 @@
     "plumbDesc": "كشف تسربات وطوارئ سباكة بالقرب منك.",
     "joineryDesc": "رفوف وأبواب وإصلاحات خشبية من خبراء.",
     "cleaningDesc": "نص تجريبي لوصف الخدمة والتفاصيل.",
-    "distance20": "على بُعد ٢٫٠ كم",
-    "distance13": "على بُعد ١٫٣ كم",
-    "distance24": "على بُعد ٢٫٤ كم",
-    "distance15": "على بُعد ١٫٥ كم"
+    "distance20": "على بُعد 2.0 كم",
+    "distance13": "على بُعد 1.3 كم",
+    "distance24": "على بُعد 2.4 كم",
+    "distance15": "على بُعد 1.5 كم"
+  },
+  "addAddressForm": {
+    "title": "إضافة عنوان جديد",
+    "street": "الشارع",
+    "streetPlaceholder": "المدينة",
+    "city": "المدينة",
+    "cityPlaceholder": "المدينة",
+    "postalCode": "الرمز البريدي",
+    "postalCodePlaceholder": "الشارع",
+    "block": "البلوك",
+    "blockPlaceholder": "البلوك",
+    "phoneNumber": "رقم الهاتف",
+    "phoneNumberPlaceholder": "رقم الهاتف",
+    "updateAddress": "تحديث العنوان"
+  },
+  "checkout": {
+    "title": "الدفع",
+    "companyName": "شركة إنشاءات",
+    "serviceLine": "الخدمة: تنظيف المنزل",
+    "locationLine": "الموقع: المملكة العربية السعودية",
+    "durationLine": "المدة: 3 أيام",
+    "expertName": "محمد أ",
+    "expertRole": "خبير خدمات",
+    "milestones": "دفعات",
+    "fullPayment": "دفع كامل",
+    "applePay": "آبل باي",
+    "cash": "نقدًا",
+    "duration": "المدة:",
+    "remainingPayment": "إجمالي المبلغ المتبقي",
+    "depositPayable": "العربون المستحق الآن",
+    "productDescription": "هناك حقيقة مثبتة منذ زمن طويل وهي أن المحتوى المقروء قد يشتت انتباه القارئ."
+  },
+  "addPayment": {
+    "title": "إضافة طريقة دفع",
+    "cardName": "اسم البطاقة",
+    "cardNumber": "رقم البطاقة",
+    "expiryDate": "تاريخ الانتهاء",
+    "cvc": "CVC / CVV",
+    "addPayment": "إضافة الدفع"
+  },
+  "contractSuccess": {
+    "title": "تم العقد بنجاح!",
+    "description": "تم جدولة موعدك بنجاح. يمكنك رؤية التفاصيل من تبويب المواعيد.",
+    "backHome": "العودة للرئيسية",
+    "viewDetails": "عرض التفاصيل"
   },
   "makeAppointment": {
     "serviceDescription": "نص تجريبي يصف الخدمة بإيجاز لمساعدة المستخدم على الفهم.",
     "clientName": "محمد",
-    "clientMeta": "٢٥ سنة | ٦٥ كجم"
+    "clientMeta": "25 سنة | 65 كجم"
   },
   "weekdays": {
     "mon": "إثنين",
@@ -282,18 +356,18 @@
     "sat": "سبت"
   },
   "timeSlots": {
-    "t1": "٩:٠٠ ص",
-    "t2": "١٠:٠٠ ص",
-    "t3": "١١:٠٠ ص",
-    "t4": "١٢:٠٠ ص",
-    "t5": "٤:٠٠ م",
-    "t6": "٥:٠٠ م"
+    "t1": "9:00 ص",
+    "t2": "10:00 ص",
+    "t3": "11:00 ص",
+    "t4": "12:00 ص",
+    "t5": "4:00 م",
+    "t6": "5:00 م"
   },
   "favourites": {
     "title": "المفضلة",
     "searchPlaceholder": "ابحث عن شيء",
     "productName": "باكارات روج",
-    "productPrice": "١٨٠ ر.س"
+    "productPrice": "180 ر.س"
   },
   "invoice": {
     "title": "الفاتورة",
@@ -305,24 +379,24 @@
     "bookingIdValue": "1215151515",
     "serviceProvider": "مقدم الخدمة",
     "serviceProviderName": "محمد أ",
-    "totalPayment": "إجمالي الدفع: ١٥٠ ر.س",
+    "totalPayment": "إجمالي الدفع: 150 ر.س",
     "paymentMethod": "بطاقة فيزا المدينة",
     "cardNumber": "xxxx-xxxx-XxXX-1547",
     "backHome": "العودة للرئيسية"
   },
   "wallet": {
     "title": "المحفظة",
-    "totalAmount": "٧٠٠ ر.س",
-    "dueLabel": "مستحق خلال ٧ أيام",
-    "dueAmount": "٥٠٠ ر.س",
+    "totalAmount": "700 ر.س",
+    "dueLabel": "مستحق خلال 7 أيام",
+    "dueAmount": "500 ر.س",
     "totalPaymentLabel": "إجمالي المدفوعات",
-    "totalPaymentAmount": "١٥٠٠ ر.س",
+    "totalPaymentAmount": "1500 ر.س",
     "makePayments": "إجراء الدفع",
     "paymentSection": "المدفوعات",
-    "dueDate": "٨ يوليو",
-    "dueDays": "مستحق خلال ٣ أيام",
+    "dueDate": "8 يوليو",
+    "dueDays": "مستحق خلال 3 أيام",
     "payeeName": "محمد",
-    "payeeAmount": "١٥٠٠ ر.س",
+    "payeeAmount": "1500 ر.س",
     "payeeDesc": "نص تجريبي لوصف الدفعة ومحتواها",
     "readMore": "اقرأ المزيد",
     "seeAll": "عرض الكل"
@@ -341,11 +415,133 @@
     "all": "الكل",
     "unread": "غير مقروء",
     "itemTitle": "تنظيف مطبخ معياري",
-    "itemTime": "منذ ٥ دقائق",
+    "itemTime": "منذ 5 دقائق",
     "itemDesc": "نص تجريبي لوصف الإشعار ومحتواه بشكل مختصر وواضح للمستخدم.",
     "readMore": "اقرأ المزيد"
   },
   "inviteFriends": {
     "menuLabel": "دعوة الأصدقاء"
+  },
+  "providerTabs": {
+    "home": "الرئيسية",
+    "performance": "الأداء",
+    "add": "إضافة",
+    "order": "الطلبات",
+    "profile": "حسابي"
+  },
+  "providerHome": {
+    "location": "تشينانغو، السعودية",
+    "addNewService": "إضافة خدمة جديدة",
+    "cards": {
+      "service": {
+        "title": "الخدمة",
+        "description": "نص تجريبي لوصف الخدمة بشكل مختصر."
+      },
+      "teams": {
+        "title": "الفِرق",
+        "description": "نص تجريبي لوصف الفريق بشكل مختصر."
+      }
+    }
+  },
+  "providerOrder": {
+    "title": "الطلبات",
+    "status": {
+      "newOrder": "طلب جديد",
+      "inProgress": "قيد التنفيذ",
+      "completed": "مكتمل"
+    },
+    "orderTitles": {
+      "homeCleaning": "تنظيف المنزل",
+      "electronics": "إلكترونيات"
+    }
+  },
+  "providerWallet": {
+    "title": "المحفظة",
+    "availableBalance": "الرصيد المتاح",
+    "transfers": "تحويلات",
+    "deposits": "إيداعات",
+    "transactions": "المعاملات",
+    "service": {
+      "homeCleaning": "تنظيف المنزل"
+    }
+  },
+  "providerTime": {
+    "title": "الوقت",
+    "selectDateTimePrompt": "حدد التاريخ والوقت؟",
+    "date": "التاريخ",
+    "selectDate": "حدد التاريخ",
+    "selectTime": "حدد الوقت",
+    "continue": "متابعة",
+    "weekdays": {
+      "su": "الأح",
+      "mo": "الإث",
+      "tu": "الثل",
+      "we": "الأر",
+      "th": "الخ",
+      "fr": "الجم",
+      "sa": "السب"
+    },
+    "months": {
+      "january": "يناير",
+      "february": "فبراير",
+      "march": "مارس",
+      "april": "أبريل",
+      "may": "مايو",
+      "june": "يونيو",
+      "july": "يوليو",
+      "august": "أغسطس",
+      "september": "سبتمبر",
+      "october": "أكتوبر",
+      "november": "نوفمبر",
+      "december": "ديسمبر"
+    }
+  },
+  "providerPerformance": {
+    "title": "الأداء",
+    "totalServiceProviders": "إجمالي مقدمي\nالخدمة",
+    "totalOrders": "إجمالي الطلبات",
+    "tooltipValue": "123 ر.س",
+    "lastMyOrder": "آخر طلباتي",
+    "orderTitle": "صيانة التكييف",
+    "orderDescription": "نص تجريبي لوصف الطلب ومحتواه.",
+    "orderTime": "الإثنين - الجمعة، صباح 8 إلى مساء 8",
+    "months": {
+      "jan": "ينا",
+      "feb": "فبر",
+      "mar": "مار",
+      "apr": "أبر",
+      "may": "ماي",
+      "jun": "يون"
+    }
+  },
+  "providerSelectServices": {
+    "chooseService": "اختر الخدمة التي تقدمها"
+  },
+  "providerAccountSuccess": {
+    "heading": "تم بنجاح",
+    "description": "تم إرسال بياناتك بنجاح."
+  },
+  "addNewService": {
+    "serviceTitle": "عنوان الخدمة",
+    "serviceTitlePlaceholder": "أدخل عنوان الخدمة",
+    "priceUponViewing": "السعر بعد المعاينة",
+    "enterPrice": "أدخل السعر",
+    "locationPin": "موقع الخدمة",
+    "locationPinPlaceholder": "أدخل موقع الخدمة",
+    "imageUploadIcon": "أيقونة رفع الصورة",
+    "imageUpload": "رفع صورة"
+  },
+  "teams": {
+    "title": "الفرق",
+    "teamName": "اسم الفريق",
+    "teamNamePlaceholder": "اسم الفريق",
+    "teamDescription": "وصف الفريق",
+    "teamDescriptionPlaceholder": "اكتب وصف الفريق",
+    "teamMembers": "أعضاء الفريق",
+    "teamMembersPlaceholder": "عضو الفريق",
+    "profileImage": "صورة الملف",
+    "imageUpload": "رفع صورة",
+    "addNewMembers": "إضافة أعضاء جدد",
+    "addNewTeams": "إضافة فريق جديد"
   }
 }

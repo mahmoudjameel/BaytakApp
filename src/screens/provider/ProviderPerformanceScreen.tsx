@@ -11,14 +11,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useTranslation } from 'react-i18next';
 import { Colors } from '../../theme/colors';
 import { FontFamily } from '../../theme/typography';
 import { RootStackParamList } from '../../navigation/AppNavigator';
 import { backChevronIcon, isRTL } from '../../utils/rtl';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
-
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
 
 const DATA_POINTS_1 = [320, 380, 500, 340, 300, 260];
 const DATA_POINTS_2 = [280, 320, 420, 310, 280, 240];
@@ -28,14 +27,23 @@ const CHART_HEIGHT = 160;
 const normalize = (val: number) => ((Y_MAX - val) / Y_MAX) * CHART_HEIGHT;
 
 const ORDERS = [
-  { id: '1', title: 'HVAC Maintenance', desc: 'Lorem ipsum is simply dummy text of the printing and typesetting industry.', time: 'Mon - Fri, Morning 8 AM - Night 8 PM' },
-  { id: '2', title: 'HVAC Maintenance', desc: 'Lorem ipsum is simply dummy text of the printing and typesetting industry.', time: 'Mon - Fri, Morning 8 AM - Night 8 PM' },
-  { id: '3', title: 'HVAC Maintenance', desc: 'Lorem ipsum is simply dummy text of the printing and typesetting industry.', time: 'Mon - Fri, Morning 8 AM - Night 8 PM' },
+  { id: '1', titleKey: 'providerPerformance.orderTitle', descKey: 'providerPerformance.orderDescription', timeKey: 'providerPerformance.orderTime' },
+  { id: '2', titleKey: 'providerPerformance.orderTitle', descKey: 'providerPerformance.orderDescription', timeKey: 'providerPerformance.orderTime' },
+  { id: '3', titleKey: 'providerPerformance.orderTitle', descKey: 'providerPerformance.orderDescription', timeKey: 'providerPerformance.orderTime' },
 ];
 
 export const ProviderPerformanceScreen: React.FC = () => {
   const navigation = useNavigation<Nav>();
+  const { t } = useTranslation();
   const rtl = isRTL();
+  const MONTHS = [
+    t('providerPerformance.months.jan'),
+    t('providerPerformance.months.feb'),
+    t('providerPerformance.months.mar'),
+    t('providerPerformance.months.apr'),
+    t('providerPerformance.months.may'),
+    t('providerPerformance.months.jun'),
+  ];
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -43,7 +51,7 @@ export const ProviderPerformanceScreen: React.FC = () => {
         <TouchableOpacity style={styles.iconBtn} onPress={() => navigation.goBack()} hitSlop={12}>
           <Ionicons name={backChevronIcon()} size={22} color="#1B1D36" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Performance</Text>
+        <Text style={styles.headerTitle}>{t('providerPerformance.title')}</Text>
         <View style={styles.iconBtn} />
       </View>
 
@@ -51,16 +59,16 @@ export const ProviderPerformanceScreen: React.FC = () => {
         <View style={styles.statsRow}>
           <View style={styles.statCard}>
             <View style={styles.statIconBox}>
-              <Ionicons name="people-outline" size={20} color={Colors.primary} />
+              <Image source={require('../../../assets/users 02.png')} style={styles.statIcon} resizeMode="contain" />
             </View>
-            <Text style={styles.statLabel}>Total Service{'\n'}Providers</Text>
+            <Text style={styles.statLabel}>{t('providerPerformance.totalServiceProviders')}</Text>
             <Text style={styles.statValue}>560</Text>
           </View>
           <View style={styles.statCard}>
             <View style={styles.statIconBox}>
-              <Ionicons name="document-text-outline" size={20} color={Colors.primary} />
+              <Image source={require('../../../assets/file 01.png')} style={styles.statIcon} resizeMode="contain" />
             </View>
-            <Text style={styles.statLabel}>Total Order</Text>
+            <Text style={styles.statLabel}>{t('providerPerformance.totalOrders')}</Text>
             <Text style={styles.statValue}>560</Text>
           </View>
         </View>
@@ -131,8 +139,8 @@ export const ProviderPerformanceScreen: React.FC = () => {
               })}
 
               <View style={styles.tooltip}>
-                <Text style={styles.tooltipValue}>123 SAR</Text>
-                <Text style={styles.tooltipLabel}>May</Text>
+                <Text style={styles.tooltipValue}>{t('providerPerformance.tooltipValue')}</Text>
+                <Text style={styles.tooltipLabel}>{t('providerPerformance.months.may')}</Text>
               </View>
             </View>
 
@@ -144,18 +152,18 @@ export const ProviderPerformanceScreen: React.FC = () => {
           </View>
         </View>
 
-        <Text style={[styles.sectionTitle, rtl && styles.textRtl]}>Last My Order</Text>
+        <Text style={[styles.sectionTitle, rtl && styles.textRtl]}>{t('providerPerformance.lastMyOrder')}</Text>
 
         <View style={styles.ordersList}>
           {ORDERS.map((order) => (
             <View key={order.id} style={styles.orderCard}>
               <View style={styles.orderIconBox}>
-                <Ionicons name="shield-outline" size={22} color={Colors.primary} />
+                <Image source={require('../../../assets/Group 1000004434.png')} style={styles.orderIcon} resizeMode="contain" />
               </View>
               <View style={styles.orderContent}>
-                <Text style={[styles.orderTitle, rtl && styles.textRtl]}>{order.title}</Text>
-                <Text style={[styles.orderDesc, rtl && styles.textRtl]} numberOfLines={2}>{order.desc}</Text>
-                <Text style={[styles.orderTime, rtl && styles.textRtl]}>{order.time}</Text>
+                <Text style={[styles.orderTitle, rtl && styles.textRtl]}>{t(order.titleKey)}</Text>
+                <Text style={[styles.orderDesc, rtl && styles.textRtl]} numberOfLines={2}>{t(order.descKey)}</Text>
+                <Text style={[styles.orderTime, rtl && styles.textRtl]}>{t(order.timeKey)}</Text>
               </View>
             </View>
           ))}
@@ -187,11 +195,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 14,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 2,
+    borderWidth: 1,
+    borderColor: '#E7E9EE',
   },
   statIconBox: {
     width: 36,
@@ -201,6 +206,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 8,
+  },
+  statIcon: {
+    width: 20,
+    height: 20,
   },
   statLabel: {
     fontSize: 12,
@@ -297,11 +306,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexShrink: 0,
   },
+  orderIcon: {
+    width: 22,
+    height: 22,
+  },
   orderContent: { flex: 1, gap: 4 },
   orderTitle: {
     fontSize: 15,
     fontFamily: FontFamily.outfit.semiBold,
-    color: '#1B1D36',
+    color: Colors.primary,
     textAlign: 'left',
   },
   orderDesc: {

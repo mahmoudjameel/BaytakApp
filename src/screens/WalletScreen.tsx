@@ -36,14 +36,18 @@ export const WalletScreen: React.FC<Props> = ({ navigation }) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.balanceCard}>
           <Text style={styles.balanceAmount}>{t('wallet.totalAmount')}</Text>
-          <View style={styles.balanceRow}>
+          <View style={[styles.balanceRow, rtl && styles.balanceRowRtl]}>
             <View style={styles.balanceMeta}>
-              <Text style={styles.metaLabel}>{t('wallet.dueLabel')}</Text>
-              <Text style={styles.metaValue}>{t('wallet.dueAmount')}</Text>
+              <Text style={[styles.metaLabel, rtl && styles.metaLabelRtl]}>{t('wallet.dueLabel')}</Text>
+              <Text style={[styles.metaValue, rtl && styles.metaValueRtl]}>{t('wallet.dueAmount')}</Text>
             </View>
             <View style={styles.balanceMeta}>
-              <Text style={[styles.metaLabel, styles.metaLabelRight]}>{t('wallet.totalPaymentLabel')}</Text>
-              <Text style={[styles.metaValue, styles.metaValueRight]}>{t('wallet.totalPaymentAmount')}</Text>
+              <Text style={[styles.metaLabel, styles.metaLabelRight, rtl && styles.metaLabelRtl]}>
+                {t('wallet.totalPaymentLabel')}
+              </Text>
+              <Text style={[styles.metaValue, styles.metaValueRight, rtl && styles.metaValueRtl]}>
+                {t('wallet.totalPaymentAmount')}
+              </Text>
             </View>
           </View>
 
@@ -52,35 +56,40 @@ export const WalletScreen: React.FC<Props> = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>{t('wallet.paymentSection')}</Text>
+        <View style={[styles.sectionHeader, rtl && styles.sectionHeaderRtl]}>
+          <Text style={[styles.sectionTitle, rtl && styles.textRtl]}>{t('wallet.paymentSection')}</Text>
           <TouchableOpacity>
             <Text style={styles.seeAll}>{t('wallet.seeAll')}</Text>
           </TouchableOpacity>
         </View>
 
-        <View style={styles.dueDateRow}>
-          <Text style={styles.dueDate}>{t('wallet.dueDate')} </Text>
+        <View style={[styles.dueDateRow, rtl && styles.dueDateRowRtl]}>
+          <Text style={[styles.dueDate, rtl && styles.textRtl]}>{t('wallet.dueDate')} </Text>
           <Text style={styles.dueDays}>{t('wallet.dueDays')}</Text>
         </View>
 
         <View style={styles.paymentList}>
           {PAYEES.map((id) => (
-            <View key={id} style={styles.paymentItem}>
+            <TouchableOpacity
+              key={id}
+              style={[styles.paymentItem, rtl && styles.paymentItemRtl]}
+              activeOpacity={0.8}
+              onPress={() => navigation.navigate('Invoice')}
+            >
               <View style={styles.avatar}>
                 <Text style={styles.avatarText}>Moh</Text>
               </View>
               <View style={styles.paymentInfo}>
-                <View style={styles.paymentTopRow}>
-                  <Text style={styles.payeeName}>{t('wallet.payeeName')}</Text>
+                <View style={[styles.paymentTopRow, rtl && styles.paymentTopRowRtl]}>
+                  <Text style={[styles.payeeName, rtl && styles.textRtl]}>{t('wallet.payeeName')}</Text>
                   <Text style={styles.payeeAmount}>{t('wallet.payeeAmount')}</Text>
                 </View>
-                <Text style={styles.payeeDesc} numberOfLines={2}>
+                <Text style={[styles.payeeDesc, rtl && styles.textRtl]} numberOfLines={2}>
                   {t('wallet.payeeDesc')}{' '}
                   <Text style={styles.readMore}>{t('wallet.readMore')}</Text>
                 </Text>
               </View>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
       </ScrollView>
@@ -126,6 +135,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  balanceRowRtl: { flexDirection: 'row-reverse' },
   balanceMeta: { gap: 2 },
   metaLabel: {
     fontSize: 12,
@@ -133,12 +143,14 @@ const styles = StyleSheet.create({
     color: '#9AA0AE',
   },
   metaLabelRight: { textAlign: 'right' },
+  metaLabelRtl: { textAlign: 'right', writingDirection: 'rtl' },
   metaValue: {
     fontSize: 15,
     fontFamily: FontFamily.outfit.semiBold,
     color: '#1B1D36',
   },
   metaValueRight: { textAlign: 'right' },
+  metaValueRtl: { textAlign: 'right', writingDirection: 'rtl' },
   makePaymentsBtn: {
     borderWidth: 1,
     borderColor: '#C8E6C9',
@@ -160,6 +172,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginBottom: 4,
   },
+  sectionHeaderRtl: { flexDirection: 'row-reverse' },
   sectionTitle: {
     fontSize: 17,
     fontFamily: FontFamily.outfit.bold,
@@ -176,6 +189,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginBottom: 12,
   },
+  dueDateRowRtl: { flexDirection: 'row-reverse' },
   dueDate: {
     fontSize: 13,
     fontFamily: FontFamily.outfit.medium,
@@ -196,6 +210,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#F0F2F5',
   },
+  paymentItemRtl: { flexDirection: 'row-reverse' },
   avatar: {
     width: 44,
     height: 44,
@@ -216,6 +231,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  paymentTopRowRtl: { flexDirection: 'row-reverse' },
   payeeName: {
     fontSize: 15,
     fontFamily: FontFamily.outfit.semiBold,
@@ -236,4 +252,5 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     fontFamily: FontFamily.outfit.medium,
   },
+  textRtl: { textAlign: 'right', writingDirection: 'rtl' },
 });

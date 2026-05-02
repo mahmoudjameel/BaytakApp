@@ -145,13 +145,13 @@ export const HomeScreen = () => {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <HomeHeader onPressLocation={() => navigation.navigate('AddAddress')} />
+      <HomeHeader onPressLocation={() => navigation.navigate('CartAddAddress')} />
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         <HomeSearchBar value={search} onChangeText={setSearch} />
         <HomeBannerCarousel banners={banners} onPressBanner={() => navigation.navigate('Offer')} />
         <SectionHeader title={t('home.serviceCategories')} onSeeAll={() => navigation.navigate('AllCategories')} />
         <ServiceCategoriesGrid categories={categories} />
-        <SectionHeader title={t('home.nearbyServices')} />
+        <SectionHeader title={t('home.nearbyServices')} onSeeAll={() => navigation.navigate('AddAddress')} />
         <NearbyServicesList
           services={nearbyServices}
           onPressService={(service) => navigation.navigate('NearbyServiceDetails', service)}

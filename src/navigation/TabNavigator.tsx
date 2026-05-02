@@ -19,14 +19,15 @@ type TabIconProps = {
   name?: keyof typeof Ionicons.glyphMap;
   source?: ImageSourcePropType;
   label: string;
+  useTint?: boolean;
 };
 
-const TabIcon = ({ focused, name, source, label }: TabIconProps) => (
+const TabIcon = ({ focused, name, source, label, useTint = true }: TabIconProps) => (
   <View style={styles.tabItem}>
     {source ? (
       <Image
         source={source}
-        style={[styles.tabImageIcon, { tintColor: focused ? Colors.primary : Colors.textLight }]}
+        style={[styles.tabImageIcon, useTint && { tintColor: focused ? Colors.primary : Colors.textLight }]}
         resizeMode="contain"
       />
     ) : name ? (
@@ -63,7 +64,12 @@ export const TabNavigator = () => {
       name: 'Cart',
       component: CartScreen,
       renderIcon: (focused: boolean) => (
-        <TabIcon focused={focused} source={require('../../assets/cart.png')} label={t('tabs.cart')} />
+        <TabIcon
+          focused={focused}
+          source={require('../../assets/cart.png')}
+          label={t('tabs.cart')}
+          useTint={false}
+        />
       ),
     },
     {

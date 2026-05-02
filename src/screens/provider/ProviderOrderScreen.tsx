@@ -11,6 +11,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useTranslation } from 'react-i18next';
 import { Colors } from '../../theme/colors';
 import { FontFamily } from '../../theme/typography';
 import { RootStackParamList } from '../../navigation/AppNavigator';
@@ -22,29 +23,29 @@ type OrderStatus = 'new' | 'in_progress' | 'completed';
 
 const ORDERS: {
   id: string;
-  title: string;
+  titleKey: string;
   time: string;
   date: string;
   status: OrderStatus;
   icon: ReturnType<typeof require>;
 }[] = [
-  { id: '1', title: 'Home Cleaning', time: '10:00-11:00 Am', date: '4 Nov', status: 'new', icon: require('../../../assets/shopping-bag.png') },
-  { id: '2', title: 'Electronics', time: '10:00-11:00 Am', date: '4 Nov', status: 'in_progress', icon: require('../../../assets/Vector-1.png') },
-  { id: '3', title: 'Electronics', time: '10:00-11:00 Am', date: '4 Nov', status: 'in_progress', icon: require('../../../assets/Vector-1.png') },
-  { id: '4', title: 'Electronics', time: '10:00-11:00 Am', date: '4 Nov', status: 'in_progress', icon: require('../../../assets/Vector-1.png') },
-  { id: '5', title: 'Electronics', time: '10:00-11:00 Am', date: '4 Nov', status: 'in_progress', icon: require('../../../assets/Vector-1.png') },
-  { id: '6', title: 'Electronics', time: '10:00-11:00 Am', date: '4 Nov', status: 'in_progress', icon: require('../../../assets/Vector-1.png') },
+  { id: '1', titleKey: 'providerOrder.orderTitles.homeCleaning', time: '10:00-11:00 Am', date: '4 Nov', status: 'new', icon: require('../../../assets/Services.png') },
+  { id: '2', titleKey: 'providerOrder.orderTitles.electronics', time: '10:00-11:00 Am', date: '4 Nov', status: 'in_progress', icon: require('../../../assets/Services-1.png') },
+  { id: '3', titleKey: 'providerOrder.orderTitles.electronics', time: '10:00-11:00 Am', date: '4 Nov', status: 'in_progress', icon: require('../../../assets/Services-1.png') },
+  { id: '4', titleKey: 'providerOrder.orderTitles.electronics', time: '10:00-11:00 Am', date: '4 Nov', status: 'in_progress', icon: require('../../../assets/Services-1.png') },
+  { id: '5', titleKey: 'providerOrder.orderTitles.electronics', time: '10:00-11:00 Am', date: '4 Nov', status: 'in_progress', icon: require('../../../assets/Services-1.png') },
+  { id: '6', titleKey: 'providerOrder.orderTitles.electronics', time: '10:00-11:00 Am', date: '4 Nov', status: 'in_progress', icon: require('../../../assets/Services-1.png') },
 ];
-
-const STATUS_CONFIG: Record<OrderStatus, { label: string; bg: string; color: string }> = {
-  new: { label: 'New Order', bg: '#FFF3E6', color: '#FF8C00' },
-  in_progress: { label: 'In Progress', bg: Colors.primary, color: '#FFFFFF' },
-  completed: { label: 'Completed', bg: '#E8F5E9', color: '#2E7D32' },
-};
 
 export const ProviderOrderScreen: React.FC = () => {
   const navigation = useNavigation<Nav>();
+  const { t } = useTranslation();
   const rtl = isRTL();
+  const STATUS_CONFIG: Record<OrderStatus, { label: string; bg: string; color: string }> = {
+    new: { label: t('providerOrder.status.newOrder'), bg: '#29B21F', color: '#FFFFFF' },
+    in_progress: { label: t('providerOrder.status.inProgress'), bg: Colors.primary, color: '#FFFFFF' },
+    completed: { label: t('providerOrder.status.completed'), bg: '#E8F5E9', color: '#2E7D32' },
+  };
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -52,7 +53,7 @@ export const ProviderOrderScreen: React.FC = () => {
         <TouchableOpacity style={styles.iconBtn} onPress={() => navigation.goBack()} hitSlop={12}>
           <Ionicons name={backChevronIcon()} size={22} color="#1B1D36" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>order</Text>
+        <Text style={styles.headerTitle}>{t('providerOrder.title')}</Text>
         <View style={styles.iconBtn} />
       </View>
 
@@ -67,7 +68,7 @@ export const ProviderOrderScreen: React.FC = () => {
 
               <View style={styles.cardContent}>
                 <View style={[styles.cardRow, rtl && styles.cardRowRtl]}>
-                  <Text style={[styles.orderTitle, rtl && styles.textRtl]}>{order.title}</Text>
+                  <Text style={[styles.orderTitle, rtl && styles.textRtl]}>{t(order.titleKey)}</Text>
                   <View style={[styles.statusBadge, { backgroundColor: statusCfg.bg }]}>
                     <Text style={[styles.statusText, { color: statusCfg.color }]}>
                       {statusCfg.label}
@@ -77,11 +78,11 @@ export const ProviderOrderScreen: React.FC = () => {
 
                 <View style={[styles.metaRow, rtl && styles.metaRowRtl]}>
                   <View style={styles.metaItem}>
-                    <Ionicons name="time-outline" size={12} color="#9AA0AE" />
+                    <Image source={require('../../../assets/Icon-Bold.png')} style={styles.metaIcon} resizeMode="contain" />
                     <Text style={styles.metaText}>{order.time}</Text>
                   </View>
                   <View style={styles.metaItem}>
-                    <Ionicons name="calendar-outline" size={12} color="#9AA0AE" />
+                    <Image source={require('../../../assets/Icon-Bold-1.png')} style={styles.metaIcon} resizeMode="contain" />
                     <Text style={styles.metaText}>{order.date}</Text>
                   </View>
                 </View>
@@ -113,14 +114,15 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.outfit.semiBold,
     color: '#1B1D36',
   },
-  list: { padding: 16, gap: 12 },
+  list: { paddingHorizontal: 16, paddingTop: 14, paddingBottom: 22, gap: 14 },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 14,
-    gap: 14,
+    borderRadius: 18,
+    paddingVertical: 14,
+    paddingHorizontal: 14,
+    gap: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
@@ -128,16 +130,16 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   iconCircle: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 58,
+    height: 58,
+    borderRadius: 29,
     backgroundColor: '#F5F6FA',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
   },
-  orderIcon: { width: 26, height: 26 },
-  cardContent: { flex: 1, gap: 6 },
+  orderIcon: { width: 30, height: 30 },
+  cardContent: { flex: 1, gap: 7 },
   cardRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -151,12 +153,14 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   statusBadge: {
+    minWidth: 102,
+    alignItems: 'center',
     paddingHorizontal: 12,
-    paddingVertical: 4,
+    paddingVertical: 6,
     borderRadius: 20,
   },
   statusText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FontFamily.outfit.semiBold,
   },
   metaRow: {
@@ -168,12 +172,16 @@ const styles = StyleSheet.create({
   metaItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: 6,
+  },
+  metaIcon: {
+    width: 14,
+    height: 14,
   },
   metaText: {
-    fontSize: 12,
+    fontSize: 13,
     fontFamily: FontFamily.outfit.regular,
-    color: '#9AA0AE',
+    color: '#8A8FA0',
   },
   textRtl: { textAlign: 'right', writingDirection: 'rtl' },
 });

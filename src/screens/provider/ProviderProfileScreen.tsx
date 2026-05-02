@@ -1,11 +1,10 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Alert,
   Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,7 +14,6 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Colors } from '../../theme/colors';
 import { FontFamily, FontSize } from '../../theme/typography';
-import { useAppLanguage } from '../../context/LanguageContext';
 import { RootStackParamList } from '../../navigation/AppNavigator';
 import { backChevronIcon, isRTL } from '../../utils/rtl';
 
@@ -30,68 +28,59 @@ type MenuItem = {
 
 export const ProviderProfileScreen: React.FC = () => {
   const { t } = useTranslation();
-  const { setAppLanguage } = useAppLanguage();
   const navigation = useNavigation<NavigationProp>();
   const rtl = isRTL();
-
-  const openLanguagePicker = useCallback(() => {
-    Alert.alert(t('profile.chooseLanguageTitle'), t('profile.chooseLanguageMessage'), [
-      { text: t('profile.languageEnglish'), onPress: () => void setAppLanguage('en') },
-      { text: t('profile.languageArabic'), onPress: () => void setAppLanguage('ar') },
-      { text: t('common.cancel'), style: 'cancel' },
-    ]);
-  }, [setAppLanguage, t]);
 
   const menuItems: MenuItem[] = useMemo(
     () => [
       {
         id: '1',
-        label: 'Favourites',
+        label: t('profile.favourites'),
         icon: 'heart-outline',
         onPress: () => navigation.navigate('Favourites'),
       },
       {
         id: '2',
-        label: 'Time',
+        label: t('providerTime.title'),
         icon: 'time-outline',
         onPress: () => navigation.navigate('ProviderTime'),
       },
       {
         id: '3',
-        label: 'Walet',
+        label: t('providerWallet.title'),
         icon: 'wallet-outline',
         onPress: () => navigation.navigate('ProviderWallet'),
       },
       {
         id: '4',
-        label: 'Notifications',
+        label: t('profile.notifications'),
         icon: 'notifications-outline',
         onPress: () => navigation.navigate('Notifications'),
       },
       {
         id: '5',
-        label: 'Security',
+        label: t('profile.security'),
         icon: 'shield-checkmark-outline',
       },
       {
         id: '6',
-        label: 'Language',
+        label: t('profile.language'),
         icon: 'language-outline',
-        onPress: openLanguagePicker,
+        onPress: () => navigation.navigate('LanguageSettings'),
       },
       {
         id: '7',
-        label: 'Help Center',
+        label: t('profile.helpCenter'),
         icon: 'help-circle-outline',
         onPress: () => navigation.navigate('HelpCenter'),
       },
       {
         id: '8',
-        label: 'Invite Friends',
+        label: t('inviteFriends.menuLabel'),
         icon: 'people-outline',
       },
     ],
-    [navigation, openLanguagePicker],
+    [navigation, t],
   );
 
   return (
@@ -103,7 +92,7 @@ export const ProviderProfileScreen: React.FC = () => {
         >
           <Ionicons name={backChevronIcon()} size={22} color="#1B1D36" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Profile</Text>
+        <Text style={styles.headerTitle}>{t('profile.title')}</Text>
         <View style={styles.backBtn} />
       </View>
 
@@ -122,12 +111,12 @@ export const ProviderProfileScreen: React.FC = () => {
         </View>
 
         <View style={[styles.nameRow, rtl && styles.nameRowRtl]}>
-          <Text style={styles.name}>Amilie Jackson</Text>
+          <Text style={styles.name}>{t('profile.userName')}</Text>
           <TouchableOpacity style={styles.editBadge}>
             <Ionicons name="pencil" size={13} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
-        <Text style={styles.email}>amilie498@gmail.com</Text>
+        <Text style={styles.email}>{t('profile.userEmail')}</Text>
 
         <View style={styles.menuList}>
           {menuItems.map((item, index) => (

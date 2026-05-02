@@ -1,23 +1,8 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AppState, AppStateStatus, DevSettings, I18nManager, Platform } from 'react-native';
-import * as Updates from 'expo-updates';
+import { AppState, AppStateStatus, I18nManager, Platform } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import i18n, { AppLanguage, RTL_LAYOUT_KEY, STORAGE_KEY } from '../i18n/i18n';
-
-function reloadApp() {
-  if (Platform.OS === 'web') {
-    if (typeof window !== 'undefined') {
-      window.location.reload();
-    }
-    return;
-  }
-  if (__DEV__) {
-    DevSettings.reload();
-    return;
-  }
-  void Updates.reloadAsync();
-}
 
 type LanguageContextValue = {
   language: AppLanguage;
@@ -55,19 +40,12 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         return;
       }
 
-      const shouldRTL = lng === 'ar';
-      const layoutTarget = shouldRTL ? 'rtl' : 'ltr';
-      const lastLayout = await AsyncStorage.getItem(RTL_LAYOUT_KEY);
-
+      // Avoid native auto-mirroring on Android (double reverse issue).
+      // We handle layout direction manually in UI components.
       I18nManager.allowRTL(true);
-      I18nManager.swapLeftAndRightInRTL(true);
-      I18nManager.forceRTL(shouldRTL);
-
-      if (lastLayout !== layoutTarget) {
-        await AsyncStorage.setItem(RTL_LAYOUT_KEY, layoutTarget);
-        reloadApp();
-        return;
-      }
+      I18nManager.swapLeftAndRightInRTL(false);
+      I18nManager.forceRTL(false);
+      await AsyncStorage.setItem(RTL_LAYOUT_KEY, 'ltr');
       await i18nInstance.changeLanguage(lng);
     },
     [i18nInstance],

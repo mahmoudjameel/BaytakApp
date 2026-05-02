@@ -1,11 +1,10 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Alert,
   Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,7 +14,6 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Colors } from '../theme/colors';
 import { FontFamily, FontSize } from '../theme/typography';
-import { useAppLanguage } from '../context/LanguageContext';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { backChevronIcon, isRTL } from '../utils/rtl';
 
@@ -31,17 +29,8 @@ type MenuItem = {
 
 export const ProfileScreen = () => {
   const { t } = useTranslation();
-  const { language, setAppLanguage } = useAppLanguage();
   const navigation = useNavigation<NavigationProp>();
   const rtl = isRTL();
-
-  const openLanguagePicker = useCallback(() => {
-    Alert.alert(t('profile.chooseLanguageTitle'), t('profile.chooseLanguageMessage'), [
-      { text: t('profile.languageEnglish'), onPress: () => void setAppLanguage('en') },
-      { text: t('profile.languageArabic'), onPress: () => void setAppLanguage('ar') },
-      { text: t('common.cancel'), style: 'cancel' },
-    ]);
-  }, [setAppLanguage, t]);
 
   const menuItems: MenuItem[] = useMemo(
     () => [
@@ -77,7 +66,7 @@ export const ProfileScreen = () => {
         labelKey: 'profile.language',
         iconSource: require('../../assets/language-square.png'),
         iconBg: '#F0F0F0',
-        onPress: openLanguagePicker,
+        onPress: () => navigation.navigate('LanguageSettings'),
       },
       {
         id: '6',
@@ -93,7 +82,7 @@ export const ProfileScreen = () => {
         iconBg: '#F0F0F0',
       },
     ],
-    [navigation, openLanguagePicker],
+    [navigation],
   );
 
   return (

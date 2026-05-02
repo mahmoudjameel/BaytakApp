@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Image, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
@@ -15,6 +15,9 @@ export const ContractScreen = () => {
   const rtl = isRTL();
   const [activeTab, setActiveTab] = useState<ContractTab>('active');
   const [search, setSearch] = useState('');
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [location, setLocation] = useState(t('contractFilter.defaultLocation'));
+  const [selectedCategory, setSelectedCategory] = useState('all');
 
   const contracts = useMemo(
     () => [
@@ -75,6 +78,14 @@ export const ContractScreen = () => {
     if (status === 'active') return t('common.active');
     return t('common.completed');
   };
+  const visibleTabs = rtl ? [...tabs].reverse() : tabs;
+  const filterCategories = [
+    { key: 'all', label: t('contractFilter.allService') },
+    { key: 'assembly', label: t('contractFilter.assembly') },
+    { key: 'electronics', label: t('contractFilter.electronics') },
+    { key: 'waxing', label: t('contractFilter.waxing') },
+  ];
+  const visibleFilterCategories = rtl ? [...filterCategories].reverse() : filterCategories;
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -97,11 +108,13 @@ export const ContractScreen = () => {
           placeholderTextColor="#A5ACC2"
           style={styles.searchInput}
         />
-        <Ionicons name="options-outline" size={22} color="#A5ACC2" />
+        <TouchableOpacity onPress={() => setShowFilterModal(true)} hitSlop={10}>
+          <Ionicons name="options-outline" size={22} color="#A5ACC2" />
+        </TouchableOpacity>
       </View>
 
       <View style={styles.tabsRow}>
-        {tabs.map((tab) => (
+        {visibleTabs.map((tab) => (
           <TouchableOpacity
             key={tab}
             style={[styles.tabBtn, activeTab === tab && styles.tabBtnActive]}
@@ -120,16 +133,16 @@ export const ContractScreen = () => {
           <View key={item.id} style={styles.card}>
             <Image source={{ uri: item.image }} style={styles.cardImage} />
             <View style={styles.cardBody}>
-              <View style={styles.titleRow}>
-                <Text style={styles.nameText}>{item.name}</Text>
-                <View style={styles.ratingWrap}>
+              <View style={[styles.titleRow, rtl && styles.titleRowRtl]}>
+                <Text style={[styles.nameText, rtl && styles.textRtl]}>{item.name}</Text>
+                <View style={[styles.ratingWrap, rtl && styles.ratingWrapRtl]}>
                   <Ionicons name="star" size={13} color="#F6C225" />
                   <Text style={styles.ratingText}>{item.rating}</Text>
                 </View>
               </View>
-              <Text style={styles.providerText}>{item.provider}</Text>
-              <View style={styles.statusRow}>
-                <Text style={styles.descText}>{item.desc}</Text>
+              <Text style={[styles.providerText, rtl && styles.textRtl]}>{item.provider}</Text>
+              <View style={[styles.statusRow, rtl && styles.statusRowRtl]}>
+                <Text style={[styles.descText, rtl && styles.textRtl]}>{item.desc}</Text>
                 <View style={[styles.statusBadge, item.status !== 'active' && styles.pendingBadge]}>
                   <Text style={[styles.statusText, item.status !== 'active' && styles.pendingText]}>
                     {statusBadgeText(item.status)}
@@ -140,6 +153,71 @@ export const ContractScreen = () => {
           </View>
         ))}
       </ScrollView>
+
+      <Modal
+        visible={showFilterModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowFilterModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <TouchableOpacity style={styles.modalBackdrop} onPress={() => setShowFilterModal(false)} />
+          <View style={styles.filterSheet}>
+            <Text style={[styles.filterLabel, rtl && styles.textRtl]}>{t('contractFilter.locations')}</Text>
+            <View style={styles.locationBox}>
+              <TextInput
+                value={location}
+                onChangeText={setLocation}
+                style={[styles.locationInput, rtl && styles.textRtl]}
+                placeholder={t('contractFilter.defaultLocation')}
+                placeholderTextColor="#A5ACC2"
+              />
+              <Ionicons name="location-outline" size={21} color="#157E7A" />
+            </View>
+
+            <Text style={[styles.filterLabel, rtl && styles.textRtl]}>{t('contractFilter.categories')}</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryRow}>
+              {visibleFilterCategories.map((category) => {
+                const active = selectedCategory === category.key;
+                return (
+                  <TouchableOpacity
+                    key={category.key}
+                    style={[styles.categoryChip, active && styles.categoryChipActive]}
+                    onPress={() => setSelectedCategory(category.key)}
+                  >
+                    <Text style={[styles.categoryChipText, active && styles.categoryChipTextActive]}>
+                      {category.label}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+
+            <View style={[styles.priceRow, rtl && styles.priceRowRtl]}>
+              <Text style={styles.priceTitle}>{t('contractFilter.priceRange')}</Text>
+              <Text style={styles.priceValue}>$40 - $120</Text>
+            </View>
+
+            <View style={styles.sliderArea}>
+              <View style={styles.sliderGhostBars}>
+                {[30, 42, 50, 62, 72, 84, 95, 78].map((h, idx) => (
+                  <View key={idx} style={[styles.sliderGhostBar, { height: h }]} />
+                ))}
+              </View>
+              <View style={styles.sliderTrackBase} />
+              <View style={[styles.sliderTrackActive, rtl && styles.sliderTrackActiveRtl]} />
+              <View style={[styles.sliderKnobLeft, rtl && styles.sliderKnobLeftRtl]} />
+              <View style={[styles.sliderKnobRight, rtl && styles.sliderKnobRightRtl]}>
+                <Ionicons name={rtl ? 'chevron-back' : 'chevron-forward'} size={16} color="#FFFFFF" />
+              </View>
+            </View>
+
+            <TouchableOpacity style={styles.applyFilterBtn} onPress={() => setShowFilterModal(false)}>
+              <Text style={styles.applyFilterText}>{t('contractFilter.applyFilter')}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -195,6 +273,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 5,
   },
+  tabsRowRtl: {
+    flexDirection: 'row-reverse',
+  },
   tabBtn: {
     flex: 1,
     height: 48,
@@ -211,11 +292,14 @@ const styles = StyleSheet.create({
   cardImage: { width: '100%', height: 118 },
   cardBody: { padding: 10, gap: 4 },
   titleRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  titleRowRtl: { flexDirection: 'row-reverse' },
   nameText: { flex: 1, fontSize: 15, color: '#1B1D36', fontFamily: FontFamily.outfit.semiBold },
   ratingWrap: { flexDirection: 'row', alignItems: 'center', gap: 3, marginStart: 8 },
+  ratingWrapRtl: { flexDirection: 'row-reverse', marginStart: 0, marginEnd: 8 },
   ratingText: { fontSize: 15, color: '#8E95A6', fontFamily: FontFamily.outfit.regular },
   providerText: { fontSize: 14, color: '#1B1D36', fontFamily: FontFamily.outfit.medium },
   statusRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 8 },
+  statusRowRtl: { flexDirection: 'row-reverse' },
   descText: { flex: 1, fontSize: 13, lineHeight: 17, color: '#5A6072', fontFamily: FontFamily.outfit.regular },
   statusBadge: {
     minWidth: 64,
@@ -229,4 +313,160 @@ const styles = StyleSheet.create({
   pendingBadge: { backgroundColor: '#F4EFD8' },
   statusText: { color: '#FFFFFF', fontSize: 12, fontFamily: FontFamily.outfit.medium },
   pendingText: { color: '#1B1D36' },
+  textRtl: { textAlign: 'right', writingDirection: 'rtl' },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  modalBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.2)',
+  },
+  filterSheet: {
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 22,
+    gap: 10,
+  },
+  filterLabel: {
+    fontSize: 34 / 2,
+    color: '#1B1D36',
+    fontFamily: FontFamily.outfit.semiBold,
+  },
+  locationBox: {
+    height: 52,
+    borderRadius: 12,
+    backgroundColor: '#F6F7FA',
+    borderWidth: 1,
+    borderColor: '#ECEEF3',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 14,
+    justifyContent: 'space-between',
+  },
+  locationInput: {
+    flex: 1,
+    fontSize: 16,
+    color: '#1E2239',
+    fontFamily: FontFamily.outfit.regular,
+    textAlign: 'auto',
+  },
+  categoryRow: {
+    gap: 10,
+    paddingBottom: 4,
+  },
+  categoryChip: {
+    height: 42,
+    borderRadius: 20,
+    paddingHorizontal: 18,
+    backgroundColor: '#F4F5F8',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  categoryChipActive: {
+    backgroundColor: '#DFF4E8',
+  },
+  categoryChipText: {
+    fontSize: 16,
+    color: '#303649',
+    fontFamily: FontFamily.outfit.medium,
+  },
+  categoryChipTextActive: {
+    color: '#157E7A',
+  },
+  priceRow: {
+    marginTop: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  priceRowRtl: { flexDirection: 'row-reverse' },
+  priceTitle: {
+    fontSize: 36 / 2,
+    color: '#1B1D36',
+    fontFamily: FontFamily.outfit.semiBold,
+  },
+  priceValue: {
+    fontSize: 19,
+    color: '#157E7A',
+    fontFamily: FontFamily.outfit.semiBold,
+  },
+  sliderArea: {
+    height: 92,
+    justifyContent: 'center',
+  },
+  sliderGhostBars: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'flex-end',
+  },
+  sliderGhostBar: {
+    width: 20,
+    borderRadius: 6,
+    backgroundColor: '#EFF1F4',
+  },
+  sliderTrackBase: {
+    height: 7,
+    borderRadius: 4,
+    backgroundColor: '#E2E4E9',
+    marginHorizontal: 4,
+  },
+  sliderTrackActive: {
+    position: 'absolute',
+    left: '18%',
+    right: '42%',
+    height: 7,
+    borderRadius: 4,
+    backgroundColor: '#157E7A',
+  },
+  sliderTrackActiveRtl: {
+    left: '42%',
+    right: '18%',
+  },
+  sliderKnobLeft: {
+    position: 'absolute',
+    left: '15%',
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: '#157E7A',
+  },
+  sliderKnobLeftRtl: {
+    left: undefined,
+    right: '15%',
+  },
+  sliderKnobRight: {
+    position: 'absolute',
+    right: '39%',
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: '#157E7A',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  sliderKnobRightRtl: {
+    right: undefined,
+    left: '39%',
+  },
+  applyFilterBtn: {
+    marginTop: 4,
+    height: 56,
+    borderRadius: 14,
+    backgroundColor: '#157E7A',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  applyFilterText: {
+    color: '#FFFFFF',
+    fontSize: 35 / 2,
+    fontFamily: FontFamily.outfit.semiBold,
+  },
 });

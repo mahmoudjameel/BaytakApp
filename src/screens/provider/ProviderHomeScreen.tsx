@@ -11,6 +11,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { Colors } from '../../theme/colors';
 import { FontFamily } from '../../theme/typography';
 import { Button } from '../../components/Button';
@@ -22,22 +23,23 @@ type Nav = NativeStackNavigationProp<RootStackParamList>;
 const SERVICE_CARDS = [
   {
     id: 'service',
-    icon: require('../../../assets/profile.png'),
-    title: 'Service',
-    description: 'Lorem Ipsum Is Simply Dummy Text Of The Printing And Typesetting Industry.',
+    icon: require('../../../assets/service.png'),
+    titleKey: 'providerHome.cards.service.title',
+    descriptionKey: 'providerHome.cards.service.description',
     route: 'AddNewService' as const,
   },
   {
     id: 'teams',
-    icon: require('../../../assets/user-multiple.png'),
-    title: 'Teams',
-    description: 'Lorem Ipsum Is Simply Dummy Text Of The Printing And Typesetting Industry.',
+    icon: require('../../../assets/teams.png'),
+    titleKey: 'providerHome.cards.teams.title',
+    descriptionKey: 'providerHome.cards.teams.description',
     route: 'Teams' as const,
   },
 ];
 
 export const ProviderHomeScreen: React.FC = () => {
   const navigation = useNavigation<Nav>();
+  const { t } = useTranslation();
   const rtl = isRTL();
 
   return (
@@ -45,7 +47,7 @@ export const ProviderHomeScreen: React.FC = () => {
       <View style={[styles.header, rtl && styles.headerRtl]}>
         <TouchableOpacity style={styles.locationBtn} activeOpacity={0.7}>
           <Ionicons name="location-sharp" size={16} color={Colors.primary} />
-          <Text style={styles.locationText}>Chenango, Saudi Arabia</Text>
+          <Text style={styles.locationText}>{t('providerHome.location')}</Text>
           <Ionicons name="chevron-down" size={14} color="#1B1D36" />
         </TouchableOpacity>
         <View style={styles.headerIcons}>
@@ -75,9 +77,9 @@ export const ProviderHomeScreen: React.FC = () => {
             >
               <Image source={card.icon} style={styles.cardIcon} resizeMode="contain" />
               <View style={styles.cardContent}>
-                <Text style={[styles.cardTitle, rtl && styles.textRtl]}>{card.title}</Text>
+                <Text style={[styles.cardTitle, rtl && styles.textRtl]}>{t(card.titleKey)}</Text>
                 <Text style={[styles.cardDesc, rtl && styles.textRtl]} numberOfLines={3}>
-                  {card.description}
+                  {t(card.descriptionKey)}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -87,7 +89,7 @@ export const ProviderHomeScreen: React.FC = () => {
 
       <View style={styles.footer}>
         <Button
-          title="Add New Service"
+          title={t('providerHome.addNewService')}
           onPress={() => navigation.navigate('AddNewService')}
           style={styles.addBtn}
         />
@@ -160,7 +162,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 2,
   },
-  cardIcon: { width: 40, height: 40, tintColor: Colors.primary },
+  cardIcon: { width: 46, height: 46 },
   cardContent: { flex: 1 },
   cardTitle: {
     fontSize: 16,

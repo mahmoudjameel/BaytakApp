@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useTranslation } from 'react-i18next';
 import { Colors } from '../../theme/colors';
 import { FontFamily } from '../../theme/typography';
 import { Button } from '../../components/Button';
@@ -18,26 +19,26 @@ import { isRTL } from '../../utils/rtl';
 type Props = NativeStackScreenProps<RootStackParamList, 'ProviderSelectServices'>;
 
 const SERVICES = [
-  { id: '1', label: 'Electricity', icon: require('../../../assets/shopping-bag.png') },
-  { id: '2', label: 'Plumbing', icon: require('../../../assets/Vector-1.png') },
-  { id: '3', label: 'Beauty', icon: require('../../../assets/Vector-2.png') },
-  { id: '4', label: 'Appliance', icon: require('../../../assets/menu 1.png') },
-  { id: '5', label: 'Electricity', icon: require('../../../assets/shopping-bag.png') },
-  { id: '6', label: 'Plumbing', icon: require('../../../assets/Vector-1.png') },
-  { id: '7', label: 'Beauty', icon: require('../../../assets/Vector-2.png') },
-  { id: '8', label: 'Appliance', icon: require('../../../assets/menu 1.png') },
-  { id: '9', label: 'Electricity', icon: require('../../../assets/shopping-bag.png') },
-  { id: '10', label: 'Plumbing', icon: require('../../../assets/Vector-1.png') },
-  { id: '11', label: 'Beauty', icon: require('../../../assets/Vector-2.png') },
-  { id: '12', label: 'Appliance', icon: require('../../../assets/menu 1.png') },
-  { id: '13', label: 'Electricity', icon: require('../../../assets/shopping-bag.png') },
-  { id: '14', label: 'Plumbing', icon: require('../../../assets/Vector-1.png') },
-  { id: '15', label: 'Beauty', icon: require('../../../assets/Vector-2.png') },
-  { id: '16', label: 'Appliance', icon: require('../../../assets/menu 1.png') },
+  { id: '1', labelKey: 'categories.electricity', icon: require('../../../assets/shopping-bag.png') },
+  { id: '2', labelKey: 'categories.plumbing', icon: require('../../../assets/Vector-1.png') },
+  { id: '3', labelKey: 'categories.beauty', icon: require('../../../assets/Vector-2.png') },
+  { id: '4', labelKey: 'categories.appliance', icon: require('../../../assets/menu 1.png') },
+  { id: '5', labelKey: 'categories.electricity', icon: require('../../../assets/shopping-bag.png') },
+  { id: '6', labelKey: 'categories.plumbing', icon: require('../../../assets/Vector-1.png') },
+  { id: '7', labelKey: 'categories.beauty', icon: require('../../../assets/Vector-2.png') },
+  { id: '8', labelKey: 'categories.appliance', icon: require('../../../assets/menu 1.png') },
+  { id: '9', labelKey: 'categories.electricity', icon: require('../../../assets/shopping-bag.png') },
+  { id: '10', labelKey: 'categories.plumbing', icon: require('../../../assets/Vector-1.png') },
+  { id: '11', labelKey: 'categories.beauty', icon: require('../../../assets/Vector-2.png') },
+  { id: '12', labelKey: 'categories.appliance', icon: require('../../../assets/menu 1.png') },
+  { id: '13', labelKey: 'categories.electricity', icon: require('../../../assets/shopping-bag.png') },
+  { id: '14', labelKey: 'categories.plumbing', icon: require('../../../assets/Vector-1.png') },
+  { id: '15', labelKey: 'categories.beauty', icon: require('../../../assets/Vector-2.png') },
+  { id: '16', labelKey: 'categories.appliance', icon: require('../../../assets/menu 1.png') },
 ];
 
-const StepIndicator = ({ current, total }: { current: number; total: number }) => (
-  <View style={stepStyles.row}>
+const StepIndicator = ({ current, total, rtl }: { current: number; total: number; rtl: boolean }) => (
+  <View style={[stepStyles.row, rtl && stepStyles.rowRtl]}>
     {Array.from({ length: total }).map((_, i) => (
       <View
         key={i}
@@ -49,12 +50,14 @@ const StepIndicator = ({ current, total }: { current: number; total: number }) =
 
 const stepStyles = StyleSheet.create({
   row: { flexDirection: 'row', gap: 6, paddingHorizontal: 24, marginBottom: 24 },
+  rowRtl: { flexDirection: 'row-reverse' },
   bar: { flex: 1, height: 4, borderRadius: 2 },
   barActive: { backgroundColor: Colors.primary },
   barInactive: { backgroundColor: '#E0E0E0' },
 });
 
 export const ProviderSelectServicesScreen: React.FC<Props> = ({ navigation }) => {
+  const { t } = useTranslation();
   const rtl = isRTL();
   const [selected, setSelected] = useState<string[]>(['1']);
 
@@ -66,20 +69,20 @@ export const ProviderSelectServicesScreen: React.FC<Props> = ({ navigation }) =>
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
-      <StepIndicator current={3} total={3} />
+      <StepIndicator current={3} total={3} rtl={rtl} />
 
       <ScrollView
         contentContainerStyle={styles.scroll}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        <Text style={[styles.title, rtl && styles.textRtl]}>Create Account</Text>
+        <Text style={[styles.title, rtl && styles.textRtl]}>{t('auth.createAccountTitle')}</Text>
         <Text style={[styles.subtitle, rtl && styles.textRtl]}>
-          Start learning with create your account
+          {t('auth.createAccountSubtitle')}
         </Text>
 
         <Text style={[styles.sectionTitle, rtl && styles.textRtl]}>
-          Choose the service they offer
+          {t('providerSelectServices.chooseService')}
         </Text>
 
         <View style={styles.grid}>
@@ -94,7 +97,7 @@ export const ProviderSelectServicesScreen: React.FC<Props> = ({ navigation }) =>
               >
                 <Image source={svc.icon} style={styles.serviceIcon} resizeMode="contain" />
                 <Text style={[styles.serviceLabel, isActive && styles.serviceLabelActive]}>
-                  {svc.label}
+                  {t(svc.labelKey)}
                 </Text>
               </TouchableOpacity>
             );
@@ -104,7 +107,7 @@ export const ProviderSelectServicesScreen: React.FC<Props> = ({ navigation }) =>
 
       <View style={styles.footer}>
         <Button
-          title="Create Account"
+          title={t('auth.createAccountButton')}
           onPress={() => navigation.navigate('ProviderAccountSuccess')}
           style={styles.btn}
         />

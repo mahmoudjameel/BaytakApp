@@ -10,6 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useTranslation } from 'react-i18next';
 import { Colors } from '../../theme/colors';
 import { FontFamily } from '../../theme/typography';
 import { Button } from '../../components/Button';
@@ -18,22 +19,39 @@ import { backChevronIcon, isRTL } from '../../utils/rtl';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
-const DAYS_OF_WEEK = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
-
 const getDaysInMonth = (year: number, month: number): number =>
   new Date(year, month + 1, 0).getDate();
 
 const getFirstDayOfMonth = (year: number, month: number): number =>
   new Date(year, month, 1).getDay();
 
-const MONTH_NAMES = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December',
-];
-
 export const ProviderTimeScreen: React.FC = () => {
   const navigation = useNavigation<Nav>();
+  const { t } = useTranslation();
   const rtl = isRTL();
+  const DAYS_OF_WEEK = [
+    t('providerTime.weekdays.su'),
+    t('providerTime.weekdays.mo'),
+    t('providerTime.weekdays.tu'),
+    t('providerTime.weekdays.we'),
+    t('providerTime.weekdays.th'),
+    t('providerTime.weekdays.fr'),
+    t('providerTime.weekdays.sa'),
+  ];
+  const MONTH_NAMES = [
+    t('providerTime.months.january'),
+    t('providerTime.months.february'),
+    t('providerTime.months.march'),
+    t('providerTime.months.april'),
+    t('providerTime.months.may'),
+    t('providerTime.months.june'),
+    t('providerTime.months.july'),
+    t('providerTime.months.august'),
+    t('providerTime.months.september'),
+    t('providerTime.months.october'),
+    t('providerTime.months.november'),
+    t('providerTime.months.december'),
+  ];
 
   const [currentYear, setCurrentYear] = useState(2021);
   const [currentMonth, setCurrentMonth] = useState(10);
@@ -77,7 +95,7 @@ export const ProviderTimeScreen: React.FC = () => {
         <TouchableOpacity style={styles.iconBtn} onPress={() => navigation.goBack()} hitSlop={12}>
           <Ionicons name={backChevronIcon()} size={22} color="#1B1D36" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Time</Text>
+        <Text style={styles.headerTitle}>{t('providerTime.title')}</Text>
         <View style={styles.iconBtn} />
       </View>
 
@@ -88,7 +106,7 @@ export const ProviderTimeScreen: React.FC = () => {
       >
         <View style={styles.infoBanner}>
           <View style={styles.infoBannerLeft} />
-          <Text style={styles.infoBannerText}>Select your Date & Time?</Text>
+          <Text style={styles.infoBannerText}>{t('providerTime.selectDateTimePrompt')}</Text>
           <TouchableOpacity hitSlop={12}>
             <Ionicons name="close" size={18} color="#9AA0AE" />
           </TouchableOpacity>
@@ -97,9 +115,9 @@ export const ProviderTimeScreen: React.FC = () => {
         <TouchableOpacity style={styles.selectorCard} activeOpacity={0.8}>
           <Ionicons name="calendar-outline" size={18} color={Colors.primary} />
           <View style={styles.selectorContent}>
-            <Text style={styles.selectorLabel}>Date</Text>
+            <Text style={styles.selectorLabel}>{t('providerTime.date')}</Text>
             <Text style={styles.selectorValue}>
-              {selectedDay ? `${selectedDay} ${MONTH_NAMES[currentMonth]} ${currentYear}` : 'Select your Date'}
+              {selectedDay ? `${selectedDay} ${MONTH_NAMES[currentMonth]} ${currentYear}` : t('providerTime.selectDate')}
             </Text>
           </View>
         </TouchableOpacity>
@@ -152,15 +170,15 @@ export const ProviderTimeScreen: React.FC = () => {
         <TouchableOpacity style={styles.selectorCard} activeOpacity={0.8}>
           <Ionicons name="time-outline" size={18} color={Colors.primary} />
           <View style={styles.selectorContent}>
-            <Text style={styles.selectorLabel}>Time</Text>
-            <Text style={styles.selectorValue}>Select your Time</Text>
+            <Text style={styles.selectorLabel}>{t('providerTime.title')}</Text>
+            <Text style={styles.selectorValue}>{t('providerTime.selectTime')}</Text>
           </View>
         </TouchableOpacity>
       </ScrollView>
 
       <View style={styles.footer}>
         <Button
-          title="Continue"
+          title={t('providerTime.continue')}
           onPress={() => navigation.goBack()}
           style={styles.continueBtn}
           textStyle={styles.continueBtnText}

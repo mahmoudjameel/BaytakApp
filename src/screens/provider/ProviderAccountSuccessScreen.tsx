@@ -3,15 +3,17 @@ import { View, Text, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { Colors } from '../../theme/colors';
 import { FontFamily } from '../../theme/typography';
 import { Button } from '../../components/Button';
 import { RootStackParamList } from '../../navigation/AppNavigator';
+import { isRTL } from '../../utils/rtl';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ProviderAccountSuccess'>;
 
-const StepIndicator = ({ current, total }: { current: number; total: number }) => (
-  <View style={stepStyles.row}>
+const StepIndicator = ({ current, total, rtl }: { current: number; total: number; rtl: boolean }) => (
+  <View style={[stepStyles.row, rtl && stepStyles.rowRtl]}>
     {Array.from({ length: total }).map((_, i) => (
       <View
         key={i}
@@ -23,28 +25,31 @@ const StepIndicator = ({ current, total }: { current: number; total: number }) =
 
 const stepStyles = StyleSheet.create({
   row: { flexDirection: 'row', gap: 6, paddingHorizontal: 24, marginBottom: 24 },
+  rowRtl: { flexDirection: 'row-reverse' },
   bar: { flex: 1, height: 4, borderRadius: 2 },
   barActive: { backgroundColor: Colors.primary },
   barInactive: { backgroundColor: '#E0E0E0' },
 });
 
 export const ProviderAccountSuccessScreen: React.FC<Props> = ({ navigation }) => {
+  const { t } = useTranslation();
+  const rtl = isRTL();
   return (
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
-      <StepIndicator current={3} total={3} />
+      <StepIndicator current={3} total={3} rtl={rtl} />
 
       <View style={styles.body}>
         <View style={styles.iconCircle}>
           <Ionicons name="checkmark-done" size={52} color="#FFFFFF" />
         </View>
 
-        <Text style={styles.heading}>successfully</Text>
-        <Text style={styles.description}>I have sent your data successfully.</Text>
+        <Text style={styles.heading}>{t('providerAccountSuccess.heading')}</Text>
+        <Text style={styles.description}>{t('providerAccountSuccess.description')}</Text>
       </View>
 
       <View style={styles.footer}>
         <Button
-          title="Create Account"
+          title={t('auth.createAccountButton')}
           onPress={() => navigation.navigate('ProviderMain')}
           style={styles.btn}
         />

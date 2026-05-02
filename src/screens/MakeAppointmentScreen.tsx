@@ -66,26 +66,26 @@ export const MakeAppointmentScreen: React.FC<Props> = ({ navigation, route }) =>
           <View style={styles.headerSpacer} />
         </View>
 
-        <View style={styles.serviceCard}>
+        <View style={[styles.serviceCard, rtl && styles.rowRtl]}>
           <Image source={{ uri: serviceImage }} style={styles.serviceImage} />
           <View style={styles.serviceBody}>
-            <Text style={styles.serviceTitle} numberOfLines={1}>
+            <Text style={[styles.serviceTitle, rtl && styles.textRtl]} numberOfLines={1}>
               {serviceName}
             </Text>
-            <View style={styles.starsRow}>
+            <View style={[styles.starsRow, rtl && styles.rowRtl]}>
               {[1, 2, 3, 4, 5].map((s) => (
                 <Ionicons key={s} name="star" size={13} color="#F6C225" />
               ))}
             </View>
-            <Text style={styles.serviceDesc} numberOfLines={2}>
+            <Text style={[styles.serviceDesc, rtl && styles.textRtl]} numberOfLines={2}>
               {t('makeAppointment.serviceDescription')}
             </Text>
           </View>
         </View>
 
-        <View style={styles.rowBetween}>
-          <Text style={styles.sectionTitle}>{t('common.selectDate')}</Text>
-          <Text style={styles.monthText}>{t('common.monthJuly')}</Text>
+        <View style={[styles.rowBetween, rtl && styles.rowRtl]}>
+          <Text style={[styles.sectionTitle, rtl && styles.textRtl]}>{t('common.selectDate')}</Text>
+          <Text style={[styles.monthText, rtl && styles.textRtl]}>{t('common.monthJuly')}</Text>
         </View>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.datesRow}>
@@ -105,7 +105,7 @@ export const MakeAppointmentScreen: React.FC<Props> = ({ navigation, route }) =>
           })}
         </ScrollView>
 
-        <Text style={[styles.sectionTitle, { marginTop: 14 }]}>{t('common.time')}</Text>
+        <Text style={[styles.sectionTitle, { marginTop: 14 }, rtl && styles.textRtl]}>{t('common.time')}</Text>
         <View style={styles.timeGrid}>
           {timeOptions.map((time) => {
             const selected = time.key === selectedTimeKey;
@@ -123,9 +123,9 @@ export const MakeAppointmentScreen: React.FC<Props> = ({ navigation, route }) =>
         </View>
 
         <View style={styles.clientBox}>
-          <Text style={styles.clientTitle}>{t('common.clientInformation')}</Text>
-          <View style={styles.clientRow}>
-            <View style={styles.clientLeft}>
+          <Text style={[styles.clientTitle, rtl && styles.textRtl]}>{t('common.clientInformation')}</Text>
+          <View style={[styles.clientRow, rtl && styles.rowRtl]}>
+            <View style={[styles.clientLeft, rtl && styles.rowRtl]}>
               <View style={styles.radioActive}>
                 <View style={styles.radioInner} />
               </View>
@@ -134,49 +134,49 @@ export const MakeAppointmentScreen: React.FC<Props> = ({ navigation, route }) =>
                 style={styles.clientAvatar}
               />
               <View>
-                <Text style={styles.clientName}>{t('makeAppointment.clientName')}</Text>
-                <Text style={styles.clientMeta}>{t('makeAppointment.clientMeta')}</Text>
+                <Text style={[styles.clientName, rtl && styles.textRtl]}>{t('makeAppointment.clientName')}</Text>
+                <Text style={[styles.clientMeta, rtl && styles.textRtl]}>{t('makeAppointment.clientMeta')}</Text>
               </View>
             </View>
-            <TouchableOpacity style={styles.addAddressBtn} onPress={() => navigation.navigate('AddAddress')}>
+            <TouchableOpacity style={styles.addAddressBtn} onPress={() => navigation.navigate('CartAddAddress')}>
               <Text style={styles.addAddressText}>{t('common.addNewAddress')}</Text>
             </TouchableOpacity>
           </View>
         </View>
 
         <View style={styles.paymentBox}>
-          <Text style={styles.paymentTitle}>{t('common.paymentDetails')}</Text>
-          <View style={styles.paymentRow}>
-            <Text style={styles.paymentLabel}>{t('common.consultationFee')}</Text>
-            <Text style={styles.paymentValue}>
+          <Text style={[styles.paymentTitle, rtl && styles.textRtl]}>{t('common.paymentDetails')}</Text>
+          <View style={[styles.paymentRow, rtl && styles.rowRtl]}>
+            <Text style={[styles.paymentLabel, rtl && styles.textRtl]}>{t('common.consultationFee')}</Text>
+            <Text style={[styles.paymentValue, rtl && styles.textRtl]}>
               {summary.consultation}
               {t('common.sar')}
             </Text>
           </View>
-          <View style={styles.paymentRow}>
-            <Text style={styles.paymentLabel}>{t('common.vat')}</Text>
-            <Text style={styles.paymentValue}>
+          <View style={[styles.paymentRow, rtl && styles.rowRtl]}>
+            <Text style={[styles.paymentLabel, rtl && styles.textRtl]}>{t('common.vat')}</Text>
+            <Text style={[styles.paymentValue, rtl && styles.textRtl]}>
               {summary.vat}
               {t('common.sar')}
             </Text>
           </View>
           <View style={styles.paymentDivider} />
-          <View style={styles.paymentRow}>
-            <Text style={styles.paymentTotalLabel}>{t('common.netAmount')}</Text>
-            <Text style={styles.paymentTotalValue}>
+          <View style={[styles.paymentRow, rtl && styles.rowRtl]}>
+            <Text style={[styles.paymentTotalLabel, rtl && styles.textRtl]}>{t('common.netAmount')}</Text>
+            <Text style={[styles.paymentTotalValue, rtl && styles.textRtl]}>
               {summary.total}
               {t('common.sar')}
             </Text>
           </View>
         </View>
 
-        <View style={styles.promoRow}>
+        <View style={[styles.promoRow, rtl && styles.rowRtl]}>
           <TextInput
             value={promo}
             onChangeText={setPromo}
             placeholder={t('common.havePromoCode')}
             placeholderTextColor="#B5B9C7"
-            style={styles.promoInput}
+            style={[styles.promoInput, rtl && styles.textRtl]}
           />
           <TouchableOpacity style={styles.applyBtn}>
             <Text style={styles.applyText}>{t('common.apply')}</Text>
@@ -185,7 +185,11 @@ export const MakeAppointmentScreen: React.FC<Props> = ({ navigation, route }) =>
       </ScrollView>
 
       <View style={styles.bottomAction}>
-        <TouchableOpacity style={styles.mainActionBtn} activeOpacity={0.9}>
+        <TouchableOpacity
+          style={styles.mainActionBtn}
+          activeOpacity={0.9}
+          onPress={() => navigation.navigate('Checkout')}
+        >
           <Text style={styles.mainActionText}>{t('common.makeAppointments')}</Text>
         </TouchableOpacity>
       </View>
@@ -205,6 +209,13 @@ const styles = StyleSheet.create({
   headerRtl: {
     flexDirection: 'row-reverse',
   },
+  rowRtl: {
+    flexDirection: 'row-reverse',
+  },
+  textRtl: {
+    textAlign: 'right',
+    writingDirection: 'rtl',
+  },
   backBtn: { width: 34, height: 34, alignItems: 'center', justifyContent: 'center' },
   headerTitle: { fontSize: 30 / 2, color: '#1E2239', fontFamily: FontFamily.outfit.semiBold },
   headerSpacer: { width: 34 },
@@ -218,12 +229,12 @@ const styles = StyleSheet.create({
   },
   serviceImage: { width: 112, height: 110, borderRadius: 10 },
   serviceBody: { flex: 1, paddingVertical: 2 },
-  serviceTitle: { fontSize: 15, color: '#1E2239', fontFamily: FontFamily.outfit.semiBold },
+  serviceTitle: { fontSize: 15, color: '#1E2239', fontFamily: FontFamily.outfit.semiBold, textAlign: 'left' },
   starsRow: { flexDirection: 'row', gap: 1, marginTop: 3 },
-  serviceDesc: { marginTop: 4, fontSize: 11, lineHeight: 14, color: '#666D80', fontFamily: FontFamily.outfit.regular },
+  serviceDesc: { marginTop: 4, fontSize: 11, lineHeight: 14, color: '#666D80', fontFamily: FontFamily.outfit.regular, textAlign: 'left' },
   rowBetween: { marginTop: 14, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  sectionTitle: { fontSize: 34 / 2, color: '#161A30', fontFamily: FontFamily.outfit.semiBold },
-  monthText: { fontSize: 15, color: '#6D7383', fontFamily: FontFamily.outfit.medium },
+  sectionTitle: { fontSize: 34 / 2, color: '#161A30', fontFamily: FontFamily.outfit.semiBold, textAlign: 'left' },
+  monthText: { fontSize: 15, color: '#6D7383', fontFamily: FontFamily.outfit.medium, textAlign: 'left' },
   datesRow: { gap: 8, marginTop: 8 },
   dateItem: {
     width: 58,
@@ -257,7 +268,7 @@ const styles = StyleSheet.create({
   timeText: { fontSize: 16, color: '#4D5364', fontFamily: FontFamily.outfit.medium },
   timeTextSelected: { color: '#FFFFFF' },
   clientBox: { marginTop: 14, backgroundColor: '#EFEFF1', borderRadius: 12, padding: 12 },
-  clientTitle: { fontSize: 33 / 2, color: '#1A1F34', fontFamily: FontFamily.outfit.semiBold, marginBottom: 10, textTransform: 'lowercase' },
+  clientTitle: { fontSize: 33 / 2, color: '#1A1F34', fontFamily: FontFamily.outfit.semiBold, marginBottom: 10 },
   clientRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   clientLeft: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   radioActive: {
@@ -271,8 +282,8 @@ const styles = StyleSheet.create({
   },
   radioInner: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#2DB99B' },
   clientAvatar: { width: 34, height: 34, borderRadius: 17 },
-  clientName: { fontSize: 14, color: '#1E2239', fontFamily: FontFamily.outfit.medium },
-  clientMeta: { fontSize: 11, color: '#8A90A2', fontFamily: FontFamily.outfit.regular },
+  clientName: { fontSize: 14, color: '#1E2239', fontFamily: FontFamily.outfit.medium, textAlign: 'left' },
+  clientMeta: { fontSize: 11, color: '#8A90A2', fontFamily: FontFamily.outfit.regular, textAlign: 'left' },
   addAddressBtn: {
     height: 30,
     borderRadius: 15,
@@ -283,7 +294,7 @@ const styles = StyleSheet.create({
   },
   addAddressText: { color: '#FFFFFF', fontSize: 12, fontFamily: FontFamily.outfit.medium },
   paymentBox: { marginTop: 10, backgroundColor: '#EFEFF1', borderRadius: 12, padding: 12 },
-  paymentTitle: { fontSize: 18, color: '#1A1F34', fontFamily: FontFamily.outfit.semiBold, marginBottom: 8 },
+  paymentTitle: { fontSize: 18, color: '#1A1F34', fontFamily: FontFamily.outfit.semiBold, marginBottom: 8, textAlign: 'left' },
   paymentRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
   paymentLabel: { fontSize: 14, color: '#3E465B', fontFamily: FontFamily.outfit.regular },
   paymentValue: { fontSize: 14, color: '#1A1F34', fontFamily: FontFamily.outfit.semiBold },

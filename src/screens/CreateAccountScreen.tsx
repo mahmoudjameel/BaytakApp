@@ -18,8 +18,8 @@ import { SocialButton } from '../components/SocialButton';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { isRTL } from '../utils/rtl';
 
-const StepIndicator = ({ current, total }: { current: number; total: number }) => (
-  <View style={stepStyles.row}>
+const StepIndicator = ({ current, total, rtl }: { current: number; total: number; rtl: boolean }) => (
+  <View style={[stepStyles.row, rtl && stepStyles.rowRtl]}>
     {Array.from({ length: total }).map((_, i) => (
       <View
         key={i}
@@ -30,7 +30,8 @@ const StepIndicator = ({ current, total }: { current: number; total: number }) =
 );
 
 const stepStyles = StyleSheet.create({
-  row: { flexDirection: 'row', gap: 6, paddingHorizontal: 24, marginBottom: 0 },
+  row: { flexDirection: 'row', gap: 6, paddingHorizontal: 24, paddingTop: 8, marginBottom: 0 },
+  rowRtl: { flexDirection: 'row-reverse' },
   bar: { flex: 1, height: 4, borderRadius: 2 },
   barActive: { backgroundColor: Colors.primary },
   barInactive: { backgroundColor: '#E0E0E0' },
@@ -48,6 +49,17 @@ type ProviderForm = {
   taxIdNumber: string;
   commercialName: string;
   emailAddress: string;
+  phoneNumber: string;
+  password: string;
+};
+
+type CompanyForm = {
+  companyName: string;
+  registrationOrTax: string;
+  teamOrActivity: string;
+  emailAddress: string;
+  phoneNumber: string;
+  password: string;
 };
 
 const initialProviderForm: ProviderForm = {
@@ -58,6 +70,17 @@ const initialProviderForm: ProviderForm = {
   taxIdNumber: '',
   commercialName: '',
   emailAddress: '',
+  phoneNumber: '',
+  password: '',
+};
+
+const initialCompanyForm: CompanyForm = {
+  companyName: '',
+  registrationOrTax: '',
+  teamOrActivity: '',
+  emailAddress: '',
+  phoneNumber: '',
+  password: '',
 };
 
 export const CreateAccountScreen: React.FC<Props> = ({ route, navigation }) => {
@@ -66,7 +89,8 @@ export const CreateAccountScreen: React.FC<Props> = ({ route, navigation }) => {
   /** النوع يُختار من شاشة ChooseAccount فقط — لا يُعرض مرة أخرى هنا (حسب التصميم) */
   const accountType: AccountKind = route.params?.accountType ?? 'individual';
 
-  const isProviderFlow = accountType === 'provider' || accountType === 'company';
+  const isProviderFlow = accountType === 'provider';
+  const isCompanyFlow = accountType === 'company';
 
   const subtitleKey = useMemo(() => {
     if (accountType === 'provider') return 'auth.createAccountSubtitleProvider';
@@ -78,6 +102,7 @@ export const CreateAccountScreen: React.FC<Props> = ({ route, navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [providerForm, setProviderForm] = useState<ProviderForm>(initialProviderForm);
+  const [companyForm, setCompanyForm] = useState<CompanyForm>(initialCompanyForm);
 
   const providerFields = useMemo(
     () =>
@@ -117,6 +142,53 @@ export const CreateAccountScreen: React.FC<Props> = ({ route, navigation }) => {
           label: t('providerForm.emailAddress'),
           placeholder: t('providerForm.emailAddressPlaceholder'),
         },
+        {
+          key: 'phoneNumber' as const,
+          label: t('providerForm.phoneNumber'),
+          placeholder: t('providerForm.phoneNumberPlaceholder'),
+        },
+        {
+          key: 'password' as const,
+          label: t('providerForm.password'),
+          placeholder: t('providerForm.passwordPlaceholder'),
+        },
+      ] as const,
+    [t],
+  );
+
+  const companyFields = useMemo(
+    () =>
+      [
+        {
+          key: 'companyName' as const,
+          label: t('companyDetails.companyName'),
+          placeholder: t('companyDetails.companyNamePlaceholder'),
+        },
+        {
+          key: 'registrationOrTax' as const,
+          label: t('companyDetails.registrationOrTax'),
+          placeholder: t('companyDetails.registrationOrTaxPlaceholder'),
+        },
+        {
+          key: 'teamOrActivity' as const,
+          label: t('companyDetails.teamOrActivity'),
+          placeholder: t('companyDetails.teamOrActivityPlaceholder'),
+        },
+        {
+          key: 'emailAddress' as const,
+          label: t('providerForm.emailAddress'),
+          placeholder: t('providerForm.emailAddressPlaceholder'),
+        },
+        {
+          key: 'phoneNumber' as const,
+          label: t('providerForm.phoneNumber'),
+          placeholder: t('providerForm.phoneNumberPlaceholder'),
+        },
+        {
+          key: 'password' as const,
+          label: t('providerForm.password'),
+          placeholder: t('providerForm.passwordPlaceholder'),
+        },
       ] as const,
     [t],
   );
@@ -127,7 +199,7 @@ export const CreateAccountScreen: React.FC<Props> = ({ route, navigation }) => {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
-      {isProviderFlow && <StepIndicator current={2} total={3} />}
+      {(isProviderFlow || isCompanyFlow) && <StepIndicator current={2} total={3} rtl={rtl} />}
       <ScrollView
         contentContainerStyle={styles.scroll}
         showsVerticalScrollIndicator={false}
@@ -147,7 +219,38 @@ export const CreateAccountScreen: React.FC<Props> = ({ route, navigation }) => {
                 placeholder={field.placeholder}
                 value={providerForm[field.key]}
                 onChangeText={(value) => setProviderForm((prev) => ({ ...prev, [field.key]: value }))}
-                keyboardType={field.key === 'emailAddress' ? 'email-address' : 'default'}
+                keyboardType={
+                  field.key === 'emailAddress'
+                    ? 'email-address'
+                    : field.key === 'phoneNumber'
+                      ? 'phone-pad'
+                      : 'default'
+                }
+                isPassword={field.key === 'password'}
+                autoCapitalize="none"
+                containerStyle={styles.providerField}
+                labelStyle={[styles.providerFieldLabel, rtl && styles.providerFieldLabelRtl]}
+                inputWrapperStyle={styles.providerFieldWrapper}
+                inputStyle={styles.providerFieldInput}
+                placeholderColor="#A7AEC1"
+              />
+            ))
+          ) : isCompanyFlow ? (
+            companyFields.map((field) => (
+              <InputField
+                key={field.key}
+                label={field.label}
+                placeholder={field.placeholder}
+                value={companyForm[field.key]}
+                onChangeText={(value) => setCompanyForm((prev) => ({ ...prev, [field.key]: value }))}
+                keyboardType={
+                  field.key === 'emailAddress'
+                    ? 'email-address'
+                    : field.key === 'phoneNumber'
+                      ? 'phone-pad'
+                      : 'default'
+                }
+                isPassword={field.key === 'password'}
                 autoCapitalize="none"
                 containerStyle={styles.providerField}
                 labelStyle={[styles.providerFieldLabel, rtl && styles.providerFieldLabelRtl]}
@@ -203,7 +306,7 @@ export const CreateAccountScreen: React.FC<Props> = ({ route, navigation }) => {
         <Button
           title={t('auth.createAccountButton')}
           onPress={() => {
-            if (isProviderFlow) {
+            if (isProviderFlow || isCompanyFlow) {
               navigation.navigate('ProviderSelectServices', { accountType: accountType as 'provider' | 'company' });
             } else {
               navigation.navigate('Verification');
@@ -212,7 +315,7 @@ export const CreateAccountScreen: React.FC<Props> = ({ route, navigation }) => {
           style={styles.createBtn}
         />
 
-        {!isProviderFlow && (
+        {!isProviderFlow && !isCompanyFlow && (
           <>
             <View style={styles.dividerRow}>
               <View style={styles.dividerLine} />

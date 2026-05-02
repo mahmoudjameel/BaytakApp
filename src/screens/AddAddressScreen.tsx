@@ -398,4 +398,30 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
   },
   browseBtnText: { color: '#FFFFFF', fontSize: 28 / 2, fontFamily: FontFamily.poppins.semiBold },
+  textRtl: {
+    textAlign: 'right',
+    writingDirection: 'rtl',
+  },
+  updateBtn: {
+    height: 62,
+    borderRadius: 16,
+    backgroundColor: '#157E7A',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  updateBtnText: {
+    color: '#FFFFFF',
+    fontSize: 38 / 2,
+    fontFamily: FontFamily.outfit.semiBold,
+  },
+  footer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    paddingHorizontal: 16,
+    paddingTop: 10,
+    paddingBottom: 16,
+    backgroundColor: '#F4F4F6',
+  },
 });

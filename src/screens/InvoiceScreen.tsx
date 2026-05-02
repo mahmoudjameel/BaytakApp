@@ -82,7 +82,9 @@ export const InvoiceScreen: React.FC<Props> = ({ navigation }) => {
 
         <View style={styles.paymentMethodRow}>
           <View style={styles.visaBadge}>
-            <Text style={styles.visaText}>VISA</Text>
+            <View style={styles.visaInnerBadge}>
+              <Text style={styles.visaText}>VISA</Text>
+            </View>
           </View>
           <View style={styles.paymentMethodInfo}>
             <Text style={styles.paymentMethodTitle}>{t('invoice.paymentMethod')}</Text>
@@ -171,36 +173,39 @@ const styles = StyleSheet.create({
     borderColor: Colors.primary,
     borderRadius: 14,
     borderStyle: 'dashed',
-    padding: 18,
-    marginBottom: 20,
-    gap: 12,
+    paddingHorizontal: 18,
+    paddingTop: 18,
+    paddingBottom: 16,
+    marginBottom: 24,
   },
   infoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
+    marginBottom: 18,
   },
   infoCol: { flex: 1, gap: 4 },
   infoColRight: { flex: 1, alignItems: 'flex-end', gap: 4 },
   infoLabel: {
-    fontSize: 14,
+    fontSize: 16,
     fontFamily: FontFamily.outfit.semiBold,
     color: '#1B1D36',
   },
   infoValue: {
-    fontSize: 14,
+    fontSize: 15,
     fontFamily: FontFamily.outfit.regular,
-    color: '#9AA0AE',
+    color: '#868294',
   },
-  divider: { height: 1, backgroundColor: '#EDEFF3' },
-  providerCol: { alignItems: 'center', gap: 4 },
+  divider: { height: 1, backgroundColor: '#ECECF1', marginBottom: 18 },
+  providerCol: { alignItems: 'center', gap: 4, marginBottom: 14 },
   totalBtn: {
     backgroundColor: Colors.primary,
-    borderRadius: 12,
-    height: 52,
+    borderRadius: 20,
+    height: 56,
+    width: '82%',
+    alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 4,
   },
   totalBtnText: {
     fontSize: 16,
@@ -212,34 +217,42 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    paddingVertical: 12,
-    borderTopWidth: 1,
-    borderTopColor: '#EDEFF3',
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+    backgroundColor: '#F8F8FA',
+    borderRadius: 16,
   },
   visaBadge: {
-    width: 52,
-    height: 34,
-    borderRadius: 6,
-    backgroundColor: '#1A1F71',
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#E9EDF2',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  visaInnerBadge: {
+    width: 36,
+    height: 24,
+    borderRadius: 4,
+    backgroundColor: '#11786E',
     alignItems: 'center',
     justifyContent: 'center',
   },
   visaText: {
-    fontSize: 13,
+    fontSize: 14,
     fontFamily: FontFamily.outfit.bold,
     color: '#FFFFFF',
-    letterSpacing: 0.5,
   },
   paymentMethodInfo: { flex: 1, gap: 2 },
   paymentMethodTitle: {
-    fontSize: 15,
+    fontSize: 16,
     fontFamily: FontFamily.outfit.semiBold,
     color: Colors.primary,
   },
   cardNumber: {
-    fontSize: 13,
+    fontSize: 18,
     fontFamily: FontFamily.outfit.regular,
-    color: '#9AA0AE',
+    color: '#B4B2BD',
   },
   bottomBar: {
     paddingHorizontal: 20,

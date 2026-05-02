@@ -17,8 +17,13 @@ import { OfferScreen } from '../screens/OfferScreen';
 import { FavouritesScreen } from '../screens/FavouritesScreen';
 import { InvoiceScreen } from '../screens/InvoiceScreen';
 import { WalletScreen } from '../screens/WalletScreen';
+import { CartAddAddressScreen } from '../screens/CartAddAddressScreen';
+import { CheckoutScreen } from '../screens/CheckoutScreen';
+import { AddPaymentScreen } from '../screens/AddPaymentScreen';
+import { ContractSuccessScreen } from '../screens/ContractSuccessScreen';
 import { HelpCenterScreen } from '../screens/HelpCenterScreen';
 import { NotificationsScreen } from '../screens/NotificationsScreen';
+import { LanguageScreen } from '../screens/LanguageScreen';
 import { TabNavigator } from './TabNavigator';
 import { ProviderTabNavigator } from './ProviderTabNavigator';
 
@@ -66,8 +71,13 @@ export type RootStackParamList = {
   Favourites: undefined;
   Invoice: undefined;
   Wallet: undefined;
+  CartAddAddress: undefined;
+  Checkout: undefined;
+  AddPayment: undefined;
+  ContractSuccess: undefined;
   HelpCenter: undefined;
   Notifications: undefined;
+  LanguageSettings: undefined;
   Main: undefined;
   ProviderSelectServices: { accountType?: 'provider' | 'company' } | undefined;
   ProviderAccountSuccess: undefined;
@@ -103,8 +113,13 @@ export const AppNavigator = () => {
         <Stack.Screen name="Favourites" component={FavouritesScreen} />
         <Stack.Screen name="Invoice" component={InvoiceScreen} />
         <Stack.Screen name="Wallet" component={WalletScreen} />
+        <Stack.Screen name="CartAddAddress" component={CartAddAddressScreen} />
+        <Stack.Screen name="Checkout" component={CheckoutScreen} />
+        <Stack.Screen name="AddPayment" component={AddPaymentScreen} />
+        <Stack.Screen name="ContractSuccess" component={ContractSuccessScreen} />
         <Stack.Screen name="HelpCenter" component={HelpCenterScreen} />
         <Stack.Screen name="Notifications" component={NotificationsScreen} />
+        <Stack.Screen name="LanguageSettings" component={LanguageScreen} />
         <Stack.Screen name="Main" component={TabNavigator} />
 
         <Stack.Screen name="ProviderSelectServices" component={ProviderSelectServicesScreen} />

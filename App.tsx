@@ -24,7 +24,7 @@ import { LanguageProvider } from './src/context/LanguageContext';
 import { DirectionalRoot } from './src/components/DirectionalRoot';
 
 if (Platform.OS !== 'web') {
-  SplashScreen.preventAutoHideAsync();
+  void SplashScreen.preventAutoHideAsync().catch(() => {});
 }
 
 export default function App() {
@@ -47,7 +47,7 @@ export default function App() {
 
   useEffect(() => {
     if (Platform.OS !== 'web' && (fontsLoaded || fontError) && langReady) {
-      SplashScreen.hideAsync();
+      void SplashScreen.hideAsync().catch(() => {});
     }
   }, [fontsLoaded, fontError, langReady]);
 

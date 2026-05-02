@@ -102,7 +102,22 @@
     "commercialName": "Name Of Commercial",
     "commercialNamePlaceholder": "Enter Name Of Commercial",
     "emailAddress": "Email Address",
-    "emailAddressPlaceholder": "Enter Email Address"
+    "emailAddressPlaceholder": "Enter Email Address",
+    "phoneNumber": "Phone Number",
+    "phoneNumberPlaceholder": "Enter Phone Number",
+    "password": "Password",
+    "passwordPlaceholder": "Create your password"
+  },
+  "companyDetails": {
+    "title": "Company Details",
+    "subtitle": "Add a few company details before continuing to account setup.",
+    "companyName": "Company Name",
+    "companyNamePlaceholder": "Enter company name",
+    "registrationOrTax": "Commercial Registration / Tax Number (Optional)",
+    "registrationOrTaxPlaceholder": "Enter registration or tax number",
+    "teamOrActivity": "Team Size or Activity Type",
+    "teamOrActivityPlaceholder": "e.g. 10 members or HVAC services",
+    "continue": "Continue"
   },
   "verification": {
     "screenTitle": "Verification",
@@ -219,6 +234,17 @@
     "provider": "Provider: Ahmed Ali",
     "description": "We are a leading construction company dedicated to delivering high-quality"
   },
+  "contractFilter": {
+    "locations": "Locations",
+    "defaultLocation": "Saudi Arabia",
+    "categories": "Categories",
+    "allService": "All Service",
+    "assembly": "Assembly",
+    "electronics": "Electronics",
+    "waxing": "Waxing",
+    "priceRange": "Price Range",
+    "applyFilter": "Apply Filter"
+  },
   "profile": {
     "title": "Profile",
     "favourites": "Favourites",
@@ -237,6 +263,9 @@
     "userEmail": "amilie498@gmail.com",
     "chooseLanguageTitle": "Language",
     "chooseLanguageMessage": "Select app language"
+  },
+  "language": {
+    "suggestedLanguages": "Suggested Languages"
   },
   "nearbyDetails": {
     "providerName": "Ahmed Khaled",
@@ -267,6 +296,51 @@
     "distance13": "1.3 km away",
     "distance24": "2.4 km away",
     "distance15": "1.5 km away"
+  },
+  "addAddressForm": {
+    "title": "Add new Address",
+    "street": "Street",
+    "streetPlaceholder": "city",
+    "city": "City",
+    "cityPlaceholder": "city",
+    "postalCode": "postal code",
+    "postalCodePlaceholder": "street",
+    "block": "Block",
+    "blockPlaceholder": "Block",
+    "phoneNumber": "Phone number",
+    "phoneNumberPlaceholder": "Phone number",
+    "updateAddress": "Update Address"
+  },
+  "checkout": {
+    "title": "check out",
+    "companyName": "Construction company",
+    "serviceLine": "Service: House cleaning",
+    "locationLine": "Location: Saudi Arabia",
+    "durationLine": "Duration: 3 days",
+    "expertName": "Mohammed A",
+    "expertRole": "Service Expert",
+    "milestones": "Milestones",
+    "fullPayment": "Full payment",
+    "applePay": "Apple e pay",
+    "cash": "Cash",
+    "duration": "Duration:",
+    "remainingPayment": "Total Remaining Payment",
+    "depositPayable": "Deposit Payable Now",
+    "productDescription": "it is a long established fact that a reader will be distracted by the readable content of a page"
+  },
+  "addPayment": {
+    "title": "Add new paymwnt",
+    "cardName": "Card Name",
+    "cardNumber": "Card Number",
+    "expiryDate": "Expiry Date",
+    "cvc": "CVC / CVV",
+    "addPayment": "Add Payment"
+  },
+  "contractSuccess": {
+    "title": "contract  Success!",
+    "description": "Your appointment has been successfully scheduled. You can see details from your Appointments Tab.",
+    "backHome": "Back to Home",
+    "viewDetails": "View Details"
   },
   "makeAppointment": {
     "serviceDescription": "It is a long established fact that a reader will be distracted by the readable content of a page",
@@ -347,5 +421,127 @@
   },
   "inviteFriends": {
     "menuLabel": "Invite Friends"
+  },
+  "providerTabs": {
+    "home": "Home",
+    "performance": "Performance",
+    "add": "Add",
+    "order": "Order",
+    "profile": "My Profile"
+  },
+  "providerHome": {
+    "location": "Chenango, Saudi Arabia",
+    "addNewService": "Add New Service",
+    "cards": {
+      "service": {
+        "title": "Service",
+        "description": "Lorem Ipsum Is Simply Dummy Text Of The Printing And Typesetting Industry."
+      },
+      "teams": {
+        "title": "Teams",
+        "description": "Lorem Ipsum Is Simply Dummy Text Of The Printing And Typesetting Industry."
+      }
+    }
+  },
+  "providerOrder": {
+    "title": "Order",
+    "status": {
+      "newOrder": "New Order",
+      "inProgress": "In Progress",
+      "completed": "Completed"
+    },
+    "orderTitles": {
+      "homeCleaning": "Home Cleaning",
+      "electronics": "Electronics"
+    }
+  },
+  "providerWallet": {
+    "title": "Wallet",
+    "availableBalance": "Available Balance",
+    "transfers": "Transfers",
+    "deposits": "Deposits",
+    "transactions": "Transactions",
+    "service": {
+      "homeCleaning": "Home Cleaning"
+    }
+  },
+  "providerTime": {
+    "title": "Time",
+    "selectDateTimePrompt": "Select your Date & Time?",
+    "date": "Date",
+    "selectDate": "Select your Date",
+    "selectTime": "Select your Time",
+    "continue": "Continue",
+    "weekdays": {
+      "su": "Su",
+      "mo": "Mo",
+      "tu": "Tu",
+      "we": "We",
+      "th": "Th",
+      "fr": "Fr",
+      "sa": "Sa"
+    },
+    "months": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
+    }
+  },
+  "providerPerformance": {
+    "title": "Performance",
+    "totalServiceProviders": "Total Service\nProviders",
+    "totalOrders": "Total Order",
+    "tooltipValue": "123 SAR",
+    "lastMyOrder": "Last My Order",
+    "orderTitle": "HVAC Maintenance",
+    "orderDescription": "Lorem ipsum is simply dummy text of the printing and typesetting industry.",
+    "orderTime": "Mon - Fri, Morning 8 AM - Night 8 PM",
+    "months": {
+      "jan": "Jan",
+      "feb": "Feb",
+      "mar": "Mar",
+      "apr": "Apr",
+      "may": "May",
+      "jun": "Jun"
+    }
+  },
+  "providerSelectServices": {
+    "chooseService": "Choose the service they offer"
+  },
+  "providerAccountSuccess": {
+    "heading": "Successfully",
+    "description": "I have sent your data successfully."
+  },
+  "addNewService": {
+    "serviceTitle": "Service Title",
+    "serviceTitlePlaceholder": "Enter your Service Title",
+    "priceUponViewing": "Price Upon Viewing",
+    "enterPrice": "Enter Price",
+    "locationPin": "Location Pin",
+    "locationPinPlaceholder": "Enter your location pin",
+    "imageUploadIcon": "Image Upload Icon",
+    "imageUpload": "Image Upload"
+  },
+  "teams": {
+    "title": "Teams",
+    "teamName": "Team Name",
+    "teamNamePlaceholder": "Team name",
+    "teamDescription": "Team Description",
+    "teamDescriptionPlaceholder": "Teams Descriptions",
+    "teamMembers": "Team Members",
+    "teamMembersPlaceholder": "Team member",
+    "profileImage": "Profile Image",
+    "imageUpload": "Image Upload",
+    "addNewMembers": "Add new members",
+    "addNewTeams": "Add New Teams"
   }
 }

@@ -12,6 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useTranslation } from 'react-i18next';
 import { Colors } from '../../theme/colors';
 import { FontFamily } from '../../theme/typography';
 import { InputField } from '../../components/InputField';
@@ -23,6 +24,7 @@ type Nav = NativeStackNavigationProp<RootStackParamList>;
 
 export const TeamsScreen: React.FC = () => {
   const navigation = useNavigation<Nav>();
+  const { t } = useTranslation();
   const rtl = isRTL();
 
   const [teamName, setTeamName] = useState('');
@@ -39,7 +41,7 @@ export const TeamsScreen: React.FC = () => {
           <TouchableOpacity style={styles.iconBtn} onPress={() => navigation.goBack()} hitSlop={12}>
             <Ionicons name={backChevronIcon()} size={22} color="#1B1D36" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Teams</Text>
+          <Text style={styles.headerTitle}>{t('teams.title')}</Text>
           <View style={styles.iconBtn} />
         </View>
 
@@ -49,8 +51,8 @@ export const TeamsScreen: React.FC = () => {
           keyboardShouldPersistTaps="handled"
         >
           <InputField
-            label="Team Name"
-            placeholder="Team name"
+            label={t('teams.teamName')}
+            placeholder={t('teams.teamNamePlaceholder')}
             value={teamName}
             onChangeText={setTeamName}
             labelStyle={[styles.fieldLabel, rtl && styles.textRtl]}
@@ -60,11 +62,11 @@ export const TeamsScreen: React.FC = () => {
             containerStyle={styles.fieldContainer}
           />
 
-          <Text style={[styles.fieldLabel, rtl && styles.textRtl]}>Team Description</Text>
+          <Text style={[styles.fieldLabel, rtl && styles.textRtl]}>{t('teams.teamDescription')}</Text>
           <View style={[styles.textAreaWrapper, styles.fieldContainer]}>
             <InputField
               label=""
-              placeholder="Teams Descriptions"
+              placeholder={t('teams.teamDescriptionPlaceholder')}
               value={teamDescription}
               onChangeText={setTeamDescription}
               multiline
@@ -78,8 +80,8 @@ export const TeamsScreen: React.FC = () => {
           </View>
 
           <InputField
-            label="Team Members"
-            placeholder="Team member"
+            label={t('teams.teamMembers')}
+            placeholder={t('teams.teamMembersPlaceholder')}
             value={teamMembers}
             onChangeText={setTeamMembers}
             labelStyle={[styles.fieldLabel, rtl && styles.textRtl]}
@@ -89,23 +91,23 @@ export const TeamsScreen: React.FC = () => {
             containerStyle={styles.fieldContainer}
           />
 
-          <Text style={[styles.fieldLabel, rtl && styles.textRtl]}>Profile Image</Text>
+          <Text style={[styles.fieldLabel, rtl && styles.textRtl]}>{t('teams.profileImage')}</Text>
           <TouchableOpacity style={styles.uploadBox} activeOpacity={0.8}>
             <View style={styles.uploadIconCircle}>
               <Ionicons name="arrow-up-circle-outline" size={32} color={Colors.primary} />
             </View>
-            <Text style={styles.uploadText}>Image Upload</Text>
+            <Text style={styles.uploadText}>{t('teams.imageUpload')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.addMembersBtn} activeOpacity={0.8}>
             <Ionicons name="add-circle-outline" size={22} color="#1B1D36" />
-            <Text style={styles.addMembersBtnText}>Add new members</Text>
+            <Text style={styles.addMembersBtnText}>{t('teams.addNewMembers')}</Text>
           </TouchableOpacity>
         </ScrollView>
 
         <View style={styles.footer}>
           <Button
-            title="Add New Teams"
+            title={t('teams.addNewTeams')}
             onPress={() => navigation.goBack()}
             style={styles.submitBtn}
           />

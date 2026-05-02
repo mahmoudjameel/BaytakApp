@@ -3,11 +3,17 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, ScrollView 
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { FontFamily } from '../theme/typography';
 import { backArrowIcon, isRTL } from '../utils/rtl';
+import { RootStackParamList } from '../navigation/AppNavigator';
+
+type Nav = NativeStackNavigationProp<RootStackParamList>;
 
 export const CartScreen = () => {
   const { t } = useTranslation();
+  const navigation = useNavigation<Nav>();
   const rtl = isRTL();
   const [items, setItems] = useState([
     { id: '1', price: 30, rating: '4.8', qty: 1 },
@@ -34,23 +40,23 @@ export const CartScreen = () => {
         </View>
 
         {items.map((item) => (
-          <View key={item.id} style={styles.productCard}>
+          <View key={item.id} style={[styles.productCard, rtl && styles.productCardRtl]}>
             <Image
               source={{ uri: 'https://images.unsplash.com/photo-1565802681622-8e7f6f4cd3b4?auto=format&fit=crop&w=240&q=80' }}
               style={styles.productImage}
             />
             <View style={styles.productBody}>
-              <View style={styles.productTopRow}>
-                <Text style={styles.productName}>{t('cart.productName')}</Text>
+              <View style={[styles.productTopRow, rtl && styles.productTopRowRtl]}>
+                <Text style={[styles.productName, rtl && styles.textRtl]} numberOfLines={1}>{t('cart.productName')}</Text>
                 <Text style={styles.productPrice}>
-                  {item.price} {t('common.sar')}
+                  {item.price} SAR
                 </Text>
               </View>
-              <View style={styles.ratingRow}>
+              <View style={[styles.ratingRow, rtl && styles.ratingRowRtl]}>
                 <Ionicons name="star" size={14} color="#F6C225" />
                 <Text style={styles.ratingText}>{item.rating}</Text>
               </View>
-              <View style={styles.qtyRow}>
+              <View style={[styles.qtyRow, rtl && styles.qtyRowRtl]}>
                 <TouchableOpacity style={styles.qtyBtn} onPress={() => updateQty(item.id, -1)}>
                   <Ionicons name="remove" size={18} color="#9FA5B3" />
                 </TouchableOpacity>
@@ -63,46 +69,46 @@ export const CartScreen = () => {
           </View>
         ))}
 
-        <View style={styles.shipHeader}>
-          <Text style={styles.sectionTitle}>{t('common.shippingAddress')}</Text>
-          <TouchableOpacity>
+        <View style={[styles.shipHeader, rtl && styles.shipHeaderRtl]}>
+          <Text style={[styles.sectionTitle, rtl && styles.textRtl]}>{t('common.shippingAddress')}</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('CartAddAddress')}>
             <Text style={styles.addAddressText}>{t('cart.addAddress')}</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.addressCard}>
-          <View style={styles.addressRow}>
-            <Text style={styles.addressType}>{t('cart.addressType')}</Text>
+          <View style={[styles.addressRow, rtl && styles.addressRowRtl]}>
+            <Text style={[styles.addressType, rtl && styles.textRtl]}>{t('cart.addressType')}</Text>
             <Ionicons name="create-outline" size={18} color="#157E7A" />
           </View>
-          <Text style={styles.addressLine}>{t('cart.addressLine1')}</Text>
-          <Text style={styles.addressLine}>{t('cart.addressLine2')}</Text>
+          <Text style={[styles.addressLine, rtl && styles.textRtl]}>{t('cart.addressLine1')}</Text>
+          <Text style={[styles.addressLine, rtl && styles.textRtl]}>{t('cart.addressLine2')}</Text>
         </View>
 
         <View style={styles.paymentCard}>
-          <Text style={styles.sectionTitle}>{t('common.paymentDetails')}</Text>
-          <View style={styles.paymentRow}>
-            <Text style={styles.paymentLabel}>{t('common.consultationFee')}</Text>
+          <Text style={[styles.sectionTitle, rtl && styles.textRtl]}>{t('common.paymentDetails')}</Text>
+          <View style={[styles.paymentRow, rtl && styles.paymentRowRtl]}>
+            <Text style={[styles.paymentLabel, rtl && styles.textRtl]}>{t('common.consultationFee')}</Text>
             <Text style={styles.paymentValue}>{t('cart.payment100')}</Text>
           </View>
-          <View style={styles.paymentRow}>
-            <Text style={styles.paymentLabel}>{t('common.vat')}</Text>
+          <View style={[styles.paymentRow, rtl && styles.paymentRowRtl]}>
+            <Text style={[styles.paymentLabel, rtl && styles.textRtl]}>{t('common.vat')}</Text>
             <Text style={styles.paymentValue}>{t('cart.payment100')}</Text>
           </View>
           <View style={styles.paymentDivider} />
-          <View style={styles.paymentRow}>
-            <Text style={styles.netLabel}>{t('common.netAmount')}</Text>
-            <Text style={styles.netValue}>{t('cart.payment200')}</Text>
+          <View style={[styles.paymentRow, rtl && styles.paymentRowRtl]}>
+            <Text style={[styles.netLabel, rtl && styles.textRtl]}>{t('common.netAmount')}</Text>
+            <Text style={styles.netValue}>200 SAR</Text>
           </View>
         </View>
 
-        <View style={styles.promoRow}>
+        <View style={[styles.promoRow, rtl && styles.promoRowRtl]}>
           <TextInput
             value={promo}
             onChangeText={setPromo}
             placeholder={t('common.havePromoCode')}
             placeholderTextColor="#B5B9C7"
-            style={styles.promoInput}
+            style={[styles.promoInput, rtl && styles.textRtl]}
           />
           <TouchableOpacity style={styles.applyBtn}>
             <Text style={styles.applyText}>{t('common.apply')}</Text>
@@ -111,7 +117,7 @@ export const CartScreen = () => {
       </ScrollView>
 
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.confirmBtn}>
+        <TouchableOpacity style={styles.confirmBtn} onPress={() => navigation.navigate('Checkout')}>
           <Text style={styles.confirmText}>{t('common.confirmPayment')}</Text>
         </TouchableOpacity>
       </View>
@@ -120,19 +126,20 @@ export const CartScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F5F5' },
-  scrollContent: { paddingHorizontal: 16, paddingBottom: 110 },
+  container: { flex: 1, backgroundColor: '#F4F4F6' },
+  scrollContent: { paddingHorizontal: 16, paddingBottom: 120 },
   header: {
-    minHeight: 56,
+    minHeight: 58,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginBottom: 8,
   },
   headerRtl: {
     flexDirection: 'row-reverse',
   },
   backBtn: { width: 34, height: 34, alignItems: 'center', justifyContent: 'center' },
-  headerTitle: { fontSize: 18, color: '#1B1D36', fontFamily: FontFamily.outfit.semiBold },
+  headerTitle: { fontSize: 34 / 2, color: '#1B1D36', fontFamily: FontFamily.outfit.semiBold },
   notifBtn: {
     width: 42,
     height: 42,
@@ -154,53 +161,61 @@ const styles = StyleSheet.create({
   },
   productCard: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    padding: 8,
+    borderRadius: 12,
+    padding: 10,
     flexDirection: 'row',
-    gap: 10,
-    marginTop: 8,
+    gap: 12,
+    marginTop: 10,
   },
-  productImage: { width: 102, height: 102, borderRadius: 8 },
+  productCardRtl: { flexDirection: 'row-reverse' },
+  productImage: { width: 112, height: 112, borderRadius: 8, backgroundColor: '#F2F3F6' },
   productBody: { flex: 1, justifyContent: 'space-between' },
   productTopRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  productTopRowRtl: { flexDirection: 'row-reverse' },
   productName: { fontSize: 18, color: '#1B1D36', fontFamily: FontFamily.outfit.medium, flex: 1 },
   productPrice: { fontSize: 17, color: '#1B1D36', fontFamily: FontFamily.outfit.medium, marginStart: 6 },
   ratingRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  ratingRowRtl: { flexDirection: 'row-reverse', alignSelf: 'flex-start' },
   ratingText: { fontSize: 15, color: '#1B1D36', fontFamily: FontFamily.outfit.medium },
   qtyRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  qtyRowRtl: { flexDirection: 'row-reverse', alignSelf: 'flex-start' },
   qtyBtn: { width: 26, height: 26, alignItems: 'center', justifyContent: 'center' },
   qtyText: { fontSize: 18, color: '#1B1D36', fontFamily: FontFamily.outfit.medium, minWidth: 14, textAlign: 'center' },
-  shipHeader: { marginTop: 14, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  shipHeader: { marginTop: 18, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  shipHeaderRtl: { flexDirection: 'row-reverse' },
   sectionTitle: { fontSize: 35 / 2, color: '#1B1D36', fontFamily: FontFamily.outfit.semiBold },
   addAddressText: { fontSize: 16, color: '#1B1D36', fontFamily: FontFamily.outfit.medium },
-  addressCard: { marginTop: 8, backgroundColor: '#FFFFFF', borderRadius: 10, padding: 12 },
+  addressCard: { marginTop: 10, backgroundColor: '#FFFFFF', borderRadius: 12, padding: 14 },
   addressRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  addressRowRtl: { flexDirection: 'row-reverse' },
   addressType: { fontSize: 35 / 2, color: '#1B1D36', fontFamily: FontFamily.outfit.semiBold },
-  addressLine: { marginTop: 3, fontSize: 15, color: '#6F7688', fontFamily: FontFamily.outfit.regular },
-  paymentCard: { marginTop: 10, backgroundColor: '#FFFFFF', borderRadius: 10, padding: 12, gap: 8 },
+  addressLine: { marginTop: 3, fontSize: 16, color: '#6F7688', fontFamily: FontFamily.outfit.regular },
+  paymentCard: { marginTop: 12, backgroundColor: '#FFFFFF', borderRadius: 12, padding: 14, gap: 10 },
   paymentRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  paymentRowRtl: { flexDirection: 'row-reverse' },
   paymentLabel: { fontSize: 17, color: '#343C50', fontFamily: FontFamily.outfit.medium },
   paymentValue: { fontSize: 17, color: '#1B1D36', fontFamily: FontFamily.outfit.medium },
   paymentDivider: { borderTopWidth: 1, borderTopColor: '#D8DBE4', borderStyle: 'dashed' },
   netLabel: { fontSize: 18, color: '#1B1D36', fontFamily: FontFamily.outfit.semiBold },
   netValue: { fontSize: 18, color: '#1B1D36', fontFamily: FontFamily.outfit.semiBold },
   promoRow: { marginTop: 10, flexDirection: 'row', gap: 10 },
+  promoRowRtl: { flexDirection: 'row-reverse' },
   promoInput: {
     flex: 1,
-    height: 48,
+    height: 50,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#A8ADB9',
-    paddingHorizontal: 10,
+    borderColor: '#B8BDC8',
+    paddingHorizontal: 14,
     color: '#1E2239',
-    fontSize: 14,
+    fontSize: 18 / 2,
     fontFamily: FontFamily.outfit.regular,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#FFFFFF',
     textAlign: 'auto',
   },
   applyBtn: {
-    width: 122,
-    height: 48,
+    width: 132,
+    height: 50,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#157E7A',
@@ -214,9 +229,9 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     paddingHorizontal: 16,
-    paddingTop: 10,
+    paddingTop: 12,
     paddingBottom: 16,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#F4F4F6',
   },
   confirmBtn: {
     height: 56,
@@ -226,4 +241,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#157E7A',
   },
   confirmText: { color: '#FFFFFF', fontSize: 36 / 2, fontFamily: FontFamily.outfit.semiBold },
+  textRtl: { textAlign: 'right', writingDirection: 'rtl' },
 });

@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useTranslation } from 'react-i18next';
 import { Colors } from '../../theme/colors';
 import { FontFamily } from '../../theme/typography';
 import { RootStackParamList } from '../../navigation/AppNavigator';
@@ -19,15 +20,16 @@ import { backChevronIcon, isRTL } from '../../utils/rtl';
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
 const TRANSACTIONS = [
-  { id: '1', name: 'mohammed A', service: 'Home Cleaning', time: '10:00-11:00 Am', amount: '+100 SAR' },
-  { id: '2', name: 'Ramy A', service: 'Home Cleaning', time: '10:00-11:00 Am', amount: '+100 SAR' },
-  { id: '3', name: 'Maria J. Bingaman', service: 'Home Cleaning', time: '10:00-11:00 Am', amount: '+100 SAR' },
-  { id: '4', name: 'Maria J. Bingaman', service: 'Home Cleaning', time: '10:00-11:00 Am', amount: '+100 SAR' },
-  { id: '5', name: 'Maria J. Bingaman', service: 'Home Cleaning', time: '10:00-11:00 Am', amount: '+100 SAR' },
+  { id: '1', name: 'mohammed A', serviceKey: 'providerWallet.service.homeCleaning', time: '10:00-11:00 Am', amount: '+100 SAR' },
+  { id: '2', name: 'Ramy A', serviceKey: 'providerWallet.service.homeCleaning', time: '10:00-11:00 Am', amount: '+100 SAR' },
+  { id: '3', name: 'Maria J. Bingaman', serviceKey: 'providerWallet.service.homeCleaning', time: '10:00-11:00 Am', amount: '+100 SAR' },
+  { id: '4', name: 'Maria J. Bingaman', serviceKey: 'providerWallet.service.homeCleaning', time: '10:00-11:00 Am', amount: '+100 SAR' },
+  { id: '5', name: 'Maria J. Bingaman', serviceKey: 'providerWallet.service.homeCleaning', time: '10:00-11:00 Am', amount: '+100 SAR' },
 ];
 
 export const ProviderWalletScreen: React.FC = () => {
   const navigation = useNavigation<Nav>();
+  const { t } = useTranslation();
   const rtl = isRTL();
 
   return (
@@ -36,7 +38,7 @@ export const ProviderWalletScreen: React.FC = () => {
         <TouchableOpacity style={styles.iconBtn} onPress={() => navigation.goBack()} hitSlop={12}>
           <Ionicons name={backChevronIcon()} size={22} color="#1B1D36" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Walet</Text>
+        <Text style={styles.headerTitle}>{t('providerWallet.title')}</Text>
         <View style={styles.iconBtn} />
       </View>
 
@@ -48,7 +50,7 @@ export const ProviderWalletScreen: React.FC = () => {
           end={{ x: 1, y: 1 }}
         >
           <View style={styles.cardDecor} />
-          <Text style={styles.balanceLabel}>Available Balance</Text>
+          <Text style={styles.balanceLabel}>{t('providerWallet.availableBalance')}</Text>
           <Text style={styles.balanceAmount}>80 SAR</Text>
 
           <View style={styles.actionRow}>
@@ -56,22 +58,22 @@ export const ProviderWalletScreen: React.FC = () => {
               <View style={[styles.actionIconCircle, { backgroundColor: '#FF3B30' }]}>
                 <Ionicons name="arrow-up" size={16} color="#FFFFFF" />
               </View>
-              <Text style={styles.actionBtnText}>Transfers</Text>
+              <Text style={styles.actionBtnText}>{t('providerWallet.transfers')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.actionBtn} activeOpacity={0.8}>
               <View style={[styles.actionIconCircle, { backgroundColor: '#34C759' }]}>
                 <Ionicons name="arrow-down" size={16} color="#FFFFFF" />
               </View>
-              <Text style={styles.actionBtnText}>Deposits</Text>
+              <Text style={styles.actionBtnText}>{t('providerWallet.deposits')}</Text>
             </TouchableOpacity>
           </View>
         </LinearGradient>
 
         <View style={styles.sectionHeader}>
-          <Text style={[styles.sectionTitle, rtl && styles.textRtl]}>Transcations</Text>
+          <Text style={[styles.sectionTitle, rtl && styles.textRtl]}>{t('providerWallet.transactions')}</Text>
           <TouchableOpacity>
-            <Text style={styles.seeAll}>See All</Text>
+            <Text style={styles.seeAll}>{t('common.seeAll')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -82,7 +84,7 @@ export const ProviderWalletScreen: React.FC = () => {
                 <View style={styles.txContent}>
                   <Text style={[styles.txName, rtl && styles.textRtl]}>{tx.name}</Text>
                   <Text style={[styles.txMeta, rtl && styles.textRtl]}>
-                    {tx.service} • {tx.time}
+                    {t(tx.serviceKey)} • {tx.time}
                   </Text>
                 </View>
                 <Text style={styles.txAmount}>{tx.amount}</Text>
