@@ -96,7 +96,7 @@
     "loginEmailLabel": "Email",
     "loginEmailPlaceholder": "Enter the email you registered with",
     "loginEmailOnly": "Sign-in uses your registered email only. The server does not accept a mobile number in this field.",
-    "passwordMinLength": "Password must be at least 8 characters (same as the server requirement)."
+    "passwordMinLength": "Password must be at least 6 characters."
   },
   "apiErrors": {
     "generic": "Something went wrong. Please try again.",

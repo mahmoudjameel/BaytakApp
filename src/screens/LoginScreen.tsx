@@ -14,7 +14,6 @@ import { RootStackParamList } from '../navigation/AppNavigator';
 import { isRTL } from '../utils/rtl';
 import { useAuth } from '../context/AuthContext';
 import { toErrorMessage } from '../utils/errors';
-import { sanitizeSaudiLocalDigits, isValidSaudiMobileLocal } from '../utils/saudiPhone';
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
@@ -34,12 +33,7 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
       Alert.alert(t('common.error'), t('auth.fillAllFields'));
       return;
     }
-    const digitsLocal = sanitizeSaudiLocalDigits(identifier);
-    if (isValidSaudiMobileLocal(digitsLocal)) {
-      Alert.alert(t('common.error'), t('auth.loginEmailOnly'));
-      return;
-    }
-    if (password.length < 8) {
+    if (password.length < 6) {
       Alert.alert(t('common.error'), t('auth.passwordMinLength'));
       return;
     }

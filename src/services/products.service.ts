@@ -26,6 +26,28 @@ export type ProductReview = {
   reviewer?: { id: number; fullName: string };
 };
 
+function normalizeProductList(json: unknown): PaginatedResponse<Product> {
+  if (Array.isArray(json)) {
+    return { data: json as Product[], total: json.length, page: 1, limit: json.length };
+  }
+  if (json && typeof json === 'object') {
+    const o = json as Record<string, unknown>;
+    const list =
+      Array.isArray(o.data) ? o.data :
+      Array.isArray(o.items) ? o.items :
+      Array.isArray(o.products) ? o.products : null;
+    if (list) {
+      return {
+        data: list as Product[],
+        total: typeof o.total === 'number' ? o.total : list.length,
+        page: typeof o.page === 'number' ? o.page : 1,
+        limit: typeof o.limit === 'number' ? o.limit : list.length,
+      };
+    }
+  }
+  return { data: [], total: 0, page: 1, limit: 0 };
+}
+
 export const ProductsService = {
   async getAll(params?: {
     categoryId?: number;
@@ -45,7 +67,8 @@ export const ProductsService = {
     if (params?.page) query.set('page', String(params.page));
     if (params?.limit) query.set('limit', String(params.limit));
     const qs = query.toString();
-    return apiRequest(`/products${qs ? `?${qs}` : ''}`);
+    const json = await apiRequest<unknown>(`/products${qs ? `?${qs}` : ''}`);
+    return normalizeProductList(json);
   },
 
   async getOne(id: number): Promise<Product> {

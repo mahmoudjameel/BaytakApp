@@ -132,9 +132,13 @@ export function normalizeUserProfile(json: unknown): UserProfile {
   };
 }
 
-/** مسار الملف على الخادم الحالي ليس GET /profile (404) — جرّب بالترتيب. */
-const PROFILE_GET_PATHS = ['/users/me', '/profile/me', '/providers/me'] as const;
-const PROFILE_PATCH_PATHS = ['/users/me', '/profile/me'] as const;
+/**
+ * مسارات الملف الشخصي — يُجرَّب الأول أولاً.
+ * /profile/me هو المسار المعتمد من الـ API الحالي.
+ * /users/me يعيد 401 حتى مع توكن صحيح (غير متاح للموبايل).
+ */
+const PROFILE_GET_PATHS = ['/profile/me', '/users/me', '/providers/me'] as const;
+const PROFILE_PATCH_PATHS = ['/profile/me', '/users/me'] as const;
 
 function isWrongRouteError(err: unknown): boolean {
   const msg = (err instanceof Error ? err.message : String(err)).toLowerCase();
@@ -144,8 +148,12 @@ function isWrongRouteError(err: unknown): boolean {
     msg.includes('cannot post') ||
     msg.includes('not found') ||
     msg.includes('forbidden') ||
+    msg.includes('unauthorized') ||
+    msg.includes('bad request') ||
     /\b404\b/.test(msg) ||
-    /\b403\b/.test(msg)
+    /\b403\b/.test(msg) ||
+    /\b401\b/.test(msg) ||
+    /\b400\b/.test(msg)
   );
 }
 

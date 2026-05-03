@@ -24,6 +24,28 @@ export type ProviderReview = {
   reviewer?: { id: number; fullName: string };
 };
 
+function normalizeProviderList(json: unknown): PaginatedResponse<Provider> {
+  if (Array.isArray(json)) {
+    return { data: json as Provider[], total: json.length, page: 1, limit: json.length };
+  }
+  if (json && typeof json === 'object') {
+    const o = json as Record<string, unknown>;
+    const list =
+      Array.isArray(o.data) ? o.data :
+      Array.isArray(o.items) ? o.items :
+      Array.isArray(o.providers) ? o.providers : null;
+    if (list) {
+      return {
+        data: list as Provider[],
+        total: typeof o.total === 'number' ? o.total : list.length,
+        page: typeof o.page === 'number' ? o.page : 1,
+        limit: typeof o.limit === 'number' ? o.limit : list.length,
+      };
+    }
+  }
+  return { data: [], total: 0, page: 1, limit: 0 };
+}
+
 export const ProvidersService = {
   async getAll(params?: {
     search?: string;
@@ -39,7 +61,8 @@ export const ProvidersService = {
     if (params?.page) query.set('page', String(params.page));
     if (params?.limit) query.set('limit', String(params.limit));
     const qs = query.toString();
-    return apiRequest(`/providers${qs ? `?${qs}` : ''}`);
+    const json = await apiRequest<unknown>(`/providers${qs ? `?${qs}` : ''}`);
+    return normalizeProviderList(json);
   },
 
   async getOne(id: number): Promise<Provider> {

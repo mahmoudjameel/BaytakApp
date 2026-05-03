@@ -51,6 +51,24 @@ A React Native / Expo mobile home services application ("بيتك للخدمات
 - `AuthContext` wraps `AppNavigator` — provides `useAuth()` hook everywhere
 - Auto token refresh on 401 via `refreshAccessToken()` in `api.ts`
 - After login: CLIENT → `Main` (TabNavigator), PROVIDER → `ProviderMain` (ProviderTabNavigator)
+- `SplashScreen` checks auth state (`isAuthenticated + isLoading`) before routing — authenticated users skip Onboarding and go directly to `Main`/`ProviderMain`
+
+## API Endpoint Notes
+
+Confirmed working endpoints at `https://api.abdallah-ghazal.cloud`:
+- `/auth/mobile/sign-in`, `/auth/mobile/sign-up`, `/auth/refresh-token`
+- `/profile/me` — GET current user profile (flat object, no wrapper). **This is the correct endpoint.** `/users/me` returns 401 even with valid token.
+- `/categories`, `/providers`, `/products`, `/cities`
+- `/providers/{id}/availability`, `/providers/{id}/reviews`, `/products/{id}/reviews`
+
+Endpoints NOT in the API (handled gracefully with `.catch(() => null/[])`):
+- `/bookings`, `/wallet`, `/notifications`, `/teams` — screens show empty state
+
+## Data Normalization
+
+API pagination format: `{ items: [...], total, page, limit, totalPages }`.
+All paginated services normalize to the internal `PaginatedResponse<T>` type `{ data: [], total, page, limit }`.
+`CategoriesService`, `ProvidersService`, and `ProductsService` all handle `items`/`data`/direct-array responses.
 
 ## Screens Connected to Real API
 

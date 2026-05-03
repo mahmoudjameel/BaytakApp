@@ -1,15 +1,18 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Animated, Easing } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Colors } from '../theme/colors';
 import { RootStackParamList } from '../navigation/AppNavigator';
+import { useAuth } from '../context/AuthContext';
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Splash'>;
 };
 
 export const SplashScreen: React.FC<Props> = ({ navigation }) => {
-  const spinValue = useRef(new Animated.Value(0)).current;
+  const spinValue = React.useRef(new Animated.Value(0)).current;
+  const { isAuthenticated, isLoading, user } = useAuth();
+  const [animDone, setAnimDone] = useState(false);
 
   useEffect(() => {
     Animated.loop(
@@ -21,11 +24,19 @@ export const SplashScreen: React.FC<Props> = ({ navigation }) => {
       }),
     ).start();
 
-    const timer = setTimeout(() => {
-      navigation.replace('Onboarding');
-    }, 2500);
+    const timer = setTimeout(() => setAnimDone(true), 2000);
     return () => clearTimeout(timer);
-  }, [navigation, spinValue]);
+  }, [spinValue]);
+
+  useEffect(() => {
+    if (!animDone || isLoading) return;
+
+    if (isAuthenticated && user) {
+      navigation.replace(user.role === 'PROVIDER' ? 'ProviderMain' : 'Main');
+    } else {
+      navigation.replace('Onboarding');
+    }
+  }, [animDone, isLoading, isAuthenticated, user, navigation]);
 
   const spin = spinValue.interpolate({
     inputRange: [0, 1],
