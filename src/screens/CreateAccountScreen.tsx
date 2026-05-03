@@ -153,7 +153,8 @@ export const CreateAccountScreen: React.FC<Props> = ({ route, navigation }) => {
         password,
         cityId: selectedCityId,
       });
-      navigation.navigate('Verification');
+      await AuthService.signIn(email.trim(), password);
+      navigation.replace('Main');
     } catch (err: unknown) {
       Alert.alert(t('common.error'), toErrorMessage(err, t('auth.registerFailed')));
     } finally {
