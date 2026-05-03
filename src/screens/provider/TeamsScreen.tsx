@@ -14,6 +14,7 @@ import { Button } from '../../components/Button';
 import { RootStackParamList } from '../../navigation/AppNavigator';
 import { backChevronIcon, isRTL } from '../../utils/rtl';
 import { TeamsService } from '../../services/teams.service';
+import { toErrorMessage } from '../../utils/errors';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -38,8 +39,8 @@ export const TeamsScreen: React.FC = () => {
       Alert.alert(t('common.success'), t('teams.teamCreated'), [
         { text: 'OK', onPress: () => navigation.goBack() },
       ]);
-    } catch (err: any) {
-      Alert.alert(t('common.error'), err?.message ?? t('common.somethingWentWrong'));
+    } catch (err: unknown) {
+      Alert.alert(t('common.error'), toErrorMessage(err, t('common.somethingWentWrong')));
     } finally {
       setLoading(false);
     }

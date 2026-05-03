@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { backChevronIcon, isRTL } from '../utils/rtl';
 import { AuthService } from '../services/auth.service';
 import { useAuth } from '../context/AuthContext';
+import { toErrorMessage } from '../utils/errors';
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Verification'>;
@@ -21,7 +22,7 @@ type Props = {
 export const VerificationScreen: React.FC<Props> = ({ navigation }) => {
   const { t } = useTranslation();
   const rtl = isRTL();
-  const { refreshUser, role } = useAuth();
+  const { refreshUser } = useAuth();
   const [code, setCode] = useState(['', '', '', '', '']);
   const [loading, setLoading] = useState(false);
   const inputs = useRef<(TextInput | null)[]>([]);
@@ -43,14 +44,18 @@ export const VerificationScreen: React.FC<Props> = ({ navigation }) => {
     }
     setLoading(true);
     try {
-      await refreshUser();
-      if (role === 'PROVIDER') {
-        (navigation as any).replace('ProviderMain');
-      } else {
-        (navigation as any).replace('Main');
+      const profile = await refreshUser();
+      if (!profile) {
+        Alert.alert(t('common.error'), t('verification.invalidCode'));
+        return;
       }
-    } catch (err: any) {
-      Alert.alert(t('common.error'), err?.message ?? t('verification.invalidCode'));
+      if (profile.role === 'PROVIDER') {
+        navigation.replace('ProviderMain');
+      } else {
+        navigation.replace('Main');
+      }
+    } catch (err: unknown) {
+      Alert.alert(t('common.error'), toErrorMessage(err, t('verification.invalidCode')));
     } finally {
       setLoading(false);
     }

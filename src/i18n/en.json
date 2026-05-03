@@ -35,7 +35,12 @@
     "active": "Active",
     "completed": "Completed",
     "pendingApproval": "Pending Approval",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "error": "Error",
+    "success": "Success",
+    "somethingWentWrong": "Something went wrong. Please try again.",
+    "all": "All",
+    "noResults": "No results"
   },
   "tabs": {
     "home": "Home",
@@ -77,7 +82,28 @@
     "usernamePlaceholder": "Create your username",
     "createAccountButton": "Create Account",
     "signUpGoogle": "Sign Up with Google",
-    "signUpApple": "Sign Up with Apple"
+    "signUpApple": "Sign Up with Apple",
+    "fillAllFields": "Please fill in all required fields.",
+    "loginFailed": "Login failed. Check your email and password.",
+    "registerFailed": "Registration failed. Please try again.",
+    "phoneNumber": "Phone number",
+    "profileLoadFailed": "Signed in, but your profile could not be loaded. Try again or contact support.",
+    "city": "City",
+    "cityPlaceholder": "Select your city",
+    "selectCity": "Please select your city.",
+    "phonePlaceholderSa": "05xxxxxxxx or 5xxxxxxxx",
+    "phoneInvalid": "Enter a valid Saudi number: 10 digits starting with 05, or 9 digits starting with 5 (without 966 — it is added automatically).",
+    "loginEmailLabel": "Email",
+    "loginEmailPlaceholder": "Enter the email you registered with",
+    "loginEmailOnly": "Sign-in uses your registered email only. The server does not accept a mobile number in this field.",
+    "passwordMinLength": "Password must be at least 8 characters (same as the server requirement)."
+  },
+  "apiErrors": {
+    "generic": "Something went wrong. Please try again.",
+    "invalidCredentials": "Invalid email or password.",
+    "authInvalidEmail": "Invalid email format. Use the email you signed up with (not your phone number in this field).",
+    "authPasswordTooShort": "Password is too short (minimum 8 characters).",
+    "authGeneric": "Validation error: {{code}}"
   },
   "chooseAccount": {
     "title": "Choose account type",
@@ -126,7 +152,9 @@
     "phone": "+966255484848",
     "submit": "Submit",
     "resendPrompt": "Didn't receive the code?",
-    "resend": "Resend"
+    "resend": "Resend",
+    "enterCode": "Please enter the full verification code.",
+    "invalidCode": "Invalid or expired code."
   },
   "home": {
     "location": "Saudi Arabia",
@@ -420,7 +448,8 @@
     "readMore": "Read More"
   },
   "inviteFriends": {
-    "menuLabel": "Invite Friends"
+    "menuLabel": "Invite Friends",
+    "shareMessage": "Join Baytak — home services made simple.\nhttps://api.abdallah-ghazal.cloud"
   },
   "providerTabs": {
     "home": "Home",
@@ -431,6 +460,7 @@
   },
   "providerHome": {
     "location": "Chenango, Saudi Arabia",
+    "greeting": "Hi, {{name}}",
     "addNewService": "Add New Service",
     "cards": {
       "service": {
@@ -515,11 +545,28 @@
     }
   },
   "providerSelectServices": {
-    "chooseService": "Choose the service they offer"
+    "chooseService": "Choose the service they offer",
+    "loadFailed": "Could not load services. Check your connection or try again.",
+    "retry": "Retry",
+    "emptyList": "No services are available right now.",
+    "selectAtLeastOne": "Please select at least one service",
+    "unauthorizedCategories": "Can't load services: the API blocks unauthenticated access. Enable read-only public GET /categories on the server so providers can pick categories before signup.",
+    "itemsCount": "{{count}} options",
+    "selectedCount": "{{count}} selected",
+    "tapToSelectServices": "Tap the services you offer below"
+  },
+  "providerProfile": {
+    "myServices": "My services",
+    "company": "Company account",
+    "individual": "Individual account",
+    "providerRole": "Service provider",
+    "editComingTitle": "Coming soon",
+    "editComingBody": "Profile and photo editing will be available in a future update."
   },
   "providerAccountSuccess": {
     "heading": "Successfully",
-    "description": "I have sent your data successfully."
+    "description": "I have sent your data successfully.",
+    "continueToApp": "Start using the app"
   },
   "addNewService": {
     "serviceTitle": "Service Title",
@@ -542,6 +589,8 @@
     "profileImage": "Profile Image",
     "imageUpload": "Image Upload",
     "addNewMembers": "Add new members",
-    "addNewTeams": "Add New Teams"
+    "addNewTeams": "Add New Teams",
+    "nameRequired": "Please enter a team name.",
+    "teamCreated": "Team created successfully."
   }
 }

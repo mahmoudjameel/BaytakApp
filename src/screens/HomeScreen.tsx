@@ -24,9 +24,10 @@ import { HomeBannerCarousel } from '../components/home/HomeBannerCarousel';
 import { SectionHeader } from '../components/home/SectionHeader';
 import { ServiceCategoriesGrid } from '../components/home/ServiceCategoriesGrid';
 import { NearbyService, NearbyServicesList } from '../components/home/NearbyServicesList';
-import { CategoriesService, Category } from '../services/categories.service';
+import { CategoriesService, Category, categoryDisplayName } from '../services/categories.service';
 import { ProductsService, Product } from '../services/products.service';
 import { ProvidersService, Provider } from '../services/providers.service';
+import { TokenStorage } from '../services/api';
 
 const FALLBACK_ICONS: ImageSourcePropType[] = [
   require('../../assets/Vector.png'),
@@ -48,7 +49,8 @@ const banners = [
 const PLACEHOLDER_IMG = 'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=900&q=80';
 
 export const HomeScreen = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const preferAr = (i18n.language ?? '').startsWith('ar');
   const [search, setSearch] = useState('');
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const rtl = isRTL();
@@ -58,14 +60,25 @@ export const HomeScreen = () => {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    CategoriesService.getAll({ limit: 8 }).then((res) => setCategories(res.data ?? [])).catch(() => {});
+    const loadCategories = async () => {
+      try {
+        const token = await TokenStorage.getAccess();
+        const res = token
+          ? await CategoriesService.getAll({ limit: 8 })
+          : await CategoriesService.getAllPublic({ limit: 8 });
+        setCategories(res.data ?? []);
+      } catch {
+        setCategories([]);
+      }
+    };
+    void loadCategories();
     ProvidersService.getAll({ limit: 5, isAvailable: true }).then((res) => setProviders(res.data ?? [])).catch(() => {});
     ProductsService.getAll({ limit: 5, isActive: true }).then((res) => setProducts(res.data ?? [])).catch(() => {});
   }, []);
 
   const categoryItems = categories.map((c, idx) => ({
     id: String(c.id),
-    name: c.name,
+    name: categoryDisplayName(c, preferAr),
     iconImage: c.image ? { uri: c.image } as ImageSourcePropType : FALLBACK_ICONS[idx % FALLBACK_ICONS.length],
     color: '#EAF4E4',
   }));

@@ -13,6 +13,8 @@ import { SocialButton } from '../components/SocialButton';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { isRTL } from '../utils/rtl';
 import { useAuth } from '../context/AuthContext';
+import { toErrorMessage } from '../utils/errors';
+import { sanitizeSaudiLocalDigits, isValidSaudiMobileLocal } from '../utils/saudiPhone';
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
@@ -21,27 +23,40 @@ type Props = {
 export const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const { t } = useTranslation();
   const rtl = isRTL();
-  const { signIn, role } = useAuth();
+  const { signIn } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSignIn = async () => {
-    if (!email.trim() || !password.trim()) {
+    const identifier = email.trim();
+    if (!identifier || !password.trim()) {
       Alert.alert(t('common.error'), t('auth.fillAllFields'));
+      return;
+    }
+    const digitsLocal = sanitizeSaudiLocalDigits(identifier);
+    if (isValidSaudiMobileLocal(digitsLocal)) {
+      Alert.alert(t('common.error'), t('auth.loginEmailOnly'));
+      return;
+    }
+    if (password.length < 8) {
+      Alert.alert(t('common.error'), t('auth.passwordMinLength'));
       return;
     }
     setLoading(true);
     try {
-      await signIn(email.trim(), password);
-      const savedRole = role;
-      if (savedRole === 'PROVIDER') {
-        (navigation as any).replace('ProviderMain');
-      } else {
-        (navigation as any).replace('Main');
+      const profile = await signIn(identifier, password);
+      if (!profile) {
+        Alert.alert(t('common.error'), t('auth.profileLoadFailed'));
+        return;
       }
-    } catch (err: any) {
-      Alert.alert(t('common.error'), err?.message ?? t('auth.loginFailed'));
+      if (profile.role === 'PROVIDER') {
+        navigation.replace('ProviderMain');
+      } else {
+        navigation.replace('Main');
+      }
+    } catch (err: unknown) {
+      Alert.alert(t('common.error'), toErrorMessage(err, t('auth.loginFailed')));
     } finally {
       setLoading(false);
     }
@@ -65,8 +80,8 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
         <View style={styles.form}>
           <InputField
-            label={t('auth.emailOrPhone')}
-            placeholder={t('auth.emailOrPhonePlaceholder')}
+            label={t('auth.loginEmailLabel')}
+            placeholder={t('auth.loginEmailPlaceholder')}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"

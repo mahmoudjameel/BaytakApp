@@ -12,12 +12,13 @@ import { Colors } from '../theme/colors';
 import { backChevronIcon, isRTL } from '../utils/rtl';
 import { HomeSearchBar } from '../components/home/HomeSearchBar';
 import { ProductsService, Product } from '../services/products.service';
-import { CategoriesService, Category } from '../services/categories.service';
+import { CategoriesService, Category, categoryDisplayName } from '../services/categories.service';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AllProducts'>;
 
 export const AllProductsScreen: React.FC<Props> = ({ navigation }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const preferAr = (i18n.language ?? '').startsWith('ar');
   const { width } = useWindowDimensions();
   const rtl = isRTL();
   const [search, setSearch] = useState('');
@@ -117,7 +118,7 @@ export const AllProductsScreen: React.FC<Props> = ({ navigation }) => {
             activeOpacity={0.85}
           >
             <Text style={[styles.chipText, selectedCategoryId === cat.id ? styles.chipTextSelected : styles.chipTextIdle]} numberOfLines={1}>
-              {cat.name}
+              {categoryDisplayName(cat, preferAr)}
             </Text>
           </TouchableOpacity>
         ))}

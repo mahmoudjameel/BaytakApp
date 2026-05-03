@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, Alert, ActivityIndicator,
 } from 'react-native';
@@ -10,9 +10,14 @@ import { FontFamily } from '../theme/typography';
 import { Button } from '../components/Button';
 import { InputField } from '../components/InputField';
 import { SocialButton } from '../components/SocialButton';
+import { CityPicker } from '../components/CityPicker';
+import { SaudiPhoneField } from '../components/SaudiPhoneField';
+import { CitiesService, type City } from '../services/cities.service';
+import { toInternationalSa } from '../utils/saudiPhone';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { isRTL } from '../utils/rtl';
 import { AuthService } from '../services/auth.service';
+import { toErrorMessage } from '../utils/errors';
 
 const StepIndicator = ({ current, total, rtl }: { current: number; total: number; rtl: boolean }) => (
   <View style={[stepStyles.row, rtl && stepStyles.rowRtl]}>
@@ -50,6 +55,16 @@ export const CreateAccountScreen: React.FC<Props> = ({ route, navigation }) => {
   const [taxIdNumber, setTaxIdNumber] = useState('');
   const [commercialName, setCommercialName] = useState('');
   const [nationalAddress, setNationalAddress] = useState('');
+  const [cities, setCities] = useState<City[]>([]);
+  const [citiesLoading, setCitiesLoading] = useState(true);
+  const [selectedCityId, setSelectedCityId] = useState<number | null>(null);
+
+  useEffect(() => {
+    CitiesService.getAll()
+      .then(setCities)
+      .catch(() => setCities([]))
+      .finally(() => setCitiesLoading(false));
+  }, []);
 
   const subtitleKey = useMemo(() => {
     if (accountType === 'provider') return 'auth.createAccountSubtitleProvider';
@@ -59,15 +74,26 @@ export const CreateAccountScreen: React.FC<Props> = ({ route, navigation }) => {
 
   const fieldStyle = {
     containerStyle: styles.fieldContainer,
-    labelStyle: [styles.fieldLabel, rtl && styles.fieldLabelRtl] as any,
+    labelStyle: [styles.fieldLabel, rtl && styles.fieldLabelRtl],
     inputWrapperStyle: styles.fieldWrapper,
     inputStyle: styles.fieldInput,
     placeholderColor: '#A7AEC1',
   };
 
   const handleRegister = async () => {
+    if (selectedCityId == null) {
+      Alert.alert(t('common.error'), t('auth.selectCity'));
+      return;
+    }
+
+    const phoneIntl = toInternationalSa(phone);
+    if (!phoneIntl) {
+      Alert.alert(t('common.error'), t('auth.phoneInvalid'));
+      return;
+    }
+
     if (isProviderFlow) {
-      if (!fullName.trim() || !email.trim() || !phone.trim() || !password.trim() || !nationalAddress.trim()) {
+      if (!fullName.trim() || !email.trim() || !password.trim() || !nationalAddress.trim()) {
         Alert.alert(t('common.error'), t('auth.fillAllFields'));
         return;
       }
@@ -78,16 +104,17 @@ export const CreateAccountScreen: React.FC<Props> = ({ route, navigation }) => {
           accountType: 'INDIVIDUAL',
           fullName: fullName.trim(),
           email: email.trim(),
-          phone: phone.trim(),
+          phone: phoneIntl,
           password,
           nationalAddress: nationalAddress.trim(),
+          cityId: selectedCityId,
         },
       });
       return;
     }
 
     if (isCompanyFlow) {
-      if (!commercialName.trim() || !email.trim() || !phone.trim() || !password.trim() ||
+      if (!commercialName.trim() || !email.trim() || !password.trim() ||
           !commercialRegistrationNumber.trim() || !taxIdNumber.trim() || !nationalAddress.trim()) {
         Alert.alert(t('common.error'), t('auth.fillAllFields'));
         return;
@@ -98,18 +125,19 @@ export const CreateAccountScreen: React.FC<Props> = ({ route, navigation }) => {
           role: 'PROVIDER',
           accountType: 'COMPANY',
           email: email.trim(),
-          phone: phone.trim(),
+          phone: phoneIntl,
           password,
           commercialRegistrationNumber: commercialRegistrationNumber.trim(),
           taxIdNumber: taxIdNumber.trim(),
           commercialName: commercialName.trim(),
           nationalAddress: nationalAddress.trim(),
+          cityId: selectedCityId,
         },
       });
       return;
     }
 
-    if (!fullName.trim() || !email.trim() || !phone.trim() || !password.trim()) {
+    if (!fullName.trim() || !email.trim() || !password.trim()) {
       Alert.alert(t('common.error'), t('auth.fillAllFields'));
       return;
     }
@@ -121,12 +149,13 @@ export const CreateAccountScreen: React.FC<Props> = ({ route, navigation }) => {
         accountType: 'INDIVIDUAL',
         fullName: fullName.trim(),
         email: email.trim(),
-        phone: phone.trim(),
+        phone: phoneIntl,
         password,
+        cityId: selectedCityId,
       });
       navigation.navigate('Verification');
-    } catch (err: any) {
-      Alert.alert(t('common.error'), err?.message ?? t('auth.registerFailed'));
+    } catch (err: unknown) {
+      Alert.alert(t('common.error'), toErrorMessage(err, t('auth.registerFailed')));
     } finally {
       setLoading(false);
     }
@@ -148,7 +177,17 @@ export const CreateAccountScreen: React.FC<Props> = ({ route, navigation }) => {
                 <InputField label={t('providerForm.commercialName')} placeholder={t('providerForm.commercialNamePlaceholder')} value={fullName} onChangeText={setFullName} {...fieldStyle} />
                 <InputField label={t('providerForm.nationalAddress')} placeholder={t('providerForm.nationalAddressPlaceholder')} value={nationalAddress} onChangeText={setNationalAddress} {...fieldStyle} />
                 <InputField label={t('providerForm.emailAddress')} placeholder={t('providerForm.emailAddressPlaceholder')} value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" {...fieldStyle} />
-                <InputField label={t('providerForm.phoneNumber')} placeholder={t('providerForm.phoneNumberPlaceholder')} value={phone} onChangeText={setPhone} keyboardType="phone-pad" {...fieldStyle} />
+                <SaudiPhoneField
+                  label={t('providerForm.phoneNumber')}
+                  placeholder={t('auth.phonePlaceholderSa')}
+                  value={phone}
+                  onChangeText={setPhone}
+                  rtl={rtl}
+                  containerStyle={styles.fieldContainer}
+                  labelStyle={[styles.fieldLabel, rtl && styles.fieldLabelRtl]}
+                  wrapperStyle={styles.fieldWrapper}
+                  inputStyle={styles.fieldInput}
+                />
                 <InputField label={t('providerForm.password')} placeholder={t('providerForm.passwordPlaceholder')} value={password} onChangeText={setPassword} isPassword {...fieldStyle} />
               </>
             )}
@@ -160,7 +199,17 @@ export const CreateAccountScreen: React.FC<Props> = ({ route, navigation }) => {
                 <InputField label={t('providerForm.taxIdNumber')} placeholder={t('providerForm.taxIdPlaceholder')} value={taxIdNumber} onChangeText={setTaxIdNumber} {...fieldStyle} />
                 <InputField label={t('providerForm.nationalAddress')} placeholder={t('providerForm.nationalAddressPlaceholder')} value={nationalAddress} onChangeText={setNationalAddress} {...fieldStyle} />
                 <InputField label={t('providerForm.emailAddress')} placeholder={t('providerForm.emailAddressPlaceholder')} value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" {...fieldStyle} />
-                <InputField label={t('providerForm.phoneNumber')} placeholder={t('providerForm.phoneNumberPlaceholder')} value={phone} onChangeText={setPhone} keyboardType="phone-pad" {...fieldStyle} />
+                <SaudiPhoneField
+                  label={t('providerForm.phoneNumber')}
+                  placeholder={t('auth.phonePlaceholderSa')}
+                  value={phone}
+                  onChangeText={setPhone}
+                  rtl={rtl}
+                  containerStyle={styles.fieldContainer}
+                  labelStyle={[styles.fieldLabel, rtl && styles.fieldLabelRtl]}
+                  wrapperStyle={styles.fieldWrapper}
+                  inputStyle={styles.fieldInput}
+                />
                 <InputField label={t('providerForm.password')} placeholder={t('providerForm.passwordPlaceholder')} value={password} onChangeText={setPassword} isPassword {...fieldStyle} />
               </>
             )}
@@ -169,10 +218,29 @@ export const CreateAccountScreen: React.FC<Props> = ({ route, navigation }) => {
               <>
                 <InputField label={t('auth.username')} placeholder={t('auth.usernamePlaceholder')} value={fullName} onChangeText={setFullName} autoCapitalize="words" leadingIcon="person-outline" {...fieldStyle} />
                 <InputField label={t('auth.emailOrPhone')} placeholder={t('auth.emailOrPhonePlaceholder')} value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" leadingIcon="mail-outline" {...fieldStyle} />
-                <InputField label={t('auth.phoneNumber', { defaultValue: 'Phone Number' })} placeholder="+966XXXXXXXXX" value={phone} onChangeText={setPhone} keyboardType="phone-pad" leadingIcon="call-outline" {...fieldStyle} />
+                <SaudiPhoneField
+                  label={t('auth.phoneNumber', { defaultValue: 'Phone Number' })}
+                  placeholder={t('auth.phonePlaceholderSa')}
+                  value={phone}
+                  onChangeText={setPhone}
+                  rtl={rtl}
+                  containerStyle={styles.fieldContainer}
+                  labelStyle={[styles.fieldLabel, rtl && styles.fieldLabelRtl]}
+                  wrapperStyle={styles.fieldWrapper}
+                  inputStyle={styles.fieldInput}
+                />
                 <InputField label={t('auth.password')} placeholder={t('auth.passwordPlaceholder')} value={password} onChangeText={setPassword} isPassword leadingIcon="lock-closed-outline" {...fieldStyle} />
               </>
             )}
+
+            <CityPicker
+              label={t('auth.city')}
+              placeholder={t('auth.cityPlaceholder')}
+              cities={cities}
+              selectedId={selectedCityId}
+              onSelect={(city) => setSelectedCityId(city.id)}
+              loading={citiesLoading}
+            />
           </View>
 
           {loading ? (

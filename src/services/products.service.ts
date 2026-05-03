@@ -1,5 +1,7 @@
-import { apiRequest, apiUpload } from './api';
+import { apiRequest, apiUpload, formDataAppendPart, type FormDataFilePart } from './api';
 import { PaginatedResponse } from './categories.service';
+
+export type ProductUploadFile = FormDataFilePart;
 
 export type Product = {
   id: number;
@@ -56,11 +58,11 @@ export const ProductsService = {
     price: number;
     categoryId?: number;
     subCategoryId?: number;
-  }, files?: any[]): Promise<Product> {
+  }, files?: ProductUploadFile[]): Promise<Product> {
     const form = new FormData();
     form.append('data', JSON.stringify(data));
     if (files?.length) {
-      files.forEach((file) => form.append('files', file));
+      files.forEach((file) => formDataAppendPart(form, 'files', file));
     }
     return apiUpload('/products', form, 'POST');
   },
@@ -70,11 +72,11 @@ export const ProductsService = {
     description: string;
     price: number;
     isActive: boolean;
-  }>, files?: any[]): Promise<Product> {
+  }>, files?: ProductUploadFile[]): Promise<Product> {
     const form = new FormData();
     form.append('data', JSON.stringify(data));
     if (files?.length) {
-      files.forEach((file) => form.append('files', file));
+      files.forEach((file) => formDataAppendPart(form, 'files', file));
     }
     return apiUpload(`/products/${id}`, form, 'PATCH');
   },

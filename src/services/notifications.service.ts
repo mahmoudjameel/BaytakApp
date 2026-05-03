@@ -14,7 +14,7 @@ export const NotificationsService = {
     userId: number;
     title: string;
     body: string;
-    data?: Record<string, any>;
+    data?: Record<string, unknown>;
     channels?: NotificationChannel[];
   }): Promise<void> {
     return apiRequest('/notifications', {

@@ -1,1 +1,4 @@
 node_modules
+
+# كلمات مرور اختبار API المحلية (انظر scripts/api-test-users.example.json)
+scripts/api-test-users.json

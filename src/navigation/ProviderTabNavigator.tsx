@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -20,10 +20,19 @@ import { Colors } from '../theme/colors';
 import { FontFamily } from '../theme/typography';
 import { isRTL } from '../utils/rtl';
 import { RootStackParamList } from './AppNavigator';
+import { useAuth } from '../context/AuthContext';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
-const Tab = createBottomTabNavigator();
+export type ProviderTabParamList = {
+  ProviderHome: undefined;
+  ProviderPerformance: undefined;
+  ProviderAdd: undefined;
+  ProviderOrders: undefined;
+  ProviderProfile: undefined;
+};
+
+const Tab = createBottomTabNavigator<ProviderTabParamList>();
 
 type TabIconProps = {
   focused: boolean;
@@ -58,6 +67,11 @@ const AddButton = () => {
 export const ProviderTabNavigator = () => {
   const rtl = isRTL();
   const { t } = useTranslation();
+  const { refreshUser } = useAuth();
+
+  useEffect(() => {
+    void refreshUser();
+  }, [refreshUser]);
 
   const tabs = [
     {

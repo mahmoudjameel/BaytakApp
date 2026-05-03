@@ -35,7 +35,12 @@
     "active": "نشط",
     "completed": "مكتمل",
     "pendingApproval": "بانتظار الموافقة",
-    "cancel": "إلغاء"
+    "cancel": "إلغاء",
+    "error": "خطأ",
+    "success": "تم بنجاح",
+    "somethingWentWrong": "حدث خطأ. يرجى المحاولة مرة أخرى.",
+    "all": "الكل",
+    "noResults": "لا توجد نتائج"
   },
   "tabs": {
     "home": "الرئيسية",
@@ -77,7 +82,28 @@
     "usernamePlaceholder": "أنشئ اسم المستخدم",
     "createAccountButton": "إنشاء حساب",
     "signUpGoogle": "التسجيل عبر Google",
-    "signUpApple": "التسجيل عبر Apple"
+    "signUpApple": "التسجيل عبر Apple",
+    "fillAllFields": "يرجى تعبئة جميع الحقول المطلوبة.",
+    "loginFailed": "فشل تسجيل الدخول. تحقق من البريد وكلمة المرور.",
+    "registerFailed": "فشل إنشاء الحساب. يرجى المحاولة مرة أخرى.",
+    "phoneNumber": "رقم الجوال",
+    "profileLoadFailed": "تم تسجيل الدخول لكن تعذر تحميل بيانات الحساب. أعد المحاولة أو تواصل مع الدعم.",
+    "city": "المدينة",
+    "cityPlaceholder": "اختر مدينتك",
+    "selectCity": "يرجى اختيار المدينة.",
+    "phonePlaceholderSa": "05xxxxxxxx أو 5xxxxxxxx",
+    "phoneInvalid": "أدخل رقم جوال سعودي صحيح: 10 أرقام تبدأ بـ 05، أو 9 أرقام تبدأ بـ 5 (بدون 966 — تُضاف تلقائياً).",
+    "loginEmailLabel": "البريد الإلكتروني",
+    "loginEmailPlaceholder": "أدخل البريد الذي سجّلت به",
+    "loginEmailOnly": "الدخول يكون بالبريد الإلكتروني المسجّل فقط. رقم الجوال لا يُقبل في خانة تسجيل الدخول حسب إعدادات الخادم.",
+    "passwordMinLength": "كلمة المرور يجب ألا تقل عن 8 أحرف (مثل متطلبات الخادم)."
+  },
+  "apiErrors": {
+    "generic": "حدث خطأ. حاول مرة أخرى.",
+    "invalidCredentials": "البريد أو كلمة المرور غير صحيحة.",
+    "authInvalidEmail": "صيغة البريد غير صالحة. استخدم البريد الذي سجّلت به (وليس رقم الجوال في هذا الحقل).",
+    "authPasswordTooShort": "كلمة المرور قصيرة جداً (الحد الأدنى 8 أحرف).",
+    "authGeneric": "خطأ تحقق: {{code}}"
   },
   "chooseAccount": {
     "title": "اختر نوع الحساب",
@@ -126,7 +152,9 @@
     "phone": "+966255484848",
     "submit": "إرسال",
     "resendPrompt": "لم يصلك الرمز؟",
-    "resend": "إعادة الإرسال"
+    "resend": "إعادة الإرسال",
+    "enterCode": "يرجى إدخال رمز التحقق كاملاً.",
+    "invalidCode": "رمز غير صحيح أو منتهي."
   },
   "home": {
     "location": "المملكة العربية السعودية",
@@ -420,7 +448,8 @@
     "readMore": "اقرأ المزيد"
   },
   "inviteFriends": {
-    "menuLabel": "دعوة الأصدقاء"
+    "menuLabel": "دعوة الأصدقاء",
+    "shareMessage": "انضم إلى بايتك — منصة الخدمات المنزلية.\nhttps://api.abdallah-ghazal.cloud"
   },
   "providerTabs": {
     "home": "الرئيسية",
@@ -431,6 +460,7 @@
   },
   "providerHome": {
     "location": "تشينانغو، السعودية",
+    "greeting": "مرحباً، {{name}}",
     "addNewService": "إضافة خدمة جديدة",
     "cards": {
       "service": {
@@ -515,11 +545,28 @@
     }
   },
   "providerSelectServices": {
-    "chooseService": "اختر الخدمة التي تقدمها"
+    "chooseService": "اختر الخدمة التي تقدمها",
+    "loadFailed": "تعذر تحميل الخدمات. تحقق من الاتصال أو أعد المحاولة.",
+    "retry": "إعادة المحاولة",
+    "emptyList": "لا توجد خدمات متاحة حالياً.",
+    "selectAtLeastOne": "يرجى اختيار خدمة واحدة على الأقل",
+    "unauthorizedCategories": "تعذر تحميل الخدمات: الخادم يمنع الوصول بدون تسجيل دخول. يجب تمكين GET /categories للقراءة بدون توكن حتى يختار المزوّد الخدمات قبل التسجيل.",
+    "itemsCount": "{{count}} خيار",
+    "selectedCount": "{{count}} محددة",
+    "tapToSelectServices": "اختر من القائمة أدناه الخدمات التي تقدمها"
+  },
+  "providerProfile": {
+    "myServices": "خدماتي",
+    "company": "حساب شركة",
+    "individual": "حساب فرد",
+    "providerRole": "مزوّد خدمة",
+    "editComingTitle": "قريباً",
+    "editComingBody": "تعديل الملف الشخصي وصورة الحساب سيتوفر في تحديث قادم."
   },
   "providerAccountSuccess": {
     "heading": "تم بنجاح",
-    "description": "تم إرسال بياناتك بنجاح."
+    "description": "تم إرسال بياناتك بنجاح.",
+    "continueToApp": "ابدأ استخدام التطبيق"
   },
   "addNewService": {
     "serviceTitle": "عنوان الخدمة",
@@ -542,6 +589,8 @@
     "profileImage": "صورة الملف",
     "imageUpload": "رفع صورة",
     "addNewMembers": "إضافة أعضاء جدد",
-    "addNewTeams": "إضافة فريق جديد"
+    "addNewTeams": "إضافة فريق جديد",
+    "nameRequired": "يرجى إدخال اسم الفريق.",
+    "teamCreated": "تم إنشاء الفريق بنجاح."
   }
 }

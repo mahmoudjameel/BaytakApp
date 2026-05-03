@@ -94,6 +94,7 @@ export type RootStackParamList = {
       commercialRegistrationNumber?: string;
       taxIdNumber?: string;
       commercialName?: string;
+      cityId?: number;
     };
   } | undefined;
   ProviderAccountSuccess: undefined;

@@ -49,7 +49,7 @@ export const ProviderAccountSuccessScreen: React.FC<Props> = ({ navigation }) =>
 
       <View style={styles.footer}>
         <Button
-          title={t('auth.createAccountButton')}
+          title={t('providerAccountSuccess.continueToApp')}
           onPress={() => navigation.navigate('ProviderMain')}
           style={styles.btn}
         />

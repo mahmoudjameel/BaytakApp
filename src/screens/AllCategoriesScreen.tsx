@@ -8,7 +8,7 @@ import { RootStackParamList } from '../navigation/AppNavigator';
 import { FontFamily } from '../theme/typography';
 import { Colors } from '../theme/colors';
 import { backChevronIcon, isRTL } from '../utils/rtl';
-import { CategoriesService, Category } from '../services/categories.service';
+import { CategoriesService, Category, categoryDisplayName } from '../services/categories.service';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AllCategories'>;
 
@@ -24,8 +24,9 @@ const FALLBACK_ICONS = [
 ];
 
 export const AllCategoriesScreen: React.FC<Props> = ({ navigation }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const rtl = isRTL();
+  const preferAr = (i18n.language ?? '').startsWith('ar');
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -55,12 +56,12 @@ export const AllCategoriesScreen: React.FC<Props> = ({ navigation }) => {
               <View key={item.id} style={styles.itemWrap}>
                 <View style={styles.iconCircle}>
                   {item.image ? (
-                    <Image source={{ uri: item.image }} style={styles.icon} resizeMode="contain" />
+                    <Image source={{ uri: item.image }} style={styles.iconRemote} resizeMode="contain" />
                   ) : (
                     <Image source={FALLBACK_ICONS[idx % FALLBACK_ICONS.length]} style={styles.icon} resizeMode="contain" />
                   )}
                 </View>
-                <Text style={styles.itemName}>{item.name}</Text>
+                <Text style={styles.itemName}>{categoryDisplayName(item, preferAr)}</Text>
               </View>
             ))}
           </View>
@@ -82,5 +83,6 @@ const styles = StyleSheet.create({
   itemWrap: { width: '23%', alignItems: 'center', gap: 8 },
   iconCircle: { width: 78, height: 78, borderRadius: 39, backgroundColor: '#F5F6F8', alignItems: 'center', justifyContent: 'center' },
   icon: { width: 32, height: 32, tintColor: Colors.primary },
+  iconRemote: { width: 32, height: 32 },
   itemName: { fontSize: 11, lineHeight: 15, textAlign: 'center', color: '#1B1D36', fontFamily: FontFamily.outfit.medium },
 });

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Alert,
+  View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Alert, ImageSourcePropType,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -18,7 +18,7 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 type MenuItem = {
   id: string;
   labelKey: string;
-  iconSource: any;
+  iconSource: ImageSourcePropType;
   iconBg: string;
   onPress?: () => void;
 };
@@ -40,7 +40,7 @@ export const ProfileScreen = () => {
           style: 'destructive',
           onPress: async () => {
             await signOut();
-            (navigation as any).replace('Login');
+            navigation.replace('Login');
           },
         },
       ],

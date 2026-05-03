@@ -1,4 +1,11 @@
-import { apiRequest, TokenStorage, BASE_URL } from './api';
+/**
+ * عقد الـ API للمصادقة (مختبر ضد الإنتاج):
+ * - POST /auth/register — بدون Bearer؛ الجسم يطابق RegisterPayload؛ يعيد { userId } فقط (بدون توكن).
+ *   مزوّد: categoryIds مطلوبة (حد أدنى 1) عبر register:categoryRequired.
+ * - POST /auth/mobile/sign-in — بدون Bearer؛ يعيد accessToken, refreshToken, userId, expiresIn.
+ */
+import { apiRequest, TokenStorage } from './api';
+import { devLog, devLogRedacted } from '../utils/devLog';
 
 export type AuthTokens = {
   accessToken: string;
@@ -14,6 +21,8 @@ export type RegisterClientPayload = {
   email: string;
   phone: string;
   password: string;
+  /** مدينة من GET /cities */
+  cityId?: number;
 };
 
 export type RegisterProviderIndividualPayload = {
@@ -25,6 +34,7 @@ export type RegisterProviderIndividualPayload = {
   password: string;
   nationalAddress: string;
   categoryIds: number[];
+  cityId?: number;
 };
 
 export type RegisterProviderCompanyPayload = {
@@ -38,6 +48,7 @@ export type RegisterProviderCompanyPayload = {
   commercialName: string;
   nationalAddress?: string;
   categoryIds: number[];
+  cityId?: number;
 };
 
 export type RegisterPayload =
@@ -47,25 +58,44 @@ export type RegisterPayload =
 
 export const AuthService = {
   async signIn(email: string, password: string): Promise<AuthTokens> {
-    const data = await apiRequest<AuthTokens>('/auth/mobile/sign-in', {
-      method: 'POST',
-      body: JSON.stringify({ email, password }),
+    devLog('auth.signIn.request', { email });
+    const data = await apiRequest<AuthTokens>(
+      '/auth/mobile/sign-in',
+      {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+        skipAuth: true,
+      },
+    );
+    devLogRedacted('auth.signIn.response', {
+      userId: data.userId,
+      expiresIn: data.expiresIn,
+      accessToken: data.accessToken,
+      refreshToken: data.refreshToken,
     });
     await TokenStorage.save(data.accessToken, data.refreshToken, data.userId);
     return data;
   },
 
   async register(payload: RegisterPayload): Promise<{ userId: number }> {
-    return apiRequest<{ userId: number }>('/auth/register', {
+    devLog('auth.register.request', {
+      ...(payload as unknown as Record<string, unknown>),
+      password: '[redacted]',
+    });
+    const result = await apiRequest<unknown>('/auth/register', {
       method: 'POST',
       body: JSON.stringify(payload),
+      skipAuth: true,
     });
+    devLog('auth.register.response', result);
+    return result as { userId: number };
   },
 
   async requestOtp(phone: string): Promise<{ expiresAt: string; devOtp?: string }> {
     return apiRequest('/auth/mobile/request-otp', {
       method: 'POST',
       body: JSON.stringify({ phone }),
+      skipAuth: true,
     });
   },
 
@@ -73,6 +103,7 @@ export const AuthService = {
     const data = await apiRequest<AuthTokens>('/auth/mobile/verify-otp', {
       method: 'POST',
       body: JSON.stringify({ phone, code }),
+      skipAuth: true,
     });
     await TokenStorage.save(data.accessToken, data.refreshToken, data.userId);
     return data;
