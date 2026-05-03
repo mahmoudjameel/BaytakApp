@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, Animated, Easing } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Colors } from '../theme/colors';
@@ -10,10 +10,32 @@ type Props = {
 };
 
 export const SplashScreen: React.FC<Props> = ({ navigation }) => {
-  const spinValue = React.useRef(new Animated.Value(0)).current;
+  const spinValue = useRef(new Animated.Value(0)).current;
   const { isAuthenticated, isLoading, user } = useAuth();
+
+  // Refs so timers always read the latest values
+  const isAuthRef = useRef(isAuthenticated);
+  const userRoleRef = useRef(user?.role);
+  const isLoadingRef = useRef(isLoading);
+  const navigated = useRef(false);
+
+  useEffect(() => { isAuthRef.current = isAuthenticated; }, [isAuthenticated]);
+  useEffect(() => { userRoleRef.current = user?.role; }, [user]);
+  useEffect(() => { isLoadingRef.current = isLoading; }, [isLoading]);
+
+  const doNavigate = () => {
+    if (navigated.current) return;
+    navigated.current = true;
+    if (isAuthRef.current && userRoleRef.current) {
+      navigation.replace(userRoleRef.current === 'PROVIDER' ? 'ProviderMain' : 'Main');
+    } else {
+      navigation.replace('Onboarding');
+    }
+  };
+
   const [animDone, setAnimDone] = useState(false);
 
+  // Splash animation
   useEffect(() => {
     Animated.loop(
       Animated.timing(spinValue, {
@@ -24,19 +46,25 @@ export const SplashScreen: React.FC<Props> = ({ navigation }) => {
       }),
     ).start();
 
-    const timer = setTimeout(() => setAnimDone(true), 2000);
-    return () => clearTimeout(timer);
-  }, [spinValue]);
+    const animTimer = setTimeout(() => setAnimDone(true), 2000);
+    // Safety valve: always navigate after 5s maximum
+    const maxTimer = setTimeout(() => doNavigate(), 5000);
 
+    return () => {
+      clearTimeout(animTimer);
+      clearTimeout(maxTimer);
+    };
+  // doNavigate intentionally excluded — uses refs internally
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Navigate as soon as both animation AND auth are done
   useEffect(() => {
-    if (!animDone || isLoading) return;
-
-    if (isAuthenticated && user) {
-      navigation.replace(user.role === 'PROVIDER' ? 'ProviderMain' : 'Main');
-    } else {
-      navigation.replace('Onboarding');
+    if (animDone && !isLoading) {
+      doNavigate();
     }
-  }, [animDone, isLoading, isAuthenticated, user, navigation]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [animDone, isLoading]);
 
   const spin = spinValue.interpolate({
     inputRange: [0, 1],

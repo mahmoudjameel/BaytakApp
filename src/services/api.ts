@@ -66,6 +66,15 @@ async function refreshAccessToken(): Promise<string | null> {
 
 type ApiRequestOptions = RequestInit & { skipAuth?: boolean };
 
+const REQUEST_TIMEOUT_MS = 12000;
+
+function withTimeout(signal?: AbortSignal): { signal: AbortSignal; cancel: () => void } {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  if (signal) signal.addEventListener('abort', () => controller.abort());
+  return { signal: controller.signal, cancel: () => clearTimeout(id) };
+}
+
 export async function apiRequest<T = any>(
   path: string,
   options: ApiRequestOptions = {},
@@ -79,7 +88,13 @@ export async function apiRequest<T = any>(
   };
   if (token) headers['Authorization'] = `Bearer ${token}`;
 
-  const res = await fetch(`${getApiBase()}${path}`, { ...fetchOptions, headers });
+  const { signal, cancel } = withTimeout(fetchOptions.signal as AbortSignal | undefined);
+  let res: Response;
+  try {
+    res = await fetch(`${getApiBase()}${path}`, { ...fetchOptions, headers, signal });
+  } finally {
+    cancel();
+  }
 
   /** جلسة منتهية: نحدّث التوكن ونعيد الطلب. لا ينطبق على مسارات المصادقة (skipAuth) مثل تسجيل الدخول — هناك 401 تعني بيانات خاطئة. */
   if (res.status === 401 && retry && !skipAuth) {
