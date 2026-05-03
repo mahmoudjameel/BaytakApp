@@ -67,15 +67,16 @@ export const NearbyServiceDetailsScreen: React.FC<Props> = ({ navigation, route 
     [t],
   );
 
-  const metrics = useMemo(
-    () => [
-      { icon: 'people' as const, title: t('home.clientsPlus'), sub: t('home.metricClient') },
-      { icon: 'briefcase' as const, title: t('home.yearsPlus'), sub: t('home.metricExperience') },
-      { icon: 'star' as const, title: '4.9', sub: t('home.metricRating') },
-      { icon: 'chatbubble' as const, title: t('home.reviewsPlus'), sub: t('home.metricReviews') },
-    ],
-    [t],
-  );
+  const metrics = useMemo((): Array<{
+    icon: keyof typeof Ionicons.glyphMap;
+    title: string;
+    sub: string;
+  }> => [
+    { icon: 'people', title: t('home.clientsPlus'), sub: t('home.metricClient') },
+    { icon: 'briefcase', title: t('home.yearsPlus'), sub: t('home.metricExperience') },
+    { icon: 'star', title: '4.9', sub: t('home.metricRating') },
+    { icon: 'chatbubble', title: t('home.reviewsPlus'), sub: t('home.metricReviews') },
+  ], [t]);
 
   return (
     <View style={styles.container}>
@@ -109,7 +110,7 @@ export const NearbyServiceDetailsScreen: React.FC<Props> = ({ navigation, route 
             {metrics.map((m) => (
               <View key={m.title} style={styles.metricItem}>
                 <View style={styles.metricIconCircle}>
-                  <Ionicons name={m.icon as any} size={14} color="#2F3A56" />
+                  <Ionicons name={m.icon} size={14} color="#2F3A56" />
                 </View>
                 <Text style={[styles.metricTitle, rtl && styles.textRtl]}>{m.title}</Text>
                 <Text style={[styles.metricSub, rtl && styles.textRtl]}>{m.sub}</Text>

@@ -6,7 +6,9 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "concurrently \"node proxy-server.js\" \"expo start --web --port 5001\"",
+    "proxy": "node proxy-server.js",
+    "test:api": "node scripts/api-smoke.mjs"
   },
   "dependencies": {
     "@expo-google-fonts/outfit": "^0.2.3",
@@ -36,6 +38,9 @@
   "devDependencies": {
     "@babel/core": "^7.29.0",
     "@types/react": "~18.2.79",
+    "concurrently": "^9.2.1",
+    "express": "^5.2.1",
+    "http-proxy-middleware": "^3.0.5",
     "typescript": "^5.9.3"
   },
   "private": true

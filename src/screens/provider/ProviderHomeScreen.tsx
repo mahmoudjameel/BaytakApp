@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   View,
   Text,
@@ -10,8 +10,9 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../context/AuthContext';
 import { Colors } from '../../theme/colors';
 import { FontFamily } from '../../theme/typography';
 import { Button } from '../../components/Button';
@@ -41,6 +42,15 @@ export const ProviderHomeScreen: React.FC = () => {
   const navigation = useNavigation<Nav>();
   const { t } = useTranslation();
   const rtl = isRTL();
+  const { user, refreshUser } = useAuth();
+
+  useFocusEffect(
+    useCallback(() => {
+      void refreshUser();
+    }, [refreshUser]),
+  );
+
+  const displayName = user?.fullName ?? user?.commercialName ?? t('profile.userName');
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -67,6 +77,9 @@ export const ProviderHomeScreen: React.FC = () => {
         contentContainerStyle={styles.scroll}
         showsVerticalScrollIndicator={false}
       >
+        <Text style={[styles.greeting, rtl && styles.textRtl]}>
+          {t('providerHome.greeting', { name: displayName })}
+        </Text>
         <View style={styles.cardsContainer}>
           {SERVICE_CARDS.map((card) => (
             <TouchableOpacity
@@ -148,6 +161,14 @@ const styles = StyleSheet.create({
     paddingTop: 24,
     paddingBottom: 24,
   },
+  greeting: {
+    fontSize: 20,
+    fontFamily: FontFamily.outfit.bold,
+    color: '#1B1D36',
+    marginBottom: 18,
+    textAlign: 'left',
+  },
+  textRtl: { textAlign: 'right', writingDirection: 'rtl' },
   cardsContainer: { gap: 16 },
   card: {
     flexDirection: 'row',
@@ -178,7 +199,6 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     textAlign: 'left',
   },
-  textRtl: { textAlign: 'right', writingDirection: 'rtl' },
   footer: {
     paddingHorizontal: 16,
     paddingBottom: 12,

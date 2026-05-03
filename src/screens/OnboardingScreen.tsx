@@ -75,7 +75,7 @@ export const OnboardingScreen: React.FC<Props> = ({ navigation }) => {
       flatListRef.current?.scrollToIndex({ index: next, animated: true });
       setCurrentIndex(next);
     } else {
-      navigation.replace('ChooseAccount' as any);
+      navigation.replace('ChooseAccount');
     }
   };
 

@@ -22,7 +22,7 @@ export const SplashScreen: React.FC<Props> = ({ navigation }) => {
     ).start();
 
     const timer = setTimeout(() => {
-      navigation.replace('Onboarding' as any);
+      navigation.replace('Onboarding');
     }, 2500);
     return () => clearTimeout(timer);
   }, [navigation, spinValue]);

@@ -36,6 +36,7 @@ import { ProviderWalletScreen } from '../screens/provider/ProviderWalletScreen';
 import { AddNewServiceScreen } from '../screens/provider/AddNewServiceScreen';
 import { TeamsScreen } from '../screens/provider/TeamsScreen';
 import { ProviderProfileScreen } from '../screens/provider/ProviderProfileScreen';
+import { AuthProvider } from '../context/AuthContext';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -53,6 +54,7 @@ export type RootStackParamList = {
     price: string;
     image: string;
     rating: number;
+    productId?: number;
   };
   AddAddress: undefined;
   Offer: undefined;
@@ -79,7 +81,22 @@ export type RootStackParamList = {
   Notifications: undefined;
   LanguageSettings: undefined;
   Main: undefined;
-  ProviderSelectServices: { accountType?: 'provider' | 'company' } | undefined;
+  ProviderSelectServices: {
+    accountType?: 'provider' | 'company';
+    registrationData?: {
+      role: 'PROVIDER';
+      accountType: 'INDIVIDUAL' | 'COMPANY';
+      fullName?: string;
+      email: string;
+      phone: string;
+      password: string;
+      nationalAddress?: string;
+      commercialRegistrationNumber?: string;
+      taxIdNumber?: string;
+      commercialName?: string;
+      cityId?: number;
+    };
+  } | undefined;
   ProviderAccountSuccess: undefined;
   ProviderMain: undefined;
   ProviderPerformance: undefined;
@@ -95,43 +112,45 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const AppNavigator = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Splash">
-        <Stack.Screen name="Splash" component={SplashScreen} />
-        <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="ChooseAccount" component={ChooseAccountScreen} />
-        <Stack.Screen name="CreateAccount" component={CreateAccountScreen} />
-        <Stack.Screen name="Verification" component={VerificationScreen} />
-        <Stack.Screen name="AllCategories" component={AllCategoriesScreen} />
-        <Stack.Screen name="AllProducts" component={AllProductsScreen} />
-        <Stack.Screen name="ProductDetails" component={ProductDetailsScreen} />
-        <Stack.Screen name="AddAddress" component={AddAddressScreen} />
-        <Stack.Screen name="Offer" component={OfferScreen} />
-        <Stack.Screen name="MakeAppointment" component={MakeAppointmentScreen} />
-        <Stack.Screen name="NearbyServiceDetails" component={NearbyServiceDetailsScreen} />
-        <Stack.Screen name="Favourites" component={FavouritesScreen} />
-        <Stack.Screen name="Invoice" component={InvoiceScreen} />
-        <Stack.Screen name="Wallet" component={WalletScreen} />
-        <Stack.Screen name="CartAddAddress" component={CartAddAddressScreen} />
-        <Stack.Screen name="Checkout" component={CheckoutScreen} />
-        <Stack.Screen name="AddPayment" component={AddPaymentScreen} />
-        <Stack.Screen name="ContractSuccess" component={ContractSuccessScreen} />
-        <Stack.Screen name="HelpCenter" component={HelpCenterScreen} />
-        <Stack.Screen name="Notifications" component={NotificationsScreen} />
-        <Stack.Screen name="LanguageSettings" component={LanguageScreen} />
-        <Stack.Screen name="Main" component={TabNavigator} />
+    <AuthProvider>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Splash">
+          <Stack.Screen name="Splash" component={SplashScreen} />
+          <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="ChooseAccount" component={ChooseAccountScreen} />
+          <Stack.Screen name="CreateAccount" component={CreateAccountScreen} />
+          <Stack.Screen name="Verification" component={VerificationScreen} />
+          <Stack.Screen name="AllCategories" component={AllCategoriesScreen} />
+          <Stack.Screen name="AllProducts" component={AllProductsScreen} />
+          <Stack.Screen name="ProductDetails" component={ProductDetailsScreen} />
+          <Stack.Screen name="AddAddress" component={AddAddressScreen} />
+          <Stack.Screen name="Offer" component={OfferScreen} />
+          <Stack.Screen name="MakeAppointment" component={MakeAppointmentScreen} />
+          <Stack.Screen name="NearbyServiceDetails" component={NearbyServiceDetailsScreen} />
+          <Stack.Screen name="Favourites" component={FavouritesScreen} />
+          <Stack.Screen name="Invoice" component={InvoiceScreen} />
+          <Stack.Screen name="Wallet" component={WalletScreen} />
+          <Stack.Screen name="CartAddAddress" component={CartAddAddressScreen} />
+          <Stack.Screen name="Checkout" component={CheckoutScreen} />
+          <Stack.Screen name="AddPayment" component={AddPaymentScreen} />
+          <Stack.Screen name="ContractSuccess" component={ContractSuccessScreen} />
+          <Stack.Screen name="HelpCenter" component={HelpCenterScreen} />
+          <Stack.Screen name="Notifications" component={NotificationsScreen} />
+          <Stack.Screen name="LanguageSettings" component={LanguageScreen} />
+          <Stack.Screen name="Main" component={TabNavigator} />
 
-        <Stack.Screen name="ProviderSelectServices" component={ProviderSelectServicesScreen} />
-        <Stack.Screen name="ProviderAccountSuccess" component={ProviderAccountSuccessScreen} />
-        <Stack.Screen name="ProviderMain" component={ProviderTabNavigator} />
-        <Stack.Screen name="ProviderPerformance" component={ProviderPerformanceScreen} />
-        <Stack.Screen name="ProviderOrders" component={ProviderOrderScreen} />
-        <Stack.Screen name="ProviderTime" component={ProviderTimeScreen} />
-        <Stack.Screen name="ProviderWallet" component={ProviderWalletScreen} />
-        <Stack.Screen name="AddNewService" component={AddNewServiceScreen} />
-        <Stack.Screen name="Teams" component={TeamsScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+          <Stack.Screen name="ProviderSelectServices" component={ProviderSelectServicesScreen} />
+          <Stack.Screen name="ProviderAccountSuccess" component={ProviderAccountSuccessScreen} />
+          <Stack.Screen name="ProviderMain" component={ProviderTabNavigator} />
+          <Stack.Screen name="ProviderPerformance" component={ProviderPerformanceScreen} />
+          <Stack.Screen name="ProviderOrders" component={ProviderOrderScreen} />
+          <Stack.Screen name="ProviderTime" component={ProviderTimeScreen} />
+          <Stack.Screen name="ProviderWallet" component={ProviderWalletScreen} />
+          <Stack.Screen name="AddNewService" component={AddNewServiceScreen} />
+          <Stack.Screen name="Teams" component={TeamsScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </AuthProvider>
   );
 };
