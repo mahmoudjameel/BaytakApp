@@ -1,7 +1,14 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, StyleProp, ViewStyle, TextStyle } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  StyleProp,
+  ViewStyle,
+  TextStyle,
+} from 'react-native';
 import { FontFamily } from '../theme/typography';
-import { Colors } from '../theme/colors';
 import { sanitizeSaudiLocalDigits } from '../utils/saudiPhone';
 
 type Props = {
@@ -31,28 +38,36 @@ export const SaudiPhoneField: React.FC<Props> = ({
 }) => {
   return (
     <View style={[styles.container, containerStyle]}>
-      <Text style={[styles.label, labelStyle, rtl ? styles.labelRtl : styles.labelLtr]}>{label}</Text>
+      <Text
+        style={[
+          styles.label,
+          labelStyle,
+          rtl ? styles.labelRtl : styles.labelLtr,
+        ]}
+      >
+        {label}
+      </Text>
 
-      <View style={[styles.card, wrapperStyle]}>
-        <View style={styles.prefixBlock}>
-          <Text style={styles.prefixText} accessibilityRole="text">
-            +966
-          </Text>
+      <View style={[styles.row, wrapperStyle]}>
+        <View style={styles.prefix}>
+          <Text style={styles.flag}>🇸🇦</Text>
+          <Text style={styles.code}>+966</Text>
         </View>
 
-        <View style={styles.inputBlock}>
-          <TextInput
-            style={[styles.input, inputStyle]}
-            value={value}
-            onChangeText={(t) => onChangeText(sanitizeSaudiLocalDigits(t))}
-            placeholder={placeholder}
-            placeholderTextColor={placeholderColor}
-            keyboardType="phone-pad"
-            autoCorrect={false}
-            autoComplete="tel-national"
-            textContentType="telephoneNumber"
-          />
-        </View>
+        <View style={styles.divider} />
+
+        <TextInput
+          style={[styles.input, inputStyle]}
+          value={value}
+          onChangeText={(t) => onChangeText(sanitizeSaudiLocalDigits(t))}
+          placeholder={placeholder}
+          placeholderTextColor={placeholderColor}
+          keyboardType="phone-pad"
+          autoCorrect={false}
+          autoComplete="tel-national"
+          textContentType="telephoneNumber"
+          textAlign="left"
+        />
       </View>
     </View>
   );
@@ -73,50 +88,50 @@ const styles = StyleSheet.create({
   labelLtr: { textAlign: 'left', writingDirection: 'ltr' },
   labelRtl: { textAlign: 'right', writingDirection: 'rtl' },
 
-  /** صندوق واحد: في RTL يظهر الجزء الأول (المقدمة) يمينًا تلقائيًا */
-  card: {
+  row: {
     flexDirection: 'row',
-    alignItems: 'stretch',
-    minHeight: 52,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#E4E8EF',
-    backgroundColor: '#FFFFFF',
-    overflow: 'hidden',
-  },
-
-  prefixBlock: {
-    justifyContent: 'center',
     alignItems: 'center',
+    height: 52,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#F0F1F5',
+    backgroundColor: '#F5F6FA',
+    overflow: 'hidden',
     paddingHorizontal: 14,
-    minWidth: 76,
-    backgroundColor: Colors.primaryLight,
-    borderEndWidth: StyleSheet.hairlineWidth,
-    borderEndColor: '#C5DDD4',
   },
-  prefixText: {
-    fontSize: 16,
+
+  prefix: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingRight: 12,
+  },
+  flag: {
+    fontSize: 18,
+    lineHeight: 22,
+  },
+  code: {
+    fontSize: 15,
     fontFamily: FontFamily.outfit.semiBold,
-    color: Colors.primary,
-    letterSpacing: 0.3,
+    color: '#1B1D36',
+    letterSpacing: 0.2,
     writingDirection: 'ltr',
   },
 
-  inputBlock: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    backgroundColor: '#F8FAFB',
+  divider: {
+    width: 1,
+    height: 22,
+    backgroundColor: '#D8DCE6',
+    marginRight: 12,
   },
+
   input: {
-    fontSize: 15,
-    fontFamily: FontFamily.outfit.medium,
+    flex: 1,
+    fontSize: 14,
+    fontFamily: FontFamily.outfit.regular,
     color: '#1E2239',
-    paddingVertical: 8,
-    margin: 0,
-    direction: 'ltr',
-    textAlign: 'left',
+    paddingVertical: 0,
     writingDirection: 'ltr',
+    textAlign: 'left',
   },
 });
