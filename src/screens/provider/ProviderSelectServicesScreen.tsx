@@ -94,11 +94,24 @@ export const ProviderSelectServicesScreen: React.FC<Props> = ({ route, navigatio
     setExpandedCategoryId((prev) => (prev === categoryId ? null : categoryId));
   };
 
+  /** يحوّل IDs الخدمات الفرعية المختارة إلى IDs الفئات الأب المقابلة (ما يتوقعه الـ API) */
+  const selectedParentCategoryIds = (): number[] => {
+    const subToParent: Record<number, number> = {};
+    categories.forEach((parent) => {
+      getSelectableServiceItems(parent).forEach((sub) => {
+        subToParent[sub.id] = parent.id;
+      });
+    });
+    return [...new Set(selected.map((id) => subToParent[id]).filter((id): id is number => id != null))];
+  };
+
   const handleContinue = async () => {
     if (selected.length === 0) {
       Alert.alert(t('common.error'), t('providerSelectServices.selectAtLeastOne'));
       return;
     }
+
+    const categoryIds = selectedParentCategoryIds();
 
     setSaving(true);
     try {
@@ -113,7 +126,7 @@ export const ProviderSelectServicesScreen: React.FC<Props> = ({ route, navigatio
               phone: registrationData.phone,
               password: registrationData.password,
               nationalAddress: registrationData.nationalAddress ?? '',
-              categoryIds: selected,
+              categoryIds,
               ...(cityId != null ? { cityId } : {}),
             }
           : {
@@ -126,12 +139,13 @@ export const ProviderSelectServicesScreen: React.FC<Props> = ({ route, navigatio
               taxIdNumber: registrationData.taxIdNumber ?? '',
               commercialName: registrationData.commercialName ?? '',
               nationalAddress: registrationData.nationalAddress ?? '',
-              categoryIds: selected,
+              categoryIds,
               ...(cityId != null ? { cityId } : {}),
             };
 
         devLog('providerRegister.beforeApi', {
-          categoryIds: selected,
+          categoryIds,
+          selectedSubIds: selected,
           accountType: registrationData.accountType,
           email: registrationData.email,
           phone: registrationData.phone,
@@ -145,7 +159,7 @@ export const ProviderSelectServicesScreen: React.FC<Props> = ({ route, navigatio
       } else {
         const savedToken = await TokenStorage.getAccess();
         if (savedToken) {
-          await ProfileService.updateProviderProfile({ categoryIds: selected });
+          await ProfileService.updateProviderProfile({ categoryIds });
         }
       }
 
