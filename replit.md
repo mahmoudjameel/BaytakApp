@@ -42,7 +42,8 @@ A React Native / Expo mobile home services application ("بيتك للخدمات
 | `bookings.service.ts` | `create`, `update`, `updateStatus`, `getMyBookings` |
 | `profile.service.ts` | `getProfile`, `updateProfile`, `changePassword`, `updateProviderProfile`, `uploadAvatar` |
 | `wallet.service.ts` | `getWallet`, `getTransactions`, `createTransaction` |
-| `teams.service.ts` | `create`, `update`, `addMember`, `updateMember`, `removeMember`, `resetMemberPassword` |
+| `addresses.service.ts` | `getAll`, `getOne`, `create`, `update`, `remove` |
+| `teams.service.ts` | `getAll`, `getMembers`, `create`, `update`, `addMember`, `updateMember`, `removeMember`, `resetMemberPassword` |
 | `notifications.service.ts` | `registerDeviceToken`, `send` |
 
 ## Auth Flow

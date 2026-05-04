@@ -204,7 +204,10 @@
     "similarProducts": "منتجات مشابهة",
     "addToCart": "أضف إلى السلة",
     "reviewerName": "أكاش باساك",
-    "description": "نص تجريبي لوصف المنتج ومميزاته. يمكن استبداله لاحقاً بنصاً حقيقياً من الخادم. نص إضافي لمحاكاة فقرة أوضح في الواجهة."
+    "description": "نص تجريبي لوصف المنتج ومميزاته. يمكن استبداله لاحقاً بنصاً حقيقياً من الخادم. نص إضافي لمحاكاة فقرة أوضح في الواجهة.",
+    "writeReview": "كتابة تقييم",
+    "noReviews": "لا توجد تقييمات بعد",
+    "reviewCommentPlaceholder": "اكتب تعليقك هنا..."
   },
   "categories": {
     "electricity": "كهرباء",
@@ -275,6 +278,7 @@
   },
   "profile": {
     "title": "الملف الشخصي",
+    "myAddresses": "عناوين التوصيل",
     "favourites": "المفضلة",
     "wallet": "المحفظة",
     "notifications": "الإشعارات",
@@ -329,17 +333,22 @@
   },
   "addAddressForm": {
     "title": "إضافة عنوان جديد",
+    "label": "تسمية العنوان",
+    "labelPlaceholder": "مثال: المنزل، العمل",
     "street": "الشارع",
-    "streetPlaceholder": "المدينة",
+    "streetPlaceholder": "اسم الشارع",
+    "district": "الحي",
+    "districtPlaceholder": "اسم الحي",
     "city": "المدينة",
-    "cityPlaceholder": "المدينة",
+    "cityPlaceholder": "اسم المدينة",
     "postalCode": "الرمز البريدي",
-    "postalCodePlaceholder": "الشارع",
+    "postalCodePlaceholder": "الرمز البريدي",
     "block": "البلوك",
-    "blockPlaceholder": "البلوك",
+    "blockPlaceholder": "رقم البلوك",
     "phoneNumber": "رقم الهاتف",
     "phoneNumberPlaceholder": "رقم الهاتف",
-    "updateAddress": "تحديث العنوان"
+    "updateAddress": "تحديث العنوان",
+    "saveAddress": "حفظ العنوان"
   },
   "checkout": {
     "title": "الدفع",
@@ -586,8 +595,15 @@
     "enterPrice": "أدخل السعر",
     "locationPin": "موقع الخدمة",
     "locationPinPlaceholder": "أدخل موقع الخدمة",
-    "imageUploadIcon": "أيقونة رفع الصورة",
-    "imageUpload": "رفع صورة"
+    "imageUploadIcon": "صورة الخدمة",
+    "imageUpload": "رفع صورة",
+    "category": "الفئة",
+    "categoryPlaceholder": "اختر الفئة",
+    "selectCategory": "اختر فئة الخدمة",
+    "titleRequired": "يرجى إدخال عنوان الخدمة.",
+    "priceRequired": "يرجى إدخال سعر صالح.",
+    "categoryRequired": "يرجى اختيار الفئة.",
+    "saveSuccess": "تمت إضافة الخدمة بنجاح."
   },
   "teams": {
     "title": "الفرق",
@@ -602,6 +618,31 @@
     "addNewMembers": "إضافة أعضاء جدد",
     "addNewTeams": "إضافة فريق جديد",
     "nameRequired": "يرجى إدخال اسم الفريق.",
-    "teamCreated": "تم إنشاء الفريق بنجاح."
+    "teamCreated": "تم إنشاء الفريق بنجاح.",
+    "noTeams": "لا توجد فرق حتى الآن",
+    "myTeams": "فرقي",
+    "createNew": "إنشاء فريق جديد",
+    "membersCount": "{{count}} عضو",
+    "manageMembers": "إدارة الأعضاء",
+    "addMember": "إضافة عضو",
+    "memberName": "اسم العضو",
+    "memberEmail": "البريد الإلكتروني",
+    "memberPassword": "كلمة المرور",
+    "memberAdded": "تمت إضافة العضو بنجاح.",
+    "removeMember": "إزالة العضو",
+    "memberRemoved": "تمت إزالة العضو.",
+    "memberFieldsRequired": "يرجى ملء جميع الحقول."
+  },
+  "myAddresses": {
+    "title": "عناوين التوصيل",
+    "noAddresses": "لا توجد عناوين مضافة",
+    "address": "عنوان",
+    "addNew": "إضافة عنوان جديد",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "defaultBadge": "افتراضي",
+    "deleteConfirmTitle": "حذف العنوان",
+    "deleteConfirmMsg": "هل أنت متأكد من حذف هذا العنوان؟",
+    "editTitle": "تعديل العنوان"
   }
 }

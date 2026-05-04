@@ -36,6 +36,7 @@ import { ProviderWalletScreen } from '../screens/provider/ProviderWalletScreen';
 import { AddNewServiceScreen } from '../screens/provider/AddNewServiceScreen';
 import { TeamsScreen } from '../screens/provider/TeamsScreen';
 import { ProviderProfileScreen } from '../screens/provider/ProviderProfileScreen';
+import { MyAddressesScreen } from '../screens/MyAddressesScreen';
 import { AuthProvider } from '../context/AuthContext';
 
 export type RootStackParamList = {
@@ -73,7 +74,8 @@ export type RootStackParamList = {
   Favourites: undefined;
   Invoice: undefined;
   Wallet: undefined;
-  CartAddAddress: undefined;
+  CartAddAddress: { addressId?: number } | undefined;
+  MyAddresses: undefined;
   Checkout: undefined;
   AddPayment: undefined;
   ContractSuccess: undefined;
@@ -149,6 +151,7 @@ export const AppNavigator = () => {
           <Stack.Screen name="ProviderWallet" component={ProviderWalletScreen} />
           <Stack.Screen name="AddNewService" component={AddNewServiceScreen} />
           <Stack.Screen name="Teams" component={TeamsScreen} />
+          <Stack.Screen name="MyAddresses" component={MyAddressesScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>

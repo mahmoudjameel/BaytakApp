@@ -49,6 +49,7 @@ export const ProfileScreen = () => {
 
   const menuItems: MenuItem[] = useMemo(
     () => [
+      { id: '0', labelKey: 'profile.myAddresses', iconSource: require('../../assets/help-square.png'), iconBg: '#F0F0F0', onPress: () => navigation.navigate('MyAddresses') },
       { id: '1', labelKey: 'profile.favourites', iconSource: require('../../assets/favourite.png'), iconBg: '#F0F0F0', onPress: () => navigation.navigate('Favourites') },
       { id: '2', labelKey: 'profile.wallet', iconSource: require('../../assets/wallet-01.png'), iconBg: '#F0F0F0', onPress: () => navigation.navigate('Wallet') },
       { id: '3', labelKey: 'profile.notifications', iconSource: require('../../assets/notification-02.png'), iconBg: '#F0F0F0', onPress: () => navigation.navigate('Notifications') },
