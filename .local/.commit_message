@@ -1,0 +1,7 @@
+Redesign phone number field to match app's unified input style
+
+- Replaced jarring green (+966) block with a clean, single unified field
+- Flag emoji 🇸🇦 + "+966" prefix inside the same gray background (#F5F6FA)
+- Thin vertical divider separates prefix from number input
+- Matches height (52), borderRadius (10), and colors of all other InputField components
+- Removed separate colored block (Colors.primaryLight) and different background sections

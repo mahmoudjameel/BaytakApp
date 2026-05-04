@@ -100,6 +100,8 @@
   },
   "apiErrors": {
     "generic": "Something went wrong. Please try again.",
+    "serverHtmlInsteadOfJson": "The server returned an error page instead of JSON (status {{status}}). The photo upload route may be missing or a proxy returned HTML.",
+    "unreadableJson": "Could not read the server response (status {{status}}).",
     "invalidCredentials": "Invalid email or password.",
     "authInvalidEmail": "Invalid email format. Use the email you signed up with (not your phone number in this field).",
     "authPasswordTooShort": "Password is too short (minimum 8 characters).",
@@ -619,6 +621,9 @@
     "imageUpload": "Image Upload",
     "addNewMembers": "Add new members",
     "addNewTeams": "Add New Teams",
+    "serviceCategory": "Service category",
+    "categoryRequired": "Please select a service category for the team (required by the server).",
+    "noCategories": "Could not load categories. Check your connection and try again.",
     "nameRequired": "Please enter a team name.",
     "teamCreated": "Team created successfully.",
     "noTeams": "No teams yet",
@@ -631,6 +636,7 @@
     "memberEmail": "Email Address",
     "memberPassword": "Password",
     "memberAdded": "Member added successfully.",
+    "memberAddedLoginHint": "They can sign in on this app with the email and password you set. If they see the customer app instead of the provider dashboard, the server did not assign them the PROVIDER role — check with your backend developer.",
     "removeMember": "Remove Member",
     "memberRemoved": "Member removed.",
     "memberFieldsRequired": "Please fill in all fields."

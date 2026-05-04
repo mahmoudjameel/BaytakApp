@@ -242,15 +242,28 @@ export const ProfileService = {
   },
 
   async uploadAvatar(file: AvatarUploadFile): Promise<UserProfile> {
-    const form = new FormData();
-    formDataAppendPart(form, 'file', file);
-    try {
-      const json = await apiUpload<unknown>('/profile/me/avatar', form, 'POST');
-      return normalizeUserProfile(json);
-    } catch (e) {
-      if (!isWrongRouteError(e)) throw e;
-      const json = await apiUpload<unknown>('/profile/avatar', form, 'POST');
-      return normalizeUserProfile(json);
+    /**
+     * الخادم الحالي لا يعرّف POST /profile/me/avatar (404). كثير من واجهات Nest تعتمد
+     * PATCH /profile/me مع FileInterceptor('avatar' | 'file').
+     */
+    const attempts: readonly { path: string; method: 'PATCH' | 'POST'; field: string }[] = [
+      { path: '/profile/me', method: 'PATCH', field: 'avatar' },
+      { path: '/profile/me', method: 'PATCH', field: 'file' },
+      { path: '/profile/me/avatar', method: 'POST', field: 'file' },
+      { path: '/profile/avatar', method: 'POST', field: 'file' },
+    ];
+    let lastErr: unknown;
+    for (const a of attempts) {
+      const form = new FormData();
+      formDataAppendPart(form, a.field, file);
+      try {
+        const json = await apiUpload<unknown>(a.path, form, a.method);
+        return normalizeUserProfile(json);
+      } catch (e) {
+        lastErr = e;
+        if (!isWrongRouteError(e)) throw e;
+      }
     }
+    throw lastErr ?? new Error('AVATAR_UPLOAD_FAILED');
   },
 };

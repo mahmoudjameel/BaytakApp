@@ -2,9 +2,11 @@ import i18n from '../i18n/i18n';
 
 /** رموز رسائل الخادم (مثل Zod) → مفاتيح ترجمة */
 const KNOWN_CODES: Record<string, string> = {
-  'auth:invalidEmail': 'apiErrors.authInvalidEmail',
+  /** لا نعرض رسالة «صيغة البريد» — نفس تجربة بيانات الدخول الخاطئة. */
+  'auth:invalidEmail': 'apiErrors.invalidCredentials',
   'auth:passwordTooShort': 'apiErrors.authPasswordTooShort',
   'auth:invalidEmailOrPassword': 'apiErrors.invalidCredentials',
+  'team:categoryRequired': 'teams.categoryRequired',
 };
 
 function translateCode(code: string): string {
@@ -41,6 +43,15 @@ export function messageFromApiErrorJson(json: unknown): string {
     if (joined.length) return joined.join('\n');
   }
 
-  if (topStr) return topStr;
+  if (topStr) return translateCode(topStr.trim());
   return i18n.t('apiErrors.generic');
+}
+
+/** رد HTML (صفحة خطأ/بوابة) أو غير JSON — يظهر كـ JSON Parse "<" في الطبقة السفلى */
+export function messageFromNonJsonResponse(status: number): string {
+  return i18n.t('apiErrors.serverHtmlInsteadOfJson', { status });
+}
+
+export function messageFromInvalidJsonResponse(status: number): string {
+  return i18n.t('apiErrors.unreadableJson', { status });
 }

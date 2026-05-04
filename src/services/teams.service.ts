@@ -71,6 +71,10 @@ export const TeamsService = {
     });
   },
 
+  /**
+   * ينشئ حساباً يمكنه تسجيل الدخول عبر `POST /auth/mobile/sign-in` بنفس البريد وكلمة المرور.
+   * لظهور واجهة مزود الخدمة في التطبيق، يجب أن يعيد `/profile/me` للعضو `role: PROVIDER` (قرار الباك اند).
+   */
   async addMember(teamId: number, payload: {
     fullName: string;
     email: string;

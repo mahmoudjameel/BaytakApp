@@ -1,7 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity, ScrollView,
-  KeyboardAvoidingView, Platform, Alert, ActivityIndicator, Modal,
+  KeyboardAvoidingView, Platform, Alert, ActivityIndicator, Modal, type ViewStyle,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,19 +15,24 @@ import { Button } from '../../components/Button';
 import { RootStackParamList } from '../../navigation/AppNavigator';
 import { backChevronIcon, isRTL } from '../../utils/rtl';
 import { TeamsService, Team, TeamMember } from '../../services/teams.service';
+import { CategoriesService, Category, categoryDisplayName } from '../../services/categories.service';
 import { toErrorMessage } from '../../utils/errors';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
 export const TeamsScreen: React.FC = () => {
   const navigation = useNavigation<Nav>();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const preferAr = (i18n.language ?? '').startsWith('ar');
   const rtl = isRTL();
 
   const [teams, setTeams] = useState<Team[]>([]);
   const [loadingTeams, setLoadingTeams] = useState(true);
   const [createVisible, setCreateVisible] = useState(false);
   const [teamName, setTeamName] = useState('');
+  const [createCategories, setCreateCategories] = useState<Category[]>([]);
+  const [loadingCreateCategories, setLoadingCreateCategories] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | undefined>(undefined);
   const [creating, setCreating] = useState(false);
 
   const [memberModalTeam, setMemberModalTeam] = useState<Team | null>(null);
@@ -55,6 +60,21 @@ export const TeamsScreen: React.FC = () => {
     }, [loadTeams]),
   );
 
+  useEffect(() => {
+    if (!createVisible) return;
+    setLoadingCreateCategories(true);
+    CategoriesService.getAll({ limit: 60 })
+      .then((res) => setCreateCategories(res.data ?? []))
+      .catch(() => setCreateCategories([]))
+      .finally(() => setLoadingCreateCategories(false));
+  }, [createVisible]);
+
+  const closeCreateModal = useCallback(() => {
+    setCreateVisible(false);
+    setTeamName('');
+    setSelectedCategoryId(undefined);
+  }, []);
+
   const openMemberModal = async (team: Team) => {
     setMemberModalTeam(team);
     setMemberName('');
@@ -73,12 +93,18 @@ export const TeamsScreen: React.FC = () => {
       Alert.alert(t('common.error'), t('teams.nameRequired'));
       return;
     }
+    if (selectedCategoryId == null) {
+      Alert.alert(t('common.error'), t('teams.categoryRequired'));
+      return;
+    }
     setCreating(true);
     try {
-      const created = await TeamsService.create({ name: teamName.trim(), categoryIds: [] });
+      const created = await TeamsService.create({
+        name: teamName.trim(),
+        categoryIds: [selectedCategoryId],
+      });
       setTeams((prev) => [created, ...prev]);
-      setTeamName('');
-      setCreateVisible(false);
+      closeCreateModal();
       Alert.alert(t('common.success'), t('teams.teamCreated'));
     } catch (err: unknown) {
       Alert.alert(t('common.error'), toErrorMessage(err, t('common.somethingWentWrong')));
@@ -97,14 +123,14 @@ export const TeamsScreen: React.FC = () => {
     try {
       const member = await TeamsService.addMember(memberModalTeam.id, {
         fullName: memberName.trim(),
-        email: memberEmail.trim(),
+        email: memberEmail.trim().toLowerCase(),
         password: memberPassword.trim(),
       });
       setTeamMembers((prev) => [...prev, member]);
       setMemberName('');
       setMemberEmail('');
       setMemberPassword('');
-      Alert.alert(t('common.success'), t('teams.memberAdded'));
+      Alert.alert(t('common.success'), `${t('teams.memberAdded')}\n\n${t('teams.memberAddedLoginHint')}`);
     } catch (err: unknown) {
       Alert.alert(t('common.error'), toErrorMessage(err, t('common.somethingWentWrong')));
     } finally {
@@ -189,12 +215,12 @@ export const TeamsScreen: React.FC = () => {
           </View>
         )}
 
-        <Modal visible={createVisible} transparent animationType="slide" onRequestClose={() => setCreateVisible(false)}>
-          <TouchableOpacity style={styles.overlay} activeOpacity={1} onPress={() => setCreateVisible(false)} />
+        <Modal visible={createVisible} transparent animationType="slide" onRequestClose={closeCreateModal}>
+          <TouchableOpacity style={styles.overlay} activeOpacity={1} onPress={closeCreateModal} />
           <View style={styles.sheet}>
             <View style={styles.sheetHeader}>
               <Text style={styles.sheetTitle}>{t('teams.addNewTeams')}</Text>
-              <TouchableOpacity onPress={() => setCreateVisible(false)} hitSlop={12}>
+              <TouchableOpacity onPress={closeCreateModal} hitSlop={12}>
                 <Ionicons name="close" size={22} color="#1B1D36" />
               </TouchableOpacity>
             </View>
@@ -208,12 +234,45 @@ export const TeamsScreen: React.FC = () => {
                 inputWrapperStyle={styles.fieldWrapper}
                 inputStyle={styles.fieldInput}
                 placeholderColor="#A7AEC1"
-                containerStyle={{ marginBottom: 20 }}
+                containerStyle={{ marginBottom: 14 }}
               />
-              {creating ? (
-                <ActivityIndicator color={Colors.primary} />
+              <Text style={[styles.fieldLabel, rtl && styles.textRtl]}>{t('teams.serviceCategory')}</Text>
+              {loadingCreateCategories ? (
+                <ActivityIndicator color={Colors.primary} style={{ marginVertical: 12, alignSelf: rtl ? 'flex-end' : 'flex-start' }} />
+              ) : createCategories.length === 0 ? (
+                <Text style={[styles.categoryHint, rtl && styles.textRtl]}>{t('teams.noCategories')}</Text>
               ) : (
-                <Button title={t('teams.addNewTeams')} onPress={handleCreateTeam} style={styles.submitBtn} />
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  style={styles.categoryScroll}
+                  contentContainerStyle={[styles.categoryChipsRow, rtl && styles.categoryChipsRowRtl]}
+                >
+                  {createCategories.map((cat) => {
+                    const selected = selectedCategoryId === cat.id;
+                    return (
+                      <TouchableOpacity
+                        key={cat.id}
+                        style={[styles.categoryChip, selected ? styles.categoryChipOn : styles.categoryChipOff]}
+                        onPress={() => setSelectedCategoryId(cat.id)}
+                        activeOpacity={0.85}
+                      >
+                        <Text style={[styles.categoryChipText, selected ? styles.categoryChipTextOn : styles.categoryChipTextOff]} numberOfLines={1}>
+                          {categoryDisplayName(cat, preferAr)}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </ScrollView>
+              )}
+              {creating ? (
+                <ActivityIndicator color={Colors.primary} style={{ marginTop: 16 }} />
+              ) : (
+                <Button
+                  title={t('teams.addNewTeams')}
+                  onPress={handleCreateTeam}
+                  style={StyleSheet.flatten([styles.submitBtn, { marginTop: 16 }]) as ViewStyle}
+                />
               )}
             </View>
           </View>
@@ -334,6 +393,16 @@ const styles = StyleSheet.create({
   sheetHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 16, borderBottomWidth: 1, borderBottomColor: '#F0F0F0' },
   sheetTitle: { fontSize: 16, fontFamily: FontFamily.outfit.semiBold, color: '#1B1D36' },
   sheetBody: { padding: 16, paddingBottom: 24 },
+  categoryScroll: { flexGrow: 0, marginBottom: 4 },
+  categoryChipsRow: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 4 },
+  categoryChipsRowRtl: { flexDirection: 'row-reverse' },
+  categoryChip: { paddingHorizontal: 14, height: 32, borderRadius: 8, alignItems: 'center', justifyContent: 'center', maxWidth: 220 },
+  categoryChipOff: { backgroundColor: '#E8F1E3' },
+  categoryChipOn: { backgroundColor: Colors.primary },
+  categoryChipText: { fontSize: 12, fontFamily: FontFamily.outfit.medium },
+  categoryChipTextOff: { color: '#1B1D36' },
+  categoryChipTextOn: { color: '#FFFFFF' },
+  categoryHint: { fontSize: 12, color: '#9AA0AE', fontFamily: FontFamily.outfit.regular, marginTop: 4 },
   fieldLabel: { fontSize: 14, fontFamily: FontFamily.outfit.semiBold, color: '#1B1D36', marginBottom: 6 },
   fieldWrapper: { height: 48, borderRadius: 10, backgroundColor: '#F5F6FA', borderColor: '#F0F1F5', borderWidth: 1 },
   fieldInput: { fontSize: 14, fontFamily: FontFamily.outfit.regular, color: '#1E2239' },

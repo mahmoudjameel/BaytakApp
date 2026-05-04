@@ -1,6 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
-import { messageFromApiErrorJson } from '../utils/apiErrors';
+import {
+  messageFromApiErrorJson,
+  messageFromInvalidJsonResponse,
+  messageFromNonJsonResponse,
+} from '../utils/apiErrors';
 
 export const BASE_URL = 'https://api.abdallah-ghazal.cloud';
 
@@ -15,6 +19,18 @@ const STORAGE_KEYS = {
   ACCESS_TOKEN: '@baytak_access_token',
   REFRESH_TOKEN: '@baytak_refresh_token',
   USER_ID: '@baytak_user_id',
+  LAST_LOGIN_EMAIL: '@baytak_last_login_email',
+};
+
+/** آخر بريد نجح تسجيل الدخول به — لتعبئة شاشة الدخول فقط (لا تُخزَّن كلمة المرور). */
+export const LastLoginStorage = {
+  async getEmail(): Promise<string | null> {
+    return AsyncStorage.getItem(STORAGE_KEYS.LAST_LOGIN_EMAIL);
+  },
+  async saveEmail(email: string): Promise<void> {
+    const e = email.trim().toLowerCase();
+    if (e) await AsyncStorage.setItem(STORAGE_KEYS.LAST_LOGIN_EMAIL, e);
+  },
 };
 
 export const TokenStorage = {
@@ -142,6 +158,21 @@ export function formDataAppendPart(form: FormData, name: string, part: FormDataF
   (form as unknown as { append(key: string, value: unknown): void }).append(name, part);
 }
 
+/** يقرأ جسم الرد كـ JSON؛ إذا وصل HTML (يُبدأ بـ <) يعطي رسالة واضحة بدل JSON Parse error */
+async function readResponseJson(res: Response): Promise<unknown> {
+  const text = await res.text();
+  if (!text?.trim()) return undefined;
+  const trimmed = text.trim();
+  if (trimmed.startsWith('<')) {
+    throw new Error(messageFromNonJsonResponse(res.status));
+  }
+  try {
+    return JSON.parse(text) as unknown;
+  } catch {
+    throw new Error(messageFromInvalidJsonResponse(res.status));
+  }
+}
+
 export async function apiUpload<T = any>(
   path: string,
   formData: FormData,
@@ -151,14 +182,21 @@ export async function apiUpload<T = any>(
   const headers: Record<string, string> = {};
   if (token) headers['Authorization'] = `Bearer ${token}`;
 
-  const res = await fetch(`${getApiBase()}${path}`, {
-    method,
-    headers,
-    body: formData,
-  });
+  const { signal, cancel } = withTimeout(undefined);
+  let res: Response;
+  try {
+    res = await fetch(`${getApiBase()}${path}`, {
+      method,
+      headers,
+      body: formData,
+      signal,
+    });
+  } finally {
+    cancel();
+  }
 
   if (res.status === 204) return undefined as T;
-  const json = await res.json();
+  const json = await readResponseJson(res);
   if (!res.ok) {
     throw new Error(messageFromApiErrorJson(json));
   }

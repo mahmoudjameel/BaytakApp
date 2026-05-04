@@ -26,8 +26,10 @@ export const SplashScreen: React.FC<Props> = ({ navigation }) => {
   const doNavigate = () => {
     if (navigated.current) return;
     navigated.current = true;
-    if (isAuthRef.current && userRoleRef.current) {
-      navigation.replace(userRoleRef.current === 'PROVIDER' ? 'ProviderMain' : 'Main');
+    /** توكن محفوظ = جلسة مفتوحة؛ لا نطلب role قبل التوجيه وإلا قد يُرسل المستخدم لـ Onboarding رغم أنه مسجّل. */
+    if (isAuthRef.current) {
+      const role = userRoleRef.current;
+      navigation.replace(role === 'PROVIDER' ? 'ProviderMain' : 'Main');
     } else {
       navigation.replace('Onboarding');
     }

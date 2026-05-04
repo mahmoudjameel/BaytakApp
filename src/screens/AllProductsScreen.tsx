@@ -102,7 +102,12 @@ export const AllProductsScreen: React.FC<Props> = ({ navigation }) => {
 
       <HomeSearchBar value={search} onChangeText={setSearch} />
 
-      <ScrollView horizontal style={styles.chipsScroll} showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipsRow}>
+      <ScrollView
+        horizontal
+        style={styles.chipsScroll}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={[styles.chipsRow, rtl && styles.chipsRowRtl]}
+      >
         <TouchableOpacity
           style={[styles.chip, selectedCategoryId === undefined ? styles.chipSelected : styles.chipIdle]}
           onPress={() => setSelectedCategoryId(undefined)}
@@ -133,7 +138,7 @@ export const AllProductsScreen: React.FC<Props> = ({ navigation }) => {
           keyExtractor={(item) => String(item.id)}
           numColumns={2}
           renderItem={renderItem}
-          columnWrapperStyle={styles.gridRow}
+          columnWrapperStyle={[styles.gridRow, rtl && styles.gridRowRtl]}
           contentContainerStyle={styles.gridContent}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={<Text style={styles.emptyText}>{t('common.noResults')}</Text>}
@@ -151,6 +156,8 @@ const styles = StyleSheet.create({
   headerTitleCenter: { flex: 1, fontSize: 18, fontFamily: FontFamily.outfit.semiBold, color: '#1B1D36', textAlign: 'center' },
   chipsScroll: { flexGrow: 0, flexShrink: 0 },
   chipsRow: { paddingHorizontal: 16, paddingTop: 2, paddingBottom: 8, gap: 8, flexDirection: 'row', alignItems: 'center', flexGrow: 0 },
+  /** RTL: «الكل» يمين، وباقي التصنيفات تتجه لليسار كما يتوقع المستخدم */
+  chipsRowRtl: { flexDirection: 'row-reverse' },
   chip: { paddingHorizontal: 14, height: 29, borderRadius: 5, flexShrink: 0, alignItems: 'center', justifyContent: 'center', minHeight: 29 },
   chipIdle: { backgroundColor: '#E8F1E3' },
   chipSelected: { backgroundColor: Colors.primary },
@@ -160,6 +167,7 @@ const styles = StyleSheet.create({
   gridList: { flex: 1 },
   gridContent: { paddingHorizontal: 16, paddingBottom: 24, paddingTop: 0 },
   gridRow: { justifyContent: 'space-between', marginBottom: 14, gap: 12 },
+  gridRowRtl: { flexDirection: 'row-reverse' },
   productCard: { borderRadius: 14, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#EDEFF3', overflow: 'hidden' },
   productImage: { width: '100%', aspectRatio: 1, backgroundColor: '#F7F8FA', borderTopLeftRadius: 13, borderTopRightRadius: 13 },
   cardBody: { padding: 10, paddingTop: 8, gap: 4 },

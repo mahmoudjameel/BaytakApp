@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity, KeyboardAvoidingView, Platform, Alert, ActivityIndicator,
 } from 'react-native';
@@ -14,6 +14,7 @@ import { RootStackParamList } from '../navigation/AppNavigator';
 import { isRTL } from '../utils/rtl';
 import { useAuth } from '../context/AuthContext';
 import { toErrorMessage } from '../utils/errors';
+import { LastLoginStorage } from '../services/api';
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
@@ -27,8 +28,14 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    void LastLoginStorage.getEmail().then((saved) => {
+      if (saved) setEmail(saved);
+    });
+  }, []);
+
   const handleSignIn = async () => {
-    const identifier = email.trim();
+    const identifier = email.trim().toLowerCase();
     if (!identifier || !password.trim()) {
       Alert.alert(t('common.error'), t('auth.fillAllFields'));
       return;
@@ -44,6 +51,7 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
         Alert.alert(t('common.error'), t('auth.profileLoadFailed'));
         return;
       }
+      await LastLoginStorage.saveEmail(identifier);
       if (profile.role === 'PROVIDER') {
         navigation.replace('ProviderMain');
       } else {
