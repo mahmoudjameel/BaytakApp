@@ -16,7 +16,7 @@ export type UserProfile = {
   avatar?: string;
   commercialName?: string;
   offeredServices?: string[];
-  categories?: { id: number; name: string }[];
+  categories?: { id: number; name: string; nameAr?: string; nameEn?: string }[];
 };
 
 function resolveMediaUrl(path?: string | null): string | undefined {
@@ -56,15 +56,12 @@ function pickRecord(json: unknown): Record<string, unknown> | null {
   return o;
 }
 
-function mapCategoryRef(c: Record<string, unknown>): { id: number; name: string } {
+function mapCategoryRef(c: Record<string, unknown>): { id: number; name: string; nameAr?: string; nameEn?: string } {
   const id = Number(c.id);
-  const name =
-    str(c.name) ??
-    str(c.titleAr) ??
-    str(c.titleEn) ??
-    str(c.label) ??
-    '';
-  return { id, name: name || (Number.isFinite(id) ? `#${id}` : '') };
+  const nameAr = str(c.titleAr) ?? str(c.nameAr) ?? undefined;
+  const nameEn = str(c.titleEn) ?? str(c.nameEn) ?? undefined;
+  const name = str(c.name) ?? nameAr ?? nameEn ?? '';
+  return { id, name: name || (Number.isFinite(id) ? `#${id}` : ''), nameAr, nameEn };
 }
 
 /** يوحّد شكل استجابة GET/PATCH /profile مع حقول متعددة من الخادم */

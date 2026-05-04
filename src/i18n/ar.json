@@ -296,7 +296,9 @@
     "userName": "إيميلي جاكسون",
     "userEmail": "amilie498@gmail.com",
     "chooseLanguageTitle": "اللغة",
-    "chooseLanguageMessage": "اختر لغة التطبيق"
+    "chooseLanguageMessage": "اختر لغة التطبيق",
+    "myServices": "خدماتي",
+    "noServices": "لا توجد خدمات مسجلة"
   },
   "language": {
     "suggestedLanguages": "اللغات المقترحة"

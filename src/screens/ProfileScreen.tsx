@@ -65,6 +65,12 @@ export const ProfileScreen = () => {
   const displayName = user?.fullName ?? user?.commercialName ?? t('profile.userName');
   const displayEmail = user?.email ?? t('profile.userEmail');
   const avatarUri = user?.avatar;
+  const isProvider = user?.role === 'PROVIDER';
+  const { i18n } = useTranslation();
+  const preferAr = (i18n.language ?? '').startsWith('ar');
+
+  const categoryLabel = (cat: { name: string; nameAr?: string; nameEn?: string }) =>
+    (preferAr ? cat.nameAr : cat.nameEn) ?? cat.name;
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -97,6 +103,27 @@ export const ProfileScreen = () => {
           </TouchableOpacity>
         </View>
         <Text style={[styles.email, rtl && styles.emailRtl]}>{displayEmail}</Text>
+
+        {isProvider && (
+          <View style={[styles.servicesCard, { alignSelf: 'stretch' }]}>
+            <Text style={[styles.servicesSectionTitle, rtl && styles.textRtl]}>
+              {t('profile.myServices')}
+            </Text>
+            {user?.categories && user.categories.length > 0 ? (
+              <View style={[styles.chipsRow, rtl && styles.chipsRowRtl]}>
+                {user.categories.map((cat) => (
+                  <View key={cat.id} style={styles.chip}>
+                    <Text style={styles.chipText}>{categoryLabel(cat)}</Text>
+                  </View>
+                ))}
+              </View>
+            ) : (
+              <Text style={[styles.noServicesText, rtl && styles.textRtl]}>
+                {t('profile.noServices')}
+              </Text>
+            )}
+          </View>
+        )}
 
         <View style={styles.menuList}>
           {menuItems.map((item, index) => (
@@ -149,4 +176,47 @@ const styles = StyleSheet.create({
   menuLabel: { flex: 1, fontSize: FontSize.base, fontFamily: FontFamily.outfit.medium, color: '#1B1D36' },
   menuLabelRtl: { textAlign: 'right', writingDirection: 'rtl' },
   menuLabelDanger: { color: '#D72653' },
+  textRtl: { textAlign: 'right', writingDirection: 'rtl' },
+  servicesCard: {
+    backgroundColor: '#F8F9FC',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#EDEFF3',
+    padding: 16,
+    marginBottom: 20,
+  },
+  servicesSectionTitle: {
+    fontSize: 15,
+    fontFamily: FontFamily.outfit.semiBold,
+    color: '#1B1D36',
+    marginBottom: 12,
+    textAlign: 'left',
+  },
+  chipsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  chipsRowRtl: {
+    flexDirection: 'row-reverse',
+  },
+  chip: {
+    paddingHorizontal: 14,
+    paddingVertical: 7,
+    borderRadius: 20,
+    backgroundColor: '#E8F5F4',
+    borderWidth: 1,
+    borderColor: Colors.primary + '33',
+  },
+  chipText: {
+    fontSize: 13,
+    fontFamily: FontFamily.outfit.medium,
+    color: Colors.primary,
+  },
+  noServicesText: {
+    fontSize: 13,
+    fontFamily: FontFamily.outfit.regular,
+    color: '#A7AEC1',
+    textAlign: 'left',
+  },
 });

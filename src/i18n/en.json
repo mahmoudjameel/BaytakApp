@@ -296,7 +296,9 @@
     "userName": "Amilie Jackson",
     "userEmail": "amilie498@gmail.com",
     "chooseLanguageTitle": "Language",
-    "chooseLanguageMessage": "Select app language"
+    "chooseLanguageMessage": "Select app language",
+    "myServices": "My Services",
+    "noServices": "No registered services"
   },
   "language": {
     "suggestedLanguages": "Suggested Languages"
