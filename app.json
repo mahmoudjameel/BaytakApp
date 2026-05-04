@@ -13,7 +13,11 @@
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.baytak.app"
+      "bundleIdentifier": "com.baytak.app",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "نحتاج الوصول إلى الصور لتحديث صورة ملفك الشخصي.",
+        "NSCameraUsageDescription": "نحتاج الكاميرا إن اخترت التقاط صورة لملفك الشخصي."
+      }
     },
     "android": {
       "supportsRTL": true,
@@ -31,6 +35,15 @@
       "eas": {
         "projectId": "57a4c149-9f0b-4991-acec-d76ea203a1de"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "نحتاج الوصول إلى الصور لتحديث صورة ملفك الشخصي.",
+          "cameraPermission": "نحتاج الكاميرا إن اخترت التقاط صورة لملفك الشخصي."
+        }
+      ]
+    ]
   }
 }

@@ -218,7 +218,16 @@ export const CreateAccountScreen: React.FC<Props> = ({ route, navigation }) => {
             {!isProviderFlow && !isCompanyFlow && (
               <>
                 <InputField label={t('auth.username')} placeholder={t('auth.usernamePlaceholder')} value={fullName} onChangeText={setFullName} autoCapitalize="words" leadingIcon="person-outline" {...fieldStyle} />
-                <InputField label={t('auth.emailOrPhone')} placeholder={t('auth.emailOrPhonePlaceholder')} value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" leadingIcon="mail-outline" {...fieldStyle} />
+                <InputField
+                  label={t('auth.loginEmailLabel')}
+                  placeholder={t('providerForm.emailAddressPlaceholder')}
+                  value={email}
+                  onChangeText={setEmail}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  leadingIcon="mail-outline"
+                  {...fieldStyle}
+                />
                 <SaudiPhoneField
                   label={t('auth.phoneNumber', { defaultValue: 'Phone Number' })}
                   placeholder={t('auth.phonePlaceholderSa')}

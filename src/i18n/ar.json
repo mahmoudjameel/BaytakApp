@@ -287,6 +287,8 @@
     "contracts": "العقود",
     "sarWallet": "رصيد المحفظة (ر.س)",
     "logout": "تسجيل الخروج",
+    "signOut": "تسجيل الخروج",
+    "signOutConfirm": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
     "userName": "إيميلي جاكسون",
     "userEmail": "amilie498@gmail.com",
     "chooseLanguageTitle": "اللغة",
@@ -561,7 +563,16 @@
     "individual": "حساب فرد",
     "providerRole": "مزوّد خدمة",
     "editComingTitle": "قريباً",
-    "editComingBody": "تعديل الملف الشخصي وصورة الحساب سيتوفر في تحديث قادم."
+    "editComingBody": "تعديل الملف الشخصي وصورة الحساب سيتوفر في تحديث قادم.",
+    "editTitle": "تعديل الملف الشخصي",
+    "displayName": "الاسم الظاهر",
+    "displayNamePlaceholder": "اسمك كما يظهر في التطبيق",
+    "saveSuccess": "تم حفظ التغييرات.",
+    "photoPermission": "يرجى السماح بالوصول إلى معرض الصور من إعدادات الجهاز.",
+    "uploadingPhoto": "جاري رفع الصورة…",
+    "saving": "جاري الحفظ…",
+    "nationalAddressHint": "اكتب اسم المدينة أو المنطقة واختر من القائمة لتنسيق العنوان.",
+    "addressCitiesLoadError": "تعذر تحميل قائمة المدن. يمكنك كتابة العنوان يدوياً."
   },
   "providerAccountSuccess": {
     "heading": "تم بنجاح",

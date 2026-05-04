@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -52,6 +52,12 @@ export const ProviderHomeScreen: React.FC = () => {
 
   const displayName = user?.fullName ?? user?.commercialName ?? t('profile.userName');
 
+  const serviceCards = useMemo(() => {
+    const showTeams =
+      user?.role === 'PROVIDER' && user?.accountType === 'COMPANY';
+    return showTeams ? SERVICE_CARDS : SERVICE_CARDS.filter((c) => c.id !== 'teams');
+  }, [user?.accountType, user?.role]);
+
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <View style={[styles.header, rtl && styles.headerRtl]}>
@@ -81,7 +87,7 @@ export const ProviderHomeScreen: React.FC = () => {
           {t('providerHome.greeting', { name: displayName })}
         </Text>
         <View style={styles.cardsContainer}>
-          {SERVICE_CARDS.map((card) => (
+          {serviceCards.map((card) => (
             <TouchableOpacity
               key={card.id}
               style={styles.card}

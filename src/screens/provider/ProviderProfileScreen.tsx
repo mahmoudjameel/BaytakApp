@@ -1,8 +1,21 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Alert, Share, ActivityIndicator,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+  Alert,
+  Share,
+  ActivityIndicator,
+  Modal,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { CommonActions, useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -14,6 +27,9 @@ import { FontFamily, FontSize } from '../../theme/typography';
 import { RootStackParamList } from '../../navigation/AppNavigator';
 import { backChevronIcon, isRTL } from '../../utils/rtl';
 import { useAuth } from '../../context/AuthContext';
+import { InputField } from '../../components/InputField';
+import { NationalAddressAutocomplete } from '../../components/NationalAddressAutocomplete';
+import { ProfileService } from '../../services/profile.service';
 
 type MenuItem = {
   id: string;
@@ -29,6 +45,13 @@ export const ProviderProfileScreen: React.FC = () => {
   const rtl = isRTL();
   const { user, signOut, refreshUser } = useAuth();
   const [refreshing, setRefreshing] = useState(false);
+  const [editVisible, setEditVisible] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [formName, setFormName] = useState('');
+  const [formEmail, setFormEmail] = useState('');
+  const [formPhone, setFormPhone] = useState('');
+  const [formNationalAddress, setFormNationalAddress] = useState('');
 
   const openRoot = useCallback((screen: keyof RootStackParamList) => {
     const parent = navigation.getParent<NativeStackNavigationProp<RootStackParamList>>();
@@ -77,8 +100,8 @@ export const ProviderProfileScreen: React.FC = () => {
     }
   }, [t]);
 
-  const menuItems: MenuItem[] = useMemo(
-    () => [
+  const menuItems: MenuItem[] = useMemo(() => {
+    const items: MenuItem[] = [
       { id: '1', label: t('profile.favourites'), icon: 'heart-outline', onPress: () => openRoot('Favourites') },
       { id: '2', label: t('providerTime.title'), icon: 'time-outline', onPress: () => openRoot('ProviderTime') },
       { id: '3', label: t('providerWallet.title'), icon: 'wallet-outline', onPress: () => openRoot('ProviderWallet') },
@@ -89,9 +112,15 @@ export const ProviderProfileScreen: React.FC = () => {
       { id: '8', label: t('profile.helpCenter'), icon: 'help-circle-outline', onPress: () => openRoot('HelpCenter') },
       { id: '9', label: t('inviteFriends.menuLabel'), icon: 'share-social-outline', onPress: handleInvite },
       { id: '10', label: t('profile.signOut'), icon: 'log-out-outline', onPress: handleSignOut, danger: true },
-    ],
-    [handleInvite, openRoot, t],
-  );
+    ];
+    /** «الفرق» لمزوّدي الخدمة من نوع شركة فقط؛ INDIVIDUAL لا يظهر لهم. */
+    const showTeams =
+      user?.role === 'PROVIDER' && user?.accountType === 'COMPANY';
+    if (!showTeams) {
+      return items.filter((item) => item.id !== '4');
+    }
+    return items;
+  }, [handleInvite, openRoot, t, user?.accountType, user?.role]);
 
   const displayName = user?.fullName ?? user?.commercialName ?? t('profile.userName');
   const displayEmail = user?.email ?? t('profile.userEmail');
@@ -112,9 +141,90 @@ export const ProviderProfileScreen: React.FC = () => {
     : user?.accountType === 'INDIVIDUAL' ? t('providerProfile.individual')
     : null;
 
-  const editComing = () => {
-    Alert.alert(t('providerProfile.editComingTitle'), t('providerProfile.editComingBody'));
-  };
+  const isCompanyAccount = user?.accountType === 'COMPANY';
+
+  const openEditModal = useCallback(() => {
+    const company = user?.accountType === 'COMPANY';
+    const nameSeed = company
+      ? (user?.commercialName ?? user?.fullName ?? '')
+      : (user?.fullName ?? user?.commercialName ?? '');
+    setFormName(nameSeed);
+    setFormEmail(user?.email ?? '');
+    setFormPhone(user?.phone ?? '');
+    setFormNationalAddress(user?.nationalAddress ?? '');
+    setEditVisible(true);
+  }, [user?.accountType, user?.commercialName, user?.email, user?.fullName, user?.nationalAddress, user?.phone]);
+
+  const closeEditModal = useCallback(() => {
+    if (!saving) setEditVisible(false);
+  }, [saving]);
+
+  const saveProfile = useCallback(async () => {
+    setSaving(true);
+    try {
+      if (isCompanyAccount) {
+        await ProfileService.updateCompanyProfile({
+          commercialName: formName.trim() || undefined,
+          email: formEmail.trim() || undefined,
+          phone: formPhone.trim() || undefined,
+          nationalAddress: formNationalAddress.trim() || undefined,
+        });
+      } else {
+        await ProfileService.updateProfile({
+          fullName: formName.trim() || undefined,
+          email: formEmail.trim() || undefined,
+          phone: formPhone.trim() || undefined,
+          nationalAddress: formNationalAddress.trim() || undefined,
+        });
+      }
+      await refreshUser();
+      setEditVisible(false);
+      Alert.alert(t('common.success'), t('providerProfile.saveSuccess'));
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : t('common.somethingWentWrong');
+      Alert.alert(t('common.error'), msg);
+    } finally {
+      setSaving(false);
+    }
+  }, [
+    formEmail,
+    formName,
+    formNationalAddress,
+    formPhone,
+    isCompanyAccount,
+    refreshUser,
+    t,
+  ]);
+
+  const pickAvatar = useCallback(async () => {
+    try {
+      const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (!perm.granted) {
+        Alert.alert(t('common.error'), t('providerProfile.photoPermission'));
+        return;
+      }
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.85,
+      });
+      if (result.canceled || !result.assets?.[0]?.uri) return;
+      const asset = result.assets[0];
+      setUploadingAvatar(true);
+      await ProfileService.uploadAvatar({
+        uri: asset.uri,
+        name: asset.fileName ?? 'avatar.jpg',
+        type: asset.mimeType ?? 'image/jpeg',
+      });
+      await refreshUser();
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : t('common.somethingWentWrong');
+      Alert.alert(t('common.error'), msg);
+    } finally {
+      setUploadingAvatar(false);
+    }
+  }, [refreshUser, t]);
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -135,12 +245,17 @@ export const ProviderProfileScreen: React.FC = () => {
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         <View style={styles.avatarSection}>
-          <TouchableOpacity style={styles.avatarWrap} onPress={editComing} activeOpacity={0.85}>
+          <TouchableOpacity style={styles.avatarWrap} onPress={pickAvatar} activeOpacity={0.85} disabled={uploadingAvatar}>
             {avatarUri ? (
               <Image source={{ uri: avatarUri }} style={styles.avatar} resizeMode="cover" />
             ) : (
               <Image source={require('../../../assets/offer/Frame 1171279031.png')} style={styles.avatar} resizeMode="cover" />
             )}
+            {uploadingAvatar ? (
+              <View style={styles.avatarLoading}>
+                <ActivityIndicator color="#FFFFFF" />
+              </View>
+            ) : null}
             <View style={styles.plusBadge}>
               <Ionicons name="add" size={14} color="#FFFFFF" />
             </View>
@@ -149,7 +264,7 @@ export const ProviderProfileScreen: React.FC = () => {
 
         <View style={[styles.nameRow, rtl && styles.nameRowRtl]}>
           <Text style={styles.name}>{displayName}</Text>
-          <TouchableOpacity style={styles.editBadge} onPress={editComing} activeOpacity={0.8}>
+          <TouchableOpacity style={styles.editBadge} onPress={openEditModal} activeOpacity={0.8}>
             <Ionicons name="pencil" size={13} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
@@ -218,6 +333,85 @@ export const ProviderProfileScreen: React.FC = () => {
 
         <View style={{ height: 32 }} />
       </ScrollView>
+
+      <Modal visible={editVisible} animationType="fade" transparent onRequestClose={closeEditModal}>
+        <KeyboardAvoidingView
+          style={styles.modalKb}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        >
+          <View style={styles.modalInner}>
+            <Pressable style={styles.modalBackdrop} onPress={closeEditModal} disabled={saving} />
+            <View style={[styles.modalCard, rtl && styles.modalCardRtl]}>
+            <Text style={[styles.modalTitle, rtl && styles.modalTitleRtl]}>{t('providerProfile.editTitle')}</Text>
+            <ScrollView
+              keyboardShouldPersistTaps="handled"
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.modalScroll}
+            >
+              <InputField
+                label={isCompanyAccount ? t('providerForm.commercialName') : t('providerProfile.displayName')}
+                placeholder={
+                  isCompanyAccount ? t('providerForm.commercialNamePlaceholder') : t('providerProfile.displayNamePlaceholder')
+                }
+                leadingIcon="person-outline"
+                value={formName}
+                onChangeText={setFormName}
+                editable={!saving}
+                autoCapitalize="words"
+              />
+              <InputField
+                label={t('providerForm.emailAddress')}
+                placeholder={t('providerForm.emailAddressPlaceholder')}
+                leadingIcon="mail-outline"
+                value={formEmail}
+                onChangeText={setFormEmail}
+                editable={!saving}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+              <InputField
+                label={t('providerForm.phoneNumber')}
+                placeholder={t('providerForm.phoneNumberPlaceholder')}
+                leadingIcon="call-outline"
+                value={formPhone}
+                onChangeText={setFormPhone}
+                editable={!saving}
+                keyboardType="phone-pad"
+              />
+              <NationalAddressAutocomplete
+                label={t('providerForm.nationalAddress')}
+                placeholder={t('providerForm.nationalAddressPlaceholder')}
+                value={formNationalAddress}
+                onChangeText={setFormNationalAddress}
+                disabled={saving}
+                active={editVisible}
+              />
+            </ScrollView>
+            <View style={[styles.modalActions, rtl && styles.modalActionsRtl]}>
+              <TouchableOpacity
+                style={styles.modalBtnGhost}
+                onPress={closeEditModal}
+                disabled={saving}
+              >
+                <Text style={styles.modalBtnGhostText}>{t('common.cancel')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalBtnPrimary, saving && styles.modalBtnDisabled]}
+                onPress={() => void saveProfile()}
+                disabled={saving}
+              >
+                {saving ? (
+                  <ActivityIndicator color="#FFFFFF" />
+                ) : (
+                  <Text style={styles.modalBtnPrimaryText}>{t('common.submit')}</Text>
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -304,4 +498,55 @@ const styles = StyleSheet.create({
   menuLabel: { flex: 1, fontSize: FontSize.base, fontFamily: FontFamily.outfit.medium, color: '#1B1D36' },
   menuLabelRtl: { textAlign: 'right', writingDirection: 'rtl' },
   menuLabelDanger: { color: '#D72653' },
+  avatarLoading: {
+    ...StyleSheet.absoluteFillObject,
+    borderRadius: 48,
+    backgroundColor: 'rgba(0,0,0,0.35)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalKb: { flex: 1 },
+  modalInner: { flex: 1, justifyContent: 'flex-end' },
+  modalBackdrop: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(27,29,54,0.45)' },
+  modalCard: {
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 28,
+    maxHeight: '88%',
+  },
+  modalCardRtl: { direction: 'rtl' },
+  modalTitle: {
+    fontSize: 18,
+    fontFamily: FontFamily.outfit.semiBold,
+    color: '#1B1D36',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  modalTitleRtl: { writingDirection: 'rtl' },
+  modalScroll: { paddingBottom: 8 },
+  modalActions: { flexDirection: 'row', gap: 12, marginTop: 8 },
+  modalActionsRtl: { flexDirection: 'row-reverse' },
+  modalBtnGhost: {
+    flex: 1,
+    height: 48,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#E0E3EB',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalBtnGhostText: { fontSize: FontSize.base, fontFamily: FontFamily.outfit.semiBold, color: '#5A6178' },
+  modalBtnPrimary: {
+    flex: 1,
+    height: 48,
+    borderRadius: 12,
+    backgroundColor: Colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalBtnDisabled: { opacity: 0.7 },
+  modalBtnPrimaryText: { fontSize: FontSize.base, fontFamily: FontFamily.outfit.semiBold, color: '#FFFFFF' },
 });

@@ -287,6 +287,8 @@
     "contracts": "Contracts",
     "sarWallet": "SAR Wallet",
     "logout": "Log Out",
+    "signOut": "Sign out",
+    "signOutConfirm": "Are you sure you want to sign out?",
     "userName": "Amilie Jackson",
     "userEmail": "amilie498@gmail.com",
     "chooseLanguageTitle": "Language",
@@ -561,7 +563,16 @@
     "individual": "Individual account",
     "providerRole": "Service provider",
     "editComingTitle": "Coming soon",
-    "editComingBody": "Profile and photo editing will be available in a future update."
+    "editComingBody": "Profile and photo editing will be available in a future update.",
+    "editTitle": "Edit profile",
+    "displayName": "Display name",
+    "displayNamePlaceholder": "Your name as shown in the app",
+    "saveSuccess": "Your changes were saved.",
+    "photoPermission": "Please allow photo library access in your device settings.",
+    "uploadingPhoto": "Uploading photo…",
+    "saving": "Saving…",
+    "nationalAddressHint": "Type a city or region and pick from the list to format your Saudi address.",
+    "addressCitiesLoadError": "Could not load the city list. You can still type your address manually."
   },
   "providerAccountSuccess": {
     "heading": "Successfully",

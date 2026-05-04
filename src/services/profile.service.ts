@@ -101,10 +101,11 @@ export function normalizeUserProfile(json: unknown): UserProfile {
   let role: UserProfile['role'] | undefined =
     roleRaw === 'PROVIDER' || roleRaw === 'CLIENT' ? (roleRaw as UserProfile['role']) : undefined;
 
-  const at = raw.accountType ?? raw.account_type;
+  const atRaw = str(raw.accountType) ?? str(raw.account_type);
+  const atUp = atRaw?.trim().toUpperCase() ?? '';
   const accountType =
-    at === 'COMPANY' ? 'COMPANY'
-    : at === 'INDIVIDUAL' ? 'INDIVIDUAL'
+    atUp === 'COMPANY' ? 'COMPANY'
+    : atUp === 'INDIVIDUAL' ? 'INDIVIDUAL'
     : undefined;
 
   const isProv =
